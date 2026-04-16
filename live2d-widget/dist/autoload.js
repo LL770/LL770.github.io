@@ -54,15 +54,13 @@ function loadExternalResource(url, type) {
   ]);
   // For detailed usage of configuration options, see README.en.md
   // 配置选项的具体用法见 README.md
-  initWidget({
-    waifuPath: live2d_path + 'waifu-tips.json',
-    // cdnPath: 'https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/',
-    cubism2Path: live2d_path + 'live2d.min.js',
-    cubism5Path: 'https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js',
-    tools: ['hitokoto', 'asteroids', 'switch-model', 'switch-texture', 'photo', 'info', 'quit'],
-    logLevel: 'warn',
-    drag: true,
-  });
+ initWidget({
+    waifuPath: live2d_path + "waifu-tips.json",
+    // 换成这个备用 API 源
+    cdnPath: "https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/",
+    tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
+    drag: true
+});
 })();
 
 console.log(`\n%cLive2D%cWidget%c\n`, 'padding: 8px; background: #cd3e45; font-weight: bold; font-size: large; color: white;', 'padding: 8px; background: #ff5450; font-size: large; color: #eee;', '');
