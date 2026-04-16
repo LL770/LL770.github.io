@@ -37,9 +37,10 @@ function loadExternalResource(url, type) {
   };
   window.Image.prototype = OriginalImage.prototype;
 
+  // 只加载 CSS
   await loadExternalResource(live2d_path + 'waifu.css', 'css');
   
-  // 动态导入 waifu-tips.js 模块
+  // 动态导入 waifu-tips.js 作为模块（关键修改）
   const module = await import(live2d_path + 'waifu-tips.js');
   const initWidget = module.default || module.initWidget;
   
