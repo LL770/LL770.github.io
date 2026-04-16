@@ -56,11 +56,12 @@ function loadExternalResource(url, type) {
   // 配置选项的具体用法见 README.md
 initWidget({
     // 新增 model 配置，指定一个绝对可用的模型 JSON
-    model: {
-        jsonPath: 'https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/model/Sukune2/Sukune2.model.json',
-    },
+  model: {
+    jsonPath: 'https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json',
+},
+cdnPath: 'https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/',
     waifuPath: live2d_path + 'waifu-tips.json',
-    cdnPath: 'https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/',  // 取消注释，提供切换模型列表
+  
     cubism2Path: live2d_path + 'live2d.min.js',
     cubism5Path: 'https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js',
     tools: ['hitokoto', 'asteroids', 'switch-model', 'switch-texture', 'photo', 'info', 'quit'],
