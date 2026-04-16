@@ -58,6 +58,7 @@ function loadExternalResource(url, type) {
     waifuPath: live2d_path + "waifu-tips.json",
     // 换成这个备用 API 源
     cdnPath: "https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/",
+    cubism2Path: "https://cdn.jsdelivr.net/npm/live2d-widget@latest/lib/live2d.min.js", 
     tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
     drag: true,
     debug: false
