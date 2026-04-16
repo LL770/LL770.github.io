@@ -54,15 +54,19 @@ function loadExternalResource(url, type) {
   ]);
   // For detailed usage of configuration options, see README.en.md
   // 配置选项的具体用法见 README.md
-  initWidget({
+initWidget({
+    // 新增 model 配置，指定一个绝对可用的模型 JSON
+    model: {
+        jsonPath: 'https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/model/Sukune2/Sukune2.model.json',
+    },
     waifuPath: live2d_path + 'waifu-tips.json',
-    // cdnPath: 'https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/',
+    cdnPath: 'https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/',  // 取消注释，提供切换模型列表
     cubism2Path: live2d_path + 'live2d.min.js',
     cubism5Path: 'https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js',
     tools: ['hitokoto', 'asteroids', 'switch-model', 'switch-texture', 'photo', 'info', 'quit'],
-    logLevel: 'warn',
+    logLevel: 'warn',   // 可以暂时改为 'error' 减少刷屏
     drag: true,
-  });
+});
 })();
 
 console.log(`\n%cLive2D%cWidget%c\n`, 'padding: 8px; background: #cd3e45; font-weight: bold; font-size: large; color: white;', 'padding: 8px; background: #ff5450; font-size: large; color: #eee;', '');
