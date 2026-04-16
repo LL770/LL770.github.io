@@ -3,24 +3,23 @@
  * https://github.com/stevenjoezhang/live2d-widget
  */
 
-// ========== 修改为本地路径 ==========
 const live2d_path = "/live2d-widget/dist/";
-// =================================
 
 function loadExternalResource(url, type) {
   return new Promise((resolve, reject) => {
     let tag;
-
     if (type === 'css') {
       tag = document.createElement('link');
       tag.rel = 'stylesheet';
       tag.href = url;
+      tag.onload = () => resolve(url);
+      tag.onerror = () => reject(url);
+      document.head.appendChild(tag);
     }
-    else if (type === 'js') {
+    else if (type === 'module') {
       tag = document.createElement('script');
+      tag.type = 'module';
       tag.src = url;
-    }
-    if (tag) {
       tag.onload = () => resolve(url);
       tag.onerror = () => reject(url);
       document.head.appendChild(tag);
@@ -40,36 +39,28 @@ function loadExternalResource(url, type) {
   try {
     // 加载 CSS
     await loadExternalResource(live2d_path + 'waifu.css', 'css');
-    console.log('CSS loaded');
+    console.log('✅ CSS loaded');
     
-    // 加载 waifu-tips.js
-    await loadExternalResource(live2d_path + 'waifu-tips.js', 'js');
-    console.log('waifu-tips.js loaded');
+    // 以模块方式加载 waifu-tips.js
+    await loadExternalResource(live2d_path + 'waifu-tips.js', 'module');
+    console.log('✅ waifu-tips.js loaded as module');
     
-    // 检查 window.initWidget
-    let retries = 0;
-    const maxRetries = 20;
-    
-    const checkInitWidget = setInterval(() => {
-      if (typeof window.initWidget === 'function') {
-        clearInterval(checkInitWidget);
-        window.initWidget({
-          waifuPath: live2d_path + "waifu-tips.json",
-          cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
-          cubism2Path: live2d_path + "live2d.min.js",
-          tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
-          drag: true,
-          debug: true  // 开启调试模式
-        });
-        console.log('initWidget called');
-      } else {
-        retries++;
-        if (retries >= maxRetries) {
-          clearInterval(checkInitWidget);
-          console.error('waifu-tips.js exports: ', Object.keys(window));
-        }
-      }
-    }, 100);
+    // 动态导入并调用
+    const module = await import(live2d_path + 'waifu-tips.js');
+    // 模块导出的 initWidget 函数
+    if (module.initWidget) {
+      module.initWidget({
+        waifuPath: live2d_path + "waifu-tips.json",
+        cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+        cubism2Path: live2d_path + "live2d.min.js",
+        tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
+        drag: true,
+        debug: true
+      });
+      console.log('✅ initWidget called from module');
+    } else {
+      console.error('initWidget not found in module');
+    }
   } catch (error) {
     console.error('Live2D Widget loading error:', error);
   }
