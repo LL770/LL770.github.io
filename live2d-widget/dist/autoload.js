@@ -37,19 +37,24 @@ function loadExternalResource(url, type) {
   };
   window.Image.prototype = OriginalImage.prototype;
 
-  await Promise.all([
-    loadExternalResource(live2d_path + 'waifu.css', 'css'),
-    loadExternalResource(live2d_path + 'waifu-tips.js', 'js')
-  ]);
-
-  initWidget({
-    waifuPath: "/live2d-widget/dist/waifu-tips.json",  // 指向本地 JSON
-    cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
-    cubism2Path: "/live2d-widget/dist/live2d.min.js",
-    tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
-    drag: true,
-    debug: false
-  });
+  await loadExternalResource(live2d_path + 'waifu.css', 'css');
+  
+  // 动态导入 waifu-tips.js 模块
+  const module = await import(live2d_path + 'waifu-tips.js');
+  const initWidget = module.default || module.initWidget;
+  
+  if (typeof initWidget === 'function') {
+    initWidget({
+      waifuPath: "/live2d-widget/dist/waifu-tips.json",
+      cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+      cubism2Path: "/live2d-widget/dist/live2d.min.js",
+      tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
+      drag: true,
+      debug: false
+    });
+  } else {
+    console.error('Failed to load initWidget from waifu-tips.js');
+  }
 })();
 
 console.log(`\n%cLive2D%cWidget%c\n`, 'padding: 8px; background: #cd3e45; font-weight: bold; font-size: large; color: white;', 'padding: 8px; background: #ff5450; font-size: large; color: #eee;', '');
