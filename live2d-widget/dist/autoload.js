@@ -43,9 +43,9 @@ function loadExternalResource(url, type) {
   ]);
 
   initWidget({
-    waifuPath: "/live2d-widget/waifu-tips.json",  // 指向本地 JSON
+    waifuPath: "/live2d-widget/dist/waifu-tips.json",  // 指向本地 JSON
     cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
-    cubism2Path: "/live2d-widget/lib/live2d.min.js",  // 指向本地核心库
+    cubism2Path: "/live2d-widget/dist/live2d.min.js",
     tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
     drag: true,
     debug: false
