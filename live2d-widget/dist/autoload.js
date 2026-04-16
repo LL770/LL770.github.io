@@ -59,7 +59,8 @@ function loadExternalResource(url, type) {
     // 换成这个备用 API 源
     cdnPath: "https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/",
     tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
-    drag: true
+    drag: true,
+    debug: false
 });
 })();
 
