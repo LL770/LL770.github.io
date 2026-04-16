@@ -37,15 +37,15 @@ function loadExternalResource(url, type) {
   };
   window.Image.prototype = OriginalImage.prototype;
 
-  // 只加载 CSS
+  // 加载 CSS
   await loadExternalResource(live2d_path + 'waifu.css', 'css');
   
-  // 动态导入 waifu-tips.js 作为模块（关键修改）
-  const module = await import(live2d_path + 'waifu-tips.js');
-  const initWidget = module.default || module.initWidget;
+  // 加载 waifu-tips.js 作为普通脚本（不是模块）
+  await loadExternalResource(live2d_path + 'waifu-tips.js', 'js');
   
-  if (typeof initWidget === 'function') {
-    initWidget({
+  // 等待 window.initWidget 可用
+  if (typeof window.initWidget === 'function') {
+    window.initWidget({
       waifuPath: "/live2d-widget/dist/waifu-tips.json",
       cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
       cubism2Path: "/live2d-widget/dist/live2d.min.js",
@@ -54,7 +54,20 @@ function loadExternalResource(url, type) {
       debug: false
     });
   } else {
-    console.error('Failed to load initWidget from waifu-tips.js');
+    console.error('window.initWidget is not available after loading');
+    // 等待一下再试
+    setTimeout(() => {
+      if (typeof window.initWidget === 'function') {
+        window.initWidget({
+          waifuPath: "/live2d-widget/dist/waifu-tips.json",
+          cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+          cubism2Path: "/live2d-widget/dist/live2d.min.js",
+          tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
+          drag: true,
+          debug: false
+        });
+      }
+    }, 100);
   }
 })();
 
