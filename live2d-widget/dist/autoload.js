@@ -37,37 +37,41 @@ function loadExternalResource(url, type) {
   };
   window.Image.prototype = OriginalImage.prototype;
 
-  // 加载 CSS
-  await loadExternalResource(live2d_path + 'waifu.css', 'css');
-  
-  // 加载 waifu-tips.js 作为普通脚本（不是模块）
-  await loadExternalResource(live2d_path + 'waifu-tips.js', 'js');
-  
-  // 等待 window.initWidget 可用
-  if (typeof window.initWidget === 'function') {
-    window.initWidget({
-      waifuPath: "/live2d-widget/dist/waifu-tips.json",
-      cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
-      cubism2Path: "/live2d-widget/dist/live2d.min.js",
-      tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
-      drag: true,
-      debug: false
-    });
-  } else {
-    console.error('window.initWidget is not available after loading');
-    // 等待一下再试
-    setTimeout(() => {
+  try {
+    // 加载 CSS
+    await loadExternalResource(live2d_path + 'waifu.css', 'css');
+    console.log('CSS loaded');
+    
+    // 加载 waifu-tips.js
+    await loadExternalResource(live2d_path + 'waifu-tips.js', 'js');
+    console.log('waifu-tips.js loaded');
+    
+    // 检查 window.initWidget
+    let retries = 0;
+    const maxRetries = 20;
+    
+    const checkInitWidget = setInterval(() => {
       if (typeof window.initWidget === 'function') {
+        clearInterval(checkInitWidget);
         window.initWidget({
-          waifuPath: "/live2d-widget/dist/waifu-tips.json",
+          waifuPath: live2d_path + "waifu-tips.json",
           cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
-          cubism2Path: "/live2d-widget/dist/live2d.min.js",
+          cubism2Path: live2d_path + "live2d.min.js",
           tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
           drag: true,
-          debug: false
+          debug: true  // 开启调试模式
         });
+        console.log('initWidget called');
+      } else {
+        retries++;
+        if (retries >= maxRetries) {
+          clearInterval(checkInitWidget);
+          console.error('waifu-tips.js exports: ', Object.keys(window));
+        }
       }
     }, 100);
+  } catch (error) {
+    console.error('Live2D Widget loading error:', error);
   }
 })();
 
