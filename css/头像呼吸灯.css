@@ -1,0 +1,80 @@
+/****************** 头像呼吸灯优化版 ***********************/
+[data-theme="light"] .avatar-img {
+    animation: huxi_light 3.5s ease-in-out infinite;
+    position: relative;
+    display: inline-block;
+}
+
+[data-theme="dark"] .avatar-img {
+    animation: huxi_dark 3.5s ease-in-out infinite;
+    position: relative;
+    display: inline-block;
+}
+
+/* 明亮模式下的呼吸灯效果 */
+/* 明亮模式下的呼吸灯效果（浅蓝色调） */
+@keyframes huxi_light {
+    0% {
+        box-shadow:
+                0 0 5px 0px rgba(73, 177, 245, 0.3),
+                0 0 10px 0px rgba(0, 196, 182, 0.1);
+    }
+    25% {
+        box-shadow:
+                0 0 10px 2px rgba(73, 177, 245, 0.7),
+                0 0 20px 4px rgba(0, 196, 182, 0.3);
+    }
+    50% {
+        box-shadow:
+                0 0 15px 4px rgba(73, 177, 245, 0.8),
+                0 0 25px 8px rgba(0, 196, 182, 0.5);
+    }
+    75% {
+        box-shadow:
+                0 0 10px 2px rgba(73, 177, 245, 0.7),
+                0 0 20px 4px rgba(0, 196, 182, 0.3);
+    }
+    100% {
+        box-shadow:
+                0 0 5px 0px rgba(73, 177, 245, 0.3),
+                0 0 10px 0px rgba(0, 196, 182, 0.1);
+    }
+}
+
+/* 黑暗模式下的呼吸灯效果 */
+/* 黑暗模式下的呼吸灯效果（琥珀色） */
+/* 黑暗模式下的呼吸灯效果（青色） */
+/* 黑暗模式下的呼吸灯效果（青色 - 增强版） */
+@keyframes huxi_dark {
+    0% {
+        box-shadow: 
+            0 0 5px 0px rgba(0, 188, 212, 0.3),
+            0 0 10px 0px rgba(0, 150, 136, 0.1),
+            inset 0 0 3px 0px rgba(0, 188, 212, 0.2);
+        
+    }
+    25% {
+        box-shadow: 
+            0 0 12px 3px rgba(0, 188, 212, 0.6),
+            0 0 22px 6px rgba(0, 150, 136, 0.3),
+         
+    }
+    50% {
+        box-shadow: 
+            0 0 20px 6px rgba(0, 188, 212, 0.9),
+            0 0 35px 12px rgba(0, 150, 136, 0.6),
+           
+    }
+    75% {
+        box-shadow: 
+            0 0 12px 3px rgba(0, 188, 212, 0.6),
+            0 0 22px 6px rgba(0, 150, 136, 0.3),
+            
+    }
+    100% {
+        box-shadow: 
+            0 0 5px 0px rgba(0, 188, 212, 0.3),
+            0 0 10px 0px rgba(0, 150, 136, 0.1),
+           
+    }
+}
