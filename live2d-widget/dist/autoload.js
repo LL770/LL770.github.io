@@ -37,29 +37,30 @@ function loadExternalResource(url, type) {
   window.Image.prototype = OriginalImage.prototype;
 
   try {
-    // 加载 CSS
     await loadExternalResource(live2d_path + 'waifu.css', 'css');
     console.log('✅ CSS loaded');
     
-    // 以模块方式加载 waifu-tips.js
-    await loadExternalResource(live2d_path + 'waifu-tips.js', 'module');
+    // 动态导入模块
+    const module = await import(live2d_path + 'waifu-tips.js');
     console.log('✅ waifu-tips.js loaded as module');
     
-    // 动态导入并调用
-    const module = await import(live2d_path + 'waifu-tips.js');
-    // 模块导出的 initWidget 函数
-    if (module.initWidget) {
-      module.initWidget({
+    // 检查模块导出的内容
+    console.log('Module exports:', Object.keys(module));
+    
+    // 模块导出的是 'l' 或 'a'，但我们已经添加了 window.initWidget
+    // 所以直接使用 window.initWidget
+    if (typeof window.initWidget === 'function') {
+      window.initWidget({
         waifuPath: live2d_path + "waifu-tips.json",
         cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
         cubism2Path: live2d_path + "live2d.min.js",
         tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"],
         drag: true,
-        debug: true
+        debug: false
       });
-      console.log('✅ initWidget called from module');
+      console.log('✅ Live2D Widget initialized via window.initWidget');
     } else {
-      console.error('initWidget not found in module');
+      console.error('window.initWidget is not available');
     }
   } catch (error) {
     console.error('Live2D Widget loading error:', error);
