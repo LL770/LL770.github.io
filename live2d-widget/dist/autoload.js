@@ -55,17 +55,14 @@ function loadExternalResource(url, type) {
   // For detailed usage of configuration options, see README.en.md
   // 配置选项的具体用法见 README.md
 initWidget({
-    // 新增 model 配置，指定一个绝对可用的模型 JSON
-  model: {
-    jsonPath: 'https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json',
-},
-cdnPath: 'https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/',
+    // 不需要单独指定 model，让 API 自动加载模型列表
     waifuPath: live2d_path + 'waifu-tips.json',
-  
+    // 关键：使用包含 model_list.json 的 API 地址
+    cdnPath: 'https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/',
     cubism2Path: live2d_path + 'live2d.min.js',
     cubism5Path: 'https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js',
     tools: ['hitokoto', 'asteroids', 'switch-model', 'switch-texture', 'photo', 'info', 'quit'],
-    logLevel: 'warn',   // 可以暂时改为 'error' 减少刷屏
+    logLevel: 'warn',
     drag: true,
 });
 })();
