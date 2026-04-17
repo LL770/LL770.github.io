@@ -59,10 +59,12 @@ initWidget({
         jsonPath: 'https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json'
     },
     waifuPath: live2d_path + 'waifu-tips.json',
-    cdnPath: 'https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/',
+    // 删除 cdnPath，防止它随机选择其他模型
+    // cdnPath: 'https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/',
     cubism2Path: live2d_path + 'live2d.min.js',
     cubism5Path: 'https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js',
-    tools: ['hitokoto', 'asteroids', 'switch-model', 'switch-texture', 'photo', 'info', 'quit'],
+    tools: ['hitokoto', 'asteroids', 'switch-texture', 'photo', 'info', 'quit'],
+    // 注意：删除了 'switch-model'，因为只使用单个模型，无法切换
     logLevel: 'warn',
     drag: true,
 });
