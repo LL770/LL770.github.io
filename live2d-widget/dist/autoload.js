@@ -56,15 +56,15 @@ function loadExternalResource(url, type) {
   // 配置选项的具体用法见 README.md
 initWidget({
     model: {
-        // 使用独立的 shizuku 模型包，体积小，不受限制
+        // 锁定默认模型为 shizuku
         jsonPath: 'https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json'
     },
     waifuPath: live2d_path + 'waifu-tips.json',
-    // 注意：不设置 cdnPath，因为模型包已经自包含
+    // 恢复 cdnPath，它负责加载模型切换所需的环境
+    cdnPath: 'https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/',
     cubism2Path: live2d_path + 'live2d.min.js',
     cubism5Path: 'https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js',
-    tools: ['hitokoto', 'asteroids', 'switch-texture', 'photo', 'info', 'quit'],
-    // 移除 'switch-model'，因为使用单个模型包时无法切换
+    tools: ['hitokoto', 'asteroids', 'switch-model', 'switch-texture', 'photo', 'info', 'quit'],
     logLevel: 'warn',
     drag: true,
 });
