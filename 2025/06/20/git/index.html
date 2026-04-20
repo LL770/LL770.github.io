@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Git | LL770</title><meta name="author" content="LL770"><meta name="copyright" content="LL770"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Git是什么Git是目前世界上最先进的分布式版本控制系统,用于追踪文件修改、支持多分支并行开发、随时回溯历史版本，并方便多人协作合并代码，且大部分操作在本地完成。 安装Git(Windows) 官网安装 或者安装一个包管理器，推荐Scoop，然后PowerShell中通过以下命令安装Git：  1scoop install git 配置Git安装好Git后，还需要最后一步设置，在命令行输入： 12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git">
+<meta property="og:url" content="https://ll770.github.io/2025/06/20/git/index.html">
+<meta property="og:site_name" content="LL770">
+<meta property="og:description" content="Git是什么Git是目前世界上最先进的分布式版本控制系统,用于追踪文件修改、支持多分支并行开发、随时回溯历史版本，并方便多人协作合并代码，且大部分操作在本地完成。 安装Git(Windows) 官网安装 或者安装一个包管理器，推荐Scoop，然后PowerShell中通过以下命令安装Git：  1scoop install git 配置Git安装好Git后，还需要最后一步设置，在命令行输入： 12">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png">
+<meta property="article:published_time" content="2025-06-20T06:30:00.000Z">
+<meta property="article:modified_time" content="2025-06-20T06:30:00.000Z">
+<meta property="article:author" content="LL770">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Git",
+  "url": "https://ll770.github.io/2025/06/20/git/",
+  "image": "https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png",
+  "datePublished": "2025-06-20T06:30:00.000Z",
+  "dateModified": "2025-06-20T06:30:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "LL770",
+      "url": "https://ll770.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://raw.gitcode.com/LL770/Pic/raw/main/favicon.ico"><link rel="canonical" href="https://ll770.github.io/2025/06/20/git/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Git',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/footer-gradient.css"><link rel="stylesheet" href="/css/头像呼吸灯.css"><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="LL770" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-backgroud.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="https://raw.gitcode.com/LL770/Pic/raw/main/2026.4.16-logo2.0.png" alt="Logo"><span class="site-name">LL770</span></a><a class="nav-page-title" href="/"><span class="site-name">Git</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Git</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-06-20T06:30:00.000Z" title="发表于 2025-06-20 14:30:00">2025-06-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-06-20T06:30:00.000Z" title="更新于 2025-06-20 14:30:00">2025-06-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/">技术笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Git是什么"><a href="#Git是什么" class="headerlink" title="Git是什么"></a>Git是什么</h1><p>Git是目前世界上最先进的分布式版本控制系统,用于追踪文件修改、支持多分支并行开发、随时回溯历史版本，并方便多人协作合并代码，且大部分操作在本地完成。</p>
+<h3 id="安装Git-Windows"><a href="#安装Git-Windows" class="headerlink" title="安装Git(Windows)"></a>安装Git(Windows)</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://git-scm.com/downloads/win">官网安装</a></li>
+<li>或者安装一个包管理器，推荐Scoop，然后PowerShell中通过以下命令安装Git：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scoop install git</span><br></pre></td></tr></table></figure>
+<h3 id="配置Git"><a href="#配置Git" class="headerlink" title="配置Git"></a>配置Git</h3><p>安装好Git后，还需要最后一步设置，在命令行输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;Your Name&quot;</span><br><span class="line">git config --global user.email &quot;email@example.com&quot;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Git的基本使用"><a href="#Git的基本使用" class="headerlink" title="Git的基本使用"></a>Git的基本使用</h1><h3 id="通过git-init命令把这个目录变成Git可以管理的仓库"><a href="#通过git-init命令把这个目录变成Git可以管理的仓库" class="headerlink" title="通过git init命令把这个目录变成Git可以管理的仓库"></a>通过git init命令把这个目录变成Git可以管理的仓库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>创建成功后目录下会多出了一个.git文件夹</p>
+<h3 id="Git工作区和暂存区"><a href="#Git工作区和暂存区" class="headerlink" title="Git工作区和暂存区"></a>Git工作区和暂存区</h3><ul>
+<li>工作区：你看到的文件夹，修改&#x2F;删除文件在这里发生</li>
+<li>暂存区：git add 后的临时存放地</li>
+<li>仓库：git commit 后的永久存储<br>Git跟踪并管理的是修改，而非文件，只有你git add 文件后，git commit 才会提交暂存区的文件到仓库</li>
+</ul>
+<h3 id="Git的文件管理"><a href="#Git的文件管理" class="headerlink" title="Git的文件管理"></a>Git的文件管理</h3><pre><code>git add [文件名] | .  解释：将指定文件或全部更改的文件添加到仓库
+
+git commit -m &quot;你修改的说明&quot;  解释：把文件提交到仓库并附上说明
+
+git status  解释：查看文件什么状态，未添加、修改、删除
+
+git diff  解释：查看文件与修改前的差异
+
+git log [--pretty=oneline]  解释：查看提交日志 参数是简洁输出
+
+git reset --hard HEAD^  解释：回到上一个版本， HEAD^^ 回到上上一个版本 HEAD~n 回到上n个版本
+
+git reset --hard 1094a   解释：撤回即回到最新版本，输入最新版本的commit id前缀前几位就可以
+
+git reflog  解释：commit id没有找到，查看每一次命令的日志，即可找到对应的commit id
+
+git checkout -- 文件名  解释：把文件在工作区的修改全部撤销，这里有两种情况：
+一种是文件自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+一种是r文件已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+git reset HEAD [file]  解释：同样可以把暂存区的修改撤销掉（unstage），重新放回工作区
+
+要删除文件 2种情况 
+1 git rm [file]  解释：已经提交 版本库中删除该文件
+2 git checkout -- [file]  解释：删错了，恢复到最新版本
+
+git remote add origin git@github.com:LL770/LL770.github.io.git 解释：添加远程库 请更换自己得github用户名并配置SSH Key公钥
+
+git push origin master 解释：把本地master分支的最新修改推送至GitHub
+
+git remote -v  解释：查看远程库信息
+
+git remote rm origin  解释：根据远程库名字origin，删除远程库
+
+git clone 解释：克隆远程仓库
+
+```s
+| 指令 | 解释 |
+|------|------|
+| `git branch` | 查看分支 |
+| `git branch &lt;name&gt;` | 创建分支 |
+| `git checkout &lt;name&gt;` 或 `git switch &lt;name&gt;` | 切换分支 |
+| `git checkout -b &lt;name&gt;` 或 `git switch -c &lt;name&gt;` | 创建+切换分支 |
+| `git merge &lt;name&gt;` | 合并某分支到当前分支 |
+| `git branch -d &lt;name&gt;` | 删除分支 |
+|`git log --graph`|分支合并图|
+
+### 合并某分支到当前分支冲突
+必须手动解决冲突后再提交
+Git用&lt;&lt;&lt;&lt;&lt;&lt;&lt;，=======，&gt;&gt;&gt;&gt;&gt;&gt;&gt;标记出不同分支的内容
+
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://ll770.github.io">LL770</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://ll770.github.io/2025/06/20/git/">https://ll770.github.io/2025/06/20/git/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://ll770.github.io" target="_blank">LL770</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Git/">Git</a></div><div class="post-share"><div class="social-share" data-image="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/01/20/Maven/" title="Maven高级"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Maven高级</div></div><div class="info-2"><div class="info-item-1">Maven 高级特性总结本文档旨在系统化梳理 Maven 的高级功能，帮助应对中大型项目的构建与依赖管理挑战。 1. 分模块设计与开发 定义：将单一 Java 项目按功能或结构拆分为多个独立的子模块。 优势： 易维护：便于大型团队并行开发与管理。 高复用：通用组件（如工具类）可被多个项目独立依赖。   拆分策略： 按功能模块：如公共组件、商品模块、订单模块。 按代码分层：如实体层、业务层、控制层。 混合拆分：功能模块与分层结合。   实践要点：设计先行，先规划模块结构再进行编码。  2. 继承与聚合2.1 继承 (&lt;parent&gt;) 作用：子模块继承父模块的配置，用于简化依赖配置和统一版本管理。 核心配置： 父工程打包方式必须为 pom。 子工程使用 &lt;parent&gt; 标签指定父工程坐标。    12345678910111213&lt;!-- 父工程示例：tlias-parent/pom.xml --&gt;&lt;groupId&gt;com.itheima&lt;/groupId&gt;&lt;artifactId&gt;tlias-parent&l...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LL770</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/1329889487"><i class="fab fa-bilibili"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/LL770" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:yxl_1123@yeah.net" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #D32F2F;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS订阅"><i class="fas fa-rss" style="color: #ff7e00;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">📝本站所有博文均是博主的学习笔记与个人理解。<br>
+👌除特别注明外，如需转载，请在文章头部醒目处附带原文链接并告知我你将转载。<br>
+❌严禁未遵循规范的转载。<br>
+当然也欢迎使用<a href="https://space.bilibili.com/1329889487" target="_blank">哔哩哔哩私信</a>与我交流~
+</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">Git是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Git-Windows"><span class="toc-number">1.1.</span> <span class="toc-text">安装Git(Windows)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEGit"><span class="toc-number">1.2.</span> <span class="toc-text">配置Git</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">Git的基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87git-init%E5%91%BD%E4%BB%A4%E6%8A%8A%E8%BF%99%E4%B8%AA%E7%9B%AE%E5%BD%95%E5%8F%98%E6%88%90Git%E5%8F%AF%E4%BB%A5%E7%AE%A1%E7%90%86%E7%9A%84%E4%BB%93%E5%BA%93"><span class="toc-number">2.1.</span> <span class="toc-text">通过git init命令把这个目录变成Git可以管理的仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="toc-number">2.2.</span> <span class="toc-text">Git工作区和暂存区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Git%E7%9A%84%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="toc-number">2.3.</span> <span class="toc-text">Git的文件管理</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/18/agent/" title="无标题">无标题</a><time datetime="2026-04-18T00:28:54.814Z" title="发表于 2026-04-18 08:28:54">2026-04-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/13/MySQL/" title="MySQL">MySQL</a><time datetime="2026-04-13T14:02:00.000Z" title="发表于 2026-04-13 22:02:00">2026-04-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/20/Maven/" title="Maven高级">Maven高级</a><time datetime="2026-01-20T06:30:00.000Z" title="发表于 2026-01-20 14:30:00">2026-01-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/20/git/" title="Git">Git</a><time datetime="2025-06-20T06:30:00.000Z" title="发表于 2025-06-20 14:30:00">2025-06-20</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By LL770</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdn.jsdelivr.net/npm/hexo-theme-butterfly@5.5.4/source/js/utils.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-butterfly@5.5.4/source/js/main.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="https://cdn.jsdelivr.net/npm/hexo-theme-butterfly@5.5.4/source/js/search/local-search.min.js"></script></div></div></body></html>
