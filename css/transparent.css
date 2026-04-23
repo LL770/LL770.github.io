@@ -1,0 +1,24 @@
+/* 文章列表卡片透明 */
+#recent-posts > .recent-post-item {
+    background: rgba(255, 255, 255, 0.8); /* 0.8是透明度，可自行修改 */
+}
+
+/* 侧边栏所有卡片透明 */
+#aside_content .card-widget {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* 页面主体区域透明（解决归档页等白块） */
+.layout_page > div:first-child:not(.recent-posts) {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* 文章页内容区域透明 */
+.layout_post > #post {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* 设置侧边栏卡片的全局透明变量 */
+:root {
+    --card-bg: rgba(255, 255, 255, 0.8);
+}
