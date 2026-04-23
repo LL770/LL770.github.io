@@ -10,18 +10,36 @@
   <link href="https://ll770.github.io/atom.xml" rel="self"/>
   <rights>All rights reserved 2026, LL770</rights>
   <title>LL770</title>
-  <updated>2026-04-18T01:27:38.217Z</updated>
+  <updated>2026-04-23T11:21:07.272Z</updated>
   <entry>
     <author>
       <name>LL770</name>
     </author>
+    <category term="语法学习" scheme="https://ll770.github.io/categories/%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/"/>
+    <category term="Java" scheme="https://ll770.github.io/tags/Java/"/>
+    <id>https://ll770.github.io/2026/04/23/Java%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</id>
+    <link href="https://ll770.github.io/2026/04/23/Java%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/"/>
+    <published>2026-04-23T08:16:12.140Z</published>
+    <summary>
+      <![CDATA[<h1 id="1-Record-快速、效率DTO、JAVA16-、少业务逻辑、数据存储）"><a href="#1-Record-快速、效率DTO、JAVA16-、少业务逻辑、数据存储）" class="headerlink" title="1.Record]]>
+    </summary>
+    <title>Java语法学习</title>
+    <updated>2026-04-23T11:21:07.272Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>LL770</name>
+    </author>
+    <category term="技术笔记" scheme="https://ll770.github.io/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/"/>
+    <category term="Agent" scheme="https://ll770.github.io/tags/Agent/"/>
     <id>https://ll770.github.io/2026/04/18/agent/</id>
     <link href="https://ll770.github.io/2026/04/18/agent/"/>
     <published>2026-04-18T00:28:54.814Z</published>
     <summary>
       <![CDATA[<h1 id="1-什么是agent-与大模型有什么不同？"><a href="#1-什么是agent-与大模型有什么不同？" class="headerlink"]]>
     </summary>
-    <updated>2026-04-18T01:27:38.217Z</updated>
+    <title>Agent</title>
+    <updated>2026-04-23T08:15:18.123Z</updated>
   </entry>
   <entry>
     <author>
@@ -36,7 +54,7 @@
       <![CDATA[<h1 id="InnoDB-Buffer-Pool-详解"><a href="#InnoDB-Buffer-Pool-详解" class="headerlink" title="InnoDB Buffer Pool 详解"></a>InnoDB Buffer Pool]]>
     </summary>
     <title>MySQL</title>
-    <updated>2026-04-14T02:19:42.334Z</updated>
+    <updated>2026-04-23T08:12:46.655Z</updated>
   </entry>
   <entry>
     <author>
