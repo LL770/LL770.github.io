@@ -123,6 +123,273 @@ SNAPSHOT：存放开发中的快照版本。
       </tags>
   </entry>
   <entry>
+    <title>MySQL</title>
+    <url>/2026/04/13/MySQL/</url>
+    <content><![CDATA[InnoDB Buffer Pool 详解1. 什么是 Buffer Pool？Buffer Pool 是 InnoDB 存储引擎 中一块内存区域，用于缓存数据页和索引页。它是 MySQL 中最重要的内存组件，直接影响数据库的读写性能。
+
+简单理解：Buffer Pool 是 MySQL 的“内存数据缓存层”。
+
+
+2. Buffer Pool 的作用核心作用
+加速读操作：查询数据时，先从 Buffer Pool 中查找，若存在（命中）则直接返回，避免磁盘 I&#x2F;O。
+加速写操作：修改数据时，先修改 Buffer Pool 中的页，然后由后台线程异步刷回磁盘（Checkpoint 机制）。
+
+带来的好处
+
+
+功能
+说明
+
+
+
+减少磁盘 I&#x2F;O
+内存操作比磁盘快 1000+ 倍
+
+
+提高并发能力
+多线程共享 Buffer Pool
+
+
+实现数据持久性
+配合 Redo Log 保证事务不丢失
+
+
+
+3. Buffer Pool 工作原理3.1 内部结构Buffer Pool    ├── 数据页（Data Pages）    ├── 索引页（Index Pages）    ├── 自适应哈希索引（AHI）    ├── 锁信息（Lock Info）    └── 变更缓冲区（Change Buffer）
+3.2 页面管理算法：LRU
+采用 改进的 LRU（最近最少使用）算法
+分为 Young 区（热数据） 和 Old 区（冷数据）
+新加载的页先进入 Old 区头，再次被访问才进入 Young 区，防止全表扫描污染热数据
+
+3.3 预读机制
+线性预读：相邻多页一次载入
+随机预读：异步提前加载可能访问的页
+
+
+4. 如何配置 Buffer Pool4.1 查看当前大小SHOW VARIABLES LIKE &#x27;innodb_buffer_pool_size&#x27;;
+4.2 设置大小（my.cnf 或 SET GLOBAL）[mysqld]# 推荐设置为物理内存的 50%~80%innodb_buffer_pool_size = 4G
+动态调整（MySQL 5.7+）：
+SET GLOBAL innodb_buffer_pool_size = 8 * 1024 * 1024 * 1024;
+4.3 多实例分割 Buffer Poolinnodb_buffer_pool_instances = 4
+
+每个实例独立管理，减少锁竞争
+建议每个实例 ≥ 1GB
+
+4.4 其他重要参数
+
+
+参数
+说明
+
+
+
+innodb_buffer_pool_chunk_size
+块大小（默认128MB）
+
+
+innodb_old_blocks_pct
+LRU Old 区占比（默认37%）
+
+
+innodb_old_blocks_time
+页在Old区必须停留的时间（ms）
+
+
+
+5. 监控 Buffer Pool 状态5.1 常用命令SHOW ENGINE INNODB STATUS\G-- 查看 Buffer pool 部分SELECT * FROM information_schema.INNODB_BUFFER_POOL_STATS\G
+5.2 关键指标解读
+
+
+指标
+含义
+健康值
+
+
+
+Buffer pool hit rate
+命中率
+&gt;99%
+
+
+Free buffers
+空闲页数量
+&gt;10% 总页数
+
+
+Database pages
+已使用的页数
+-
+
+
+Pages read/written
+读写页计数
+关注突增
+
+
+5.3 计算命中率-- MySQL 8.0 内置SHOW STATUS LIKE &#x27;Innodb_buffer_pool_read%&#x27;;
+
+Innodb_buffer_pool_read_requests：逻辑读总次数
+Innodb_buffer_pool_reads：物理读次数命中率 &#x3D; (1 - Innodb_buffer_pool_reads &#x2F; Innodb_buffer_pool_read_requests) × 100%
+
+
+6. 最佳实践建议6.1 大小设置原则
+专用数据库服务器：物理内存 × 70% ~ 80%
+混合服务器：物理内存 × 50%
+最小不低于 1GB（生产环境）
+
+6.2 避免常见问题
+❌ 过大导致操作系统 swap
+❌ 过小导致频繁磁盘 I&#x2F;O
+❌ 频繁动态调整（会清空 Buffer Pool）
+
+6.3 预热 Buffer PoolMySQL 8.0+ 支持持久化：
+innodb_buffer_pool_dump_at_shutdown = ONinnodb_buffer_pool_load_at_startup = ON
+手动预热：
+SET GLOBAL innodb_buffer_pool_dump_now = ON;SET GLOBAL innodb_buffer_pool_load_now = ON;
+
+
+7. 总结
+
+
+方面
+核心要点
+
+
+
+本质
+InnoDB 的内存数据&#x2F;索引缓存
+
+
+作用
+极大减少磁盘 I&#x2F;O，提升读写性能
+
+
+配置
+大小、实例数、LRU 参数
+
+
+监控
+命中率、读请求、空闲页
+
+
+注意
+避免过大&#x2F;过小，合理预热
+
+
+
+Buffer Pool 是 MySQL 性能优化的第一落脚点，正确配置可显著提升数据库吞吐能力。
+
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git</title>
+    <url>/2025/06/20/git/</url>
+    <content><![CDATA[Git是什么Git是目前世界上最先进的分布式版本控制系统,用于追踪文件修改、支持多分支并行开发、随时回溯历史版本，并方便多人协作合并代码，且大部分操作在本地完成。
+安装Git(Windows)
+官网安装
+或者安装一个包管理器，推荐Scoop，然后PowerShell中通过以下命令安装Git：
+
+scoop install git
+配置Git安装好Git后，还需要最后一步设置，在命令行输入：
+git config --global user.name &quot;Your Name&quot;git config --global user.email &quot;email@example.com&quot;
+
+Git的基本使用通过git init命令把这个目录变成Git可以管理的仓库git init
+创建成功后目录下会多出了一个.git文件夹
+Git工作区和暂存区
+工作区：你看到的文件夹，修改&#x2F;删除文件在这里发生
+暂存区：git add 后的临时存放地
+仓库：git commit 后的永久存储Git跟踪并管理的是修改，而非文件，只有你git add 文件后，git commit 才会提交暂存区的文件到仓库
+
+Git的文件管理git add [文件名] | .  解释：将指定文件或全部更改的文件添加到仓库
+
+git commit -m &quot;你修改的说明&quot;  解释：把文件提交到仓库并附上说明
+
+git status  解释：查看文件什么状态，未添加、修改、删除
+
+git diff  解释：查看文件与修改前的差异
+
+git log [--pretty=oneline]  解释：查看提交日志 参数是简洁输出
+
+git reset --hard HEAD^  解释：回到上一个版本， HEAD^^ 回到上上一个版本 HEAD~n 回到上n个版本
+
+git reset --hard 1094a   解释：撤回即回到最新版本，输入最新版本的commit id前缀前几位就可以
+
+git reflog  解释：commit id没有找到，查看每一次命令的日志，即可找到对应的commit id
+
+git checkout -- 文件名  解释：把文件在工作区的修改全部撤销，这里有两种情况：
+一种是文件自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+一种是r文件已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+git reset HEAD [file]  解释：同样可以把暂存区的修改撤销掉（unstage），重新放回工作区
+
+要删除文件 2种情况 
+1 git rm [file]  解释：已经提交 版本库中删除该文件
+2 git checkout -- [file]  解释：删错了，恢复到最新版本
+
+git remote add origin git@github.com:LL770/LL770.github.io.git 解释：添加远程库 请更换自己得github用户名并配置SSH Key公钥
+
+git push origin master 解释：把本地master分支的最新修改推送至GitHub
+
+git remote -v  解释：查看远程库信息
+
+git remote rm origin  解释：根据远程库名字origin，删除远程库
+
+git clone 解释：克隆远程仓库
+
+```s
+| 指令 | 解释 |
+|------|------|
+| `git branch` | 查看分支 |
+| `git branch &lt;name&gt;` | 创建分支 |
+| `git checkout &lt;name&gt;` 或 `git switch &lt;name&gt;` | 切换分支 |
+| `git checkout -b &lt;name&gt;` 或 `git switch -c &lt;name&gt;` | 创建+切换分支 |
+| `git merge &lt;name&gt;` | 合并某分支到当前分支 |
+| `git branch -d &lt;name&gt;` | 删除分支 |
+|`git log --graph`|分支合并图|
+
+### 合并某分支到当前分支冲突
+必须手动解决冲突后再提交
+Git用&lt;&lt;&lt;&lt;&lt;&lt;&lt;，=======，&gt;&gt;&gt;&gt;&gt;&gt;&gt;标记出不同分支的内容
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Agent</title>
+    <url>/2026/04/18/agent/</url>
+    <content><![CDATA[1.什么是agent,与大模型有什么不同？
+工具调用：不同于大模型只能生成文本，agent能真正执行功能，而不是像大模型只能回答问题。注意：agent是决策调用什么工具，而不是去执行工具的代码。
+记忆机制：大模型一问一答，对之前的对话不记得，而agent会有短期记忆和长期记忆两层。短期记忆是一个对话执行多个问答时agent能记住之前问答的结果，存在上下文中。长期记忆是跨多个对话的，用向量数据库来存储
+多步推理和自我纠错：agent利用大模型实现复杂任务的多步推理，在推理得到的结果会进行验证纠错，也就是思考，再继续执行下一个步骤。而大模型直接得到回答，答案会偏离正确答案。
+
+2.agent的基本架构
+大模型：负责统筹全局，工具什么时候调用，怎么得到用户输入的结果，何时调用记忆功能,选择合适的模型，去做决策或执行任务能有效节省token
+工具系统：给一份agent工具的说明书，说明书越精确agent工具调用越准确。MCP协议，将工具标准化，可以适应不同大模型，三层架构。最外层Host，与用户交互的AI应用。中间层Clinet,负责管理和MCP Server之间的连接。最里层Server,提供标准化Server，任何支持MCP的agent都能调用这些工具
+记忆系统：短期记忆的最大问题：上下文窗口有限，要进行摘要压缩或者滑动窗口。长期记忆的最大问题：存什么，不存什么，存了怎么管理。再存入之前做一轮重要性评估，还有记忆衰退机制
+规划模块：CoT和ToT 实际运行是Plan-and-Execute和ReAct
+
+3.Workflow,Agent,Tools概念和区别- 
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Agent</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java语法学习</title>
     <url>/2026/04/23/Java%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[1.Record避免繁琐的DTO语法、JAVA16+支持、用于少业务逻辑、单纯做数据存储。数据比对时可以重写equal,选择要比对的值，默认全属性比对，再重写hashcode，避免报错
@@ -346,273 +613,6 @@ Aop 面向切面编程AOP（面向切面编程）的核心作用AOP 允许你将
       </categories>
       <tags>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL</title>
-    <url>/2026/04/13/MySQL/</url>
-    <content><![CDATA[InnoDB Buffer Pool 详解1. 什么是 Buffer Pool？Buffer Pool 是 InnoDB 存储引擎 中一块内存区域，用于缓存数据页和索引页。它是 MySQL 中最重要的内存组件，直接影响数据库的读写性能。
-
-简单理解：Buffer Pool 是 MySQL 的“内存数据缓存层”。
-
-
-2. Buffer Pool 的作用核心作用
-加速读操作：查询数据时，先从 Buffer Pool 中查找，若存在（命中）则直接返回，避免磁盘 I&#x2F;O。
-加速写操作：修改数据时，先修改 Buffer Pool 中的页，然后由后台线程异步刷回磁盘（Checkpoint 机制）。
-
-带来的好处
-
-
-功能
-说明
-
-
-
-减少磁盘 I&#x2F;O
-内存操作比磁盘快 1000+ 倍
-
-
-提高并发能力
-多线程共享 Buffer Pool
-
-
-实现数据持久性
-配合 Redo Log 保证事务不丢失
-
-
-
-3. Buffer Pool 工作原理3.1 内部结构Buffer Pool    ├── 数据页（Data Pages）    ├── 索引页（Index Pages）    ├── 自适应哈希索引（AHI）    ├── 锁信息（Lock Info）    └── 变更缓冲区（Change Buffer）
-3.2 页面管理算法：LRU
-采用 改进的 LRU（最近最少使用）算法
-分为 Young 区（热数据） 和 Old 区（冷数据）
-新加载的页先进入 Old 区头，再次被访问才进入 Young 区，防止全表扫描污染热数据
-
-3.3 预读机制
-线性预读：相邻多页一次载入
-随机预读：异步提前加载可能访问的页
-
-
-4. 如何配置 Buffer Pool4.1 查看当前大小SHOW VARIABLES LIKE &#x27;innodb_buffer_pool_size&#x27;;
-4.2 设置大小（my.cnf 或 SET GLOBAL）[mysqld]# 推荐设置为物理内存的 50%~80%innodb_buffer_pool_size = 4G
-动态调整（MySQL 5.7+）：
-SET GLOBAL innodb_buffer_pool_size = 8 * 1024 * 1024 * 1024;
-4.3 多实例分割 Buffer Poolinnodb_buffer_pool_instances = 4
-
-每个实例独立管理，减少锁竞争
-建议每个实例 ≥ 1GB
-
-4.4 其他重要参数
-
-
-参数
-说明
-
-
-
-innodb_buffer_pool_chunk_size
-块大小（默认128MB）
-
-
-innodb_old_blocks_pct
-LRU Old 区占比（默认37%）
-
-
-innodb_old_blocks_time
-页在Old区必须停留的时间（ms）
-
-
-
-5. 监控 Buffer Pool 状态5.1 常用命令SHOW ENGINE INNODB STATUS\G-- 查看 Buffer pool 部分SELECT * FROM information_schema.INNODB_BUFFER_POOL_STATS\G
-5.2 关键指标解读
-
-
-指标
-含义
-健康值
-
-
-
-Buffer pool hit rate
-命中率
-&gt;99%
-
-
-Free buffers
-空闲页数量
-&gt;10% 总页数
-
-
-Database pages
-已使用的页数
--
-
-
-Pages read/written
-读写页计数
-关注突增
-
-
-5.3 计算命中率-- MySQL 8.0 内置SHOW STATUS LIKE &#x27;Innodb_buffer_pool_read%&#x27;;
-
-Innodb_buffer_pool_read_requests：逻辑读总次数
-Innodb_buffer_pool_reads：物理读次数命中率 &#x3D; (1 - Innodb_buffer_pool_reads &#x2F; Innodb_buffer_pool_read_requests) × 100%
-
-
-6. 最佳实践建议6.1 大小设置原则
-专用数据库服务器：物理内存 × 70% ~ 80%
-混合服务器：物理内存 × 50%
-最小不低于 1GB（生产环境）
-
-6.2 避免常见问题
-❌ 过大导致操作系统 swap
-❌ 过小导致频繁磁盘 I&#x2F;O
-❌ 频繁动态调整（会清空 Buffer Pool）
-
-6.3 预热 Buffer PoolMySQL 8.0+ 支持持久化：
-innodb_buffer_pool_dump_at_shutdown = ONinnodb_buffer_pool_load_at_startup = ON
-手动预热：
-SET GLOBAL innodb_buffer_pool_dump_now = ON;SET GLOBAL innodb_buffer_pool_load_now = ON;
-
-
-7. 总结
-
-
-方面
-核心要点
-
-
-
-本质
-InnoDB 的内存数据&#x2F;索引缓存
-
-
-作用
-极大减少磁盘 I&#x2F;O，提升读写性能
-
-
-配置
-大小、实例数、LRU 参数
-
-
-监控
-命中率、读请求、空闲页
-
-
-注意
-避免过大&#x2F;过小，合理预热
-
-
-
-Buffer Pool 是 MySQL 性能优化的第一落脚点，正确配置可显著提升数据库吞吐能力。
-
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Agent</title>
-    <url>/2026/04/18/agent/</url>
-    <content><![CDATA[1.什么是agent,与大模型有什么不同？
-工具调用：不同于大模型只能生成文本，agent能真正执行功能，而不是像大模型只能回答问题。注意：agent是决策调用什么工具，而不是去执行工具的代码。
-记忆机制：大模型一问一答，对之前的对话不记得，而agent会有短期记忆和长期记忆两层。短期记忆是一个对话执行多个问答时agent能记住之前问答的结果，存在上下文中。长期记忆是跨多个对话的，用向量数据库来存储
-多步推理和自我纠错：agent利用大模型实现复杂任务的多步推理，在推理得到的结果会进行验证纠错，也就是思考，再继续执行下一个步骤。而大模型直接得到回答，答案会偏离正确答案。
-
-2.agent的基本架构
-大模型：负责统筹全局，工具什么时候调用，怎么得到用户输入的结果，何时调用记忆功能,选择合适的模型，去做决策或执行任务能有效节省token
-工具系统：给一份agent工具的说明书，说明书越精确agent工具调用越准确。MCP协议，将工具标准化，可以适应不同大模型，三层架构。最外层Host，与用户交互的AI应用。中间层Clinet,负责管理和MCP Server之间的连接。最里层Server,提供标准化Server，任何支持MCP的agent都能调用这些工具
-记忆系统：短期记忆的最大问题：上下文窗口有限，要进行摘要压缩或者滑动窗口。长期记忆的最大问题：存什么，不存什么，存了怎么管理。再存入之前做一轮重要性评估，还有记忆衰退机制
-规划模块：CoT和ToT 实际运行是Plan-and-Execute和ReAct
-
-3.Workflow,Agent,Tools概念和区别- 
-]]></content>
-      <categories>
-        <category>技术笔记</category>
-      </categories>
-      <tags>
-        <tag>Agent</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git</title>
-    <url>/2025/06/20/git/</url>
-    <content><![CDATA[Git是什么Git是目前世界上最先进的分布式版本控制系统,用于追踪文件修改、支持多分支并行开发、随时回溯历史版本，并方便多人协作合并代码，且大部分操作在本地完成。
-安装Git(Windows)
-官网安装
-或者安装一个包管理器，推荐Scoop，然后PowerShell中通过以下命令安装Git：
-
-scoop install git
-配置Git安装好Git后，还需要最后一步设置，在命令行输入：
-git config --global user.name &quot;Your Name&quot;git config --global user.email &quot;email@example.com&quot;
-
-Git的基本使用通过git init命令把这个目录变成Git可以管理的仓库git init
-创建成功后目录下会多出了一个.git文件夹
-Git工作区和暂存区
-工作区：你看到的文件夹，修改&#x2F;删除文件在这里发生
-暂存区：git add 后的临时存放地
-仓库：git commit 后的永久存储Git跟踪并管理的是修改，而非文件，只有你git add 文件后，git commit 才会提交暂存区的文件到仓库
-
-Git的文件管理git add [文件名] | .  解释：将指定文件或全部更改的文件添加到仓库
-
-git commit -m &quot;你修改的说明&quot;  解释：把文件提交到仓库并附上说明
-
-git status  解释：查看文件什么状态，未添加、修改、删除
-
-git diff  解释：查看文件与修改前的差异
-
-git log [--pretty=oneline]  解释：查看提交日志 参数是简洁输出
-
-git reset --hard HEAD^  解释：回到上一个版本， HEAD^^ 回到上上一个版本 HEAD~n 回到上n个版本
-
-git reset --hard 1094a   解释：撤回即回到最新版本，输入最新版本的commit id前缀前几位就可以
-
-git reflog  解释：commit id没有找到，查看每一次命令的日志，即可找到对应的commit id
-
-git checkout -- 文件名  解释：把文件在工作区的修改全部撤销，这里有两种情况：
-一种是文件自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
-一种是r文件已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
-
-git reset HEAD [file]  解释：同样可以把暂存区的修改撤销掉（unstage），重新放回工作区
-
-要删除文件 2种情况 
-1 git rm [file]  解释：已经提交 版本库中删除该文件
-2 git checkout -- [file]  解释：删错了，恢复到最新版本
-
-git remote add origin git@github.com:LL770/LL770.github.io.git 解释：添加远程库 请更换自己得github用户名并配置SSH Key公钥
-
-git push origin master 解释：把本地master分支的最新修改推送至GitHub
-
-git remote -v  解释：查看远程库信息
-
-git remote rm origin  解释：根据远程库名字origin，删除远程库
-
-git clone 解释：克隆远程仓库
-
-```s
-| 指令 | 解释 |
-|------|------|
-| `git branch` | 查看分支 |
-| `git branch &lt;name&gt;` | 创建分支 |
-| `git checkout &lt;name&gt;` 或 `git switch &lt;name&gt;` | 切换分支 |
-| `git checkout -b &lt;name&gt;` 或 `git switch -c &lt;name&gt;` | 创建+切换分支 |
-| `git merge &lt;name&gt;` | 合并某分支到当前分支 |
-| `git branch -d &lt;name&gt;` | 删除分支 |
-|`git log --graph`|分支合并图|
-
-### 合并某分支到当前分支冲突
-必须手动解决冲突后再提交
-Git用&lt;&lt;&lt;&lt;&lt;&lt;&lt;，=======，&gt;&gt;&gt;&gt;&gt;&gt;&gt;标记出不同分支的内容
-
-
-]]></content>
-      <categories>
-        <category>技术笔记</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
       </tags>
   </entry>
 </search>
