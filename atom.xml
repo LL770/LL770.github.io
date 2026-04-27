@@ -10,7 +10,34 @@
   <link href="https://ll770.github.io/atom.xml" rel="self"/>
   <rights>All rights reserved 2026, LL770</rights>
   <title>LL770</title>
-  <updated>2026-04-23T14:05:28.326Z</updated>
+  <updated>2026-04-25T10:18:27.961Z</updated>
+  <entry>
+    <author>
+      <name>LL770</name>
+    </author>
+    <id>https://ll770.github.io/2026/04/25/Mybatis/</id>
+    <link href="https://ll770.github.io/2026/04/25/Mybatis/"/>
+    <published>2026-04-25T07:38:19.140Z</published>
+    <summary>
+      <![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>一个持久层框架 负责数据库数据数据操作<br>简化JDBC的操作：硬编码 、操作繁琐]]>
+    </summary>
+    <updated>2026-04-25T10:18:27.961Z</updated>
+  </entry>
+  <entry>
+    <author>
+      <name>LL770</name>
+    </author>
+    <category term="技术笔记" scheme="https://ll770.github.io/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/"/>
+    <category term="Ajax" scheme="https://ll770.github.io/tags/Ajax/"/>
+    <id>https://ll770.github.io/2026/04/25/Ajax(Axios)/</id>
+    <link href="https://ll770.github.io/2026/04/25/Ajax(Axios)/"/>
+    <published>2026-04-25T06:58:33.283Z</published>
+    <summary>
+      <![CDATA[<h1 id="Ajax介绍"><a href="#Ajax介绍" class="headerlink" title="Ajax介绍"></a>Ajax介绍</h1><p>Asynchronous JavaScript And XML,]]>
+    </summary>
+    <title>Agent</title>
+    <updated>2026-04-25T07:19:14.789Z</updated>
+  </entry>
   <entry>
     <author>
       <name>LL770</name>
@@ -24,7 +51,7 @@
       <![CDATA[<h1 id="1-Record"><a href="#1-Record" class="headerlink"]]>
     </summary>
     <title>Java语法学习</title>
-    <updated>2026-04-23T14:05:28.326Z</updated>
+    <updated>2026-04-25T07:24:49.192Z</updated>
   </entry>
   <entry>
     <author>
@@ -54,7 +81,7 @@
       <![CDATA[<h1 id="InnoDB-Buffer-Pool-详解"><a href="#InnoDB-Buffer-Pool-详解" class="headerlink" title="InnoDB Buffer Pool 详解"></a>InnoDB Buffer Pool]]>
     </summary>
     <title>MySQL</title>
-    <updated>2026-04-23T08:12:46.655Z</updated>
+    <updated>2026-04-27T06:38:59.410Z</updated>
   </entry>
   <entry>
     <author>
