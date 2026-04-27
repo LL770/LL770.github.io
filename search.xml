@@ -1,6 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java语法学习</title>
+    <url>/2026/04/23/Java%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[1.Record避免繁琐的DTO语法、JAVA16+支持、用于少业务逻辑、单纯做数据存储。数据比对时可以重写equal,选择要比对的值，默认全属性比对，再重写hashcode，避免报错
+Student实体import java.time.LocalDate;    // record 自动生成构造器、equals、hashCode、toString  public record Student (          String id, //学号          String name,// 姓名          int age,// 年龄          String grade,// 年级          LocalDate enrollDate // 入学时间  )&#123;          // 可以添加自定义方法          public boolean isAdult() &#123;              return age &gt;= 18;          &#125;          //紧凑构造器，用于验证          public Student &#123;              if(id==null || id.isBlank())&#123;                  throw new IllegalArgumentException(&quot;学号不能为空&quot;);              &#125;              if(name==null || name.isBlank())&#123;                  throw new IllegalArgumentException(&quot;姓名不能为空&quot;);              &#125;              if(age&lt;0)&#123;                  throw new IllegalArgumentException(&quot;年龄不能小于0&quot;);              &#125;              if(age&gt;150)&#123;                  throw new IllegalArgumentException(&quot;年龄不能大于150&quot;);              &#125;          &#125;      &#125;
+学生Serviceimport java.util.*;  import java.util.stream.Collectors;    public class StudentService &#123;      private final List&lt;Student&gt; students = new ArrayList&lt;&gt;();        //添加学生      public boolean addStudent(Student student) &#123;          boolean exists = students.stream().anyMatch(s -&gt; s.id().equals(student.id()));          if (exists) &#123;              System.out.println(&quot;该学生已存在，学号为：&quot; + student.id());              return false;          &#125;            students.add(student);          System.out.println(&quot;添加成功&quot; + student.name());          return true;      &#125;        //删除学生      public boolean deleteStudent(String id) &#123;          boolean removed = students.removeIf(s -&gt; s.id().equals(id));          if (removed) &#123;              System.out.println(&quot;删除成功，学号为：&quot; + id);          &#125; else &#123;              System.out.println(&quot;该学生不存在，学号为：&quot; + id);          &#125;          return removed;      &#125;        //更新学生信息      public boolean updateStudent(String id, String newName, Integer newAge) &#123;          for (int i = 0; i &lt; students.size(); i++) &#123;              Student s = students.get(i);              if (s.id().equals(id)) &#123;                  Student updated = new Student(                          s.id(),                          newName != null ? newName : s.name(),                          newAge != null ? newAge : s.age(),                          s.grade(),                          s.enrollDate()                  );                  students.set(i, updated);                  System.out.println(&quot;更新成功，学号为：&quot; + id);                  return true;              &#125;          &#125;          System.out.println(&quot;该学生不存在，学号为：&quot; + id);          return false;      &#125;        //查询学生按学号      public Optional&lt;Student&gt; findById(String id) &#123;          return students.stream()                  .filter(s -&gt; s.id().equals(id))                  .findFirst();      &#125;        //查询学生按姓名      public List&lt;Student&gt; findByName(String name) &#123;          return students.stream()                  .filter(s -&gt; s.name().equalsIgnoreCase(name))                  .toList();      &#125;        //查询学生按年级      public List&lt;Student&gt; findByGrade(String grade) &#123;          return students.stream()                  .filter(s -&gt; s.grade().equals(grade))                  .toList();      &#125;        //查询所有学生      public List&lt;Student&gt; findAll() &#123;          return new ArrayList&lt;&gt;(students);//返回副本，保护内部数据      &#125;        //查询所有学生按年龄排序      public List&lt;Student&gt; sortByAge() &#123;          return students.stream()                  .sorted(Comparator.comparing(Student::age))                  .toList();      &#125;      // 统计成年学生      public long countAdults() &#123;          return students.stream()                  .filter(Student::isAdult)                  .count();      &#125;        // 获取所有年级      public Set&lt;String&gt; getAllGrades() &#123;          return students.stream()                  .map(Student::grade)                  .collect(Collectors.toSet());      &#125;  &#125;
+主程序import java.time.LocalDate;  import java.util.List;    public class Main &#123;      public static void main(String[] args) &#123;          StudentService service = new StudentService();            System.out.println(&quot;=== 学生管理系统 ===\n&quot;);            // 1. 添加学生          System.out.println(&quot;--- 添加学生 ---&quot;);          Student s1 = new Student(&quot;001&quot;, &quot;张三&quot;, 18, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          System.out.println(&quot;添加成功: &quot; + s1);          Student s2 = new Student(&quot;002&quot;, &quot;李四&quot;, 20, &quot;大二&quot;, LocalDate.of(2023, 9, 1));          Student s3 = new Student(&quot;003&quot;, &quot;王五&quot;, 17, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          Student s4 = new Student(&quot;004&quot;, &quot;赵六&quot;, 22, &quot;大三&quot;, LocalDate.of(2022, 9, 1));            service.addStudent(s1);          service.addStudent(s2);          service.addStudent(s3);          service.addStudent(s4);            // 测试重复学号          service.addStudent(new Student(&quot;001&quot;, &quot;重复&quot;, 20, &quot;大四&quot;, LocalDate.now()));            System.out.println();            // 2. 查询所有学生          System.out.println(&quot;--- 所有学生 ---&quot;);          service.findAll().forEach(System.out::println);            System.out.println();            // 3. 按学号查询          System.out.println(&quot;--- 按学号查询 ---&quot;);          service.findById(&quot;002&quot;).ifPresentOrElse(                  s -&gt; System.out.println(&quot;找到: &quot; + s),                  () -&gt; System.out.println(&quot;未找到&quot;)          );            System.out.println();            // 4. 按姓名查询          System.out.println(&quot;--- 按姓名查询 ---&quot;);          List&lt;Student&gt; result = service.findByName(&quot;张三&quot;);          result.forEach(System.out::println);            System.out.println();            // 5. 按年级查询          System.out.println(&quot;--- 按年级查询 ---&quot;);          service.findByGrade(&quot;大一&quot;).forEach(System.out::println);            System.out.println();            // 6. 更新学生          System.out.println(&quot;--- 更新学生 ---&quot;);          service.updateStudent(&quot;003&quot;, &quot;王五改&quot;, 18);          System.out.println(&quot;更新后: &quot; + service.findById(&quot;003&quot;).get());            System.out.println();            // 7. 删除学生          System.out.println(&quot;--- 删除学生 ---&quot;);          service.deleteStudent(&quot;004&quot;);            System.out.println();            // 8. 按年龄排序          System.out.println(&quot;--- 按年龄排序 ---&quot;);          service.sortByAge().forEach(System.out::println);            System.out.println();            // 9. 统计数据          System.out.println(&quot;--- 统计信息 ---&quot;);          System.out.println(&quot;成年学生数: &quot; + service.countAdults());          System.out.println(&quot;所有年级: &quot; + service.getAllGrades());            System.out.println();            // 10. 最终学生列表          System.out.println(&quot;--- 最终学生列表 ---&quot;);          service.findAll().forEach(System.out::println);      &#125;  &#125;
+
+
+]]></content>
+      <categories>
+        <category>语法学习</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Maven高级</title>
+    <url>/2026/01/20/Maven/</url>
+    <content><![CDATA[Maven 高级特性总结本文档旨在系统化梳理 Maven 的高级功能，帮助应对中大型项目的构建与依赖管理挑战。
+1. 分模块设计与开发
+定义：将单一 Java 项目按功能或结构拆分为多个独立的子模块。
+优势：
+易维护：便于大型团队并行开发与管理。
+高复用：通用组件（如工具类）可被多个项目独立依赖。
+
+
+拆分策略：
+按功能模块：如公共组件、商品模块、订单模块。
+按代码分层：如实体层、业务层、控制层。
+混合拆分：功能模块与分层结合。
+
+
+实践要点：设计先行，先规划模块结构再进行编码。
+
+2. 继承与聚合2.1 继承 (&lt;parent&gt;)
+作用：子模块继承父模块的配置，用于简化依赖配置和统一版本管理。
+核心配置：
+父工程打包方式必须为 pom。
+子工程使用 &lt;parent&gt; 标签指定父工程坐标。
+
+
+
+&lt;!-- 父工程示例：tlias-parent/pom.xml --&gt;&lt;groupId&gt;com.itheima&lt;/groupId&gt;&lt;artifactId&gt;tlias-parent&lt;/artifactId&gt;&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;&lt;packaging&gt;pom&lt;/packaging&gt;&lt;!-- 子工程示例：tlias-pojo/pom.xml --&gt;&lt;parent&gt;    &lt;groupId&gt;com.itheima&lt;/groupId&gt;    &lt;artifactId&gt;tlias-parent&lt;/artifactId&gt;    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;    &lt;relativePath&gt;../tlias-parent/pom.xml&lt;/relativePath&gt;&lt;/parent&gt;
+2.2 版本锁定 (&lt;dependencyManagement&gt;)
+作用：在父工程中统一声明依赖及版本，仅声明不自动引入。子模块需显式引入坐标但无需写版本号。
+区别（面试重点）：
+&lt;dependencies&gt;：直接引入，子模块自动继承。
+&lt;dependencyManagement&gt;：版本锁定，子模块需手动引入。
+
+
+
+&lt;!-- 父工程统一管理版本 --&gt;&lt;properties&gt;    &lt;jwt.version&gt;0.9.1&lt;/jwt.version&gt;&lt;/properties&gt;&lt;dependencyManagement&gt;    &lt;dependencies&gt;        &lt;dependency&gt;            &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;            &lt;artifactId&gt;jjwt&lt;/artifactId&gt;            &lt;version&gt;$&#123;jwt.version&#125;&lt;/version&gt;        &lt;/dependency&gt;    &lt;/dependencies&gt;&lt;/dependencyManagement&gt;
+2.3 聚合 (&lt;modules&gt;)
+作用：将多个模块组织成一个整体，实现一键构建（如统一编译、打包、安装）。
+配置：在聚合工程（通常与父工程合并）的 pom.xml 中添加。
+
+&lt;!-- 在 tlias-parent 中配置聚合 --&gt;&lt;modules&gt;    &lt;module&gt;../tlias-pojo&lt;/module&gt;    &lt;module&gt;../tlias-utils&lt;/module&gt;    &lt;module&gt;../tlias-web-management&lt;/module&gt;&lt;/modules&gt;
+
+
+
+对比项
+聚合
+继承
+
+
+
+核心作用
+快速构建项目
+简化配置、统一依赖
+
+
+配置位置
+聚合工程中配置子模块列表
+子模块中配置父工程坐标
+
+
+关系感知
+父模块知道聚合了谁
+父模块不知道谁继承了自己
+
+
+3. 私服 (Nexus)
+定义：架设在局域网内的私有远程仓库，用于解决团队内部依赖共享与外部依赖缓存。
+依赖查找顺序：本地仓库 → 私服仓库 → 中央仓库。
+
+3.1 资源配置流程
+
+
+步骤
+配置内容
+关键位置
+
+
+
+第一步
+配置私服访问权限（账号&#x2F;密码）
+Maven conf/settings.xml 中的 &lt;servers&gt;
+
+
+第二步
+配置依赖下载地址（镜像&#x2F;仓库组）
+Maven conf/settings.xml 中的 &lt;mirrors&gt; 和 &lt;profiles&gt;
+
+
+第三步
+配置项目上传地址
+项目父工程 pom.xml 中的 &lt;distributionManagement&gt;
+
+
+第四步
+执行上传指令
+运行 Maven 生命周期 deploy
+
+
+3.2 关键配置示例
+Maven settings.xml 配置：
+
+&lt;servers&gt;    &lt;server&gt;        &lt;id&gt;maven-releases&lt;/id&gt;        &lt;username&gt;admin&lt;/username&gt;        &lt;password&gt;admin&lt;/password&gt;    &lt;/server&gt;&lt;/servers&gt;&lt;mirrors&gt;    &lt;mirror&gt;        &lt;id&gt;maven-public&lt;/id&gt;        &lt;mirrorOf&gt;*&lt;/mirrorOf&gt;        &lt;url&gt;http://localhost:8081/repository/maven-public/&lt;/url&gt;    &lt;/mirror&gt;&lt;/mirrors&gt;
+
+项目 pom.xml 上传配置：
+
+&lt;distributionManagement&gt;    &lt;repository&gt;        &lt;id&gt;maven-releases&lt;/id&gt;        &lt;url&gt;http://localhost:8081/repository/maven-releases/&lt;/url&gt;    &lt;/repository&gt;    &lt;snapshotRepository&gt;        &lt;id&gt;maven-snapshots&lt;/id&gt;        &lt;url&gt;http://localhost:8081/repository/maven-snapshots/&lt;/url&gt;    &lt;/snapshotRepository&gt;&lt;/distributionManagement&gt;
+
+仓库类型说明：
+RELEASE：存放稳定发布版本。
+SNAPSHOT：存放开发中的快照版本。
+
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Maven</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ajax</title>
+    <url>/2026/04/25/Ajax(Axios)/</url>
+    <content><![CDATA[Ajax介绍Asynchronous JavaScript And XML, 异步的JavaScript和XML
+功能
+与服务器进行数据交换：通过Ajax可以给服务器发送请求，并获取服务器响应的数据。
+异步交互：可以在不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术，如：搜索联想、用户名是否可用的校验等等。大大提高页面的加载速度，用户体验提升。
+
+同步异步区别同步：浏览器页面在发送请求给服务器，在服务器处理请求的过程中，浏览器页面不能做其他的操作。只能等到服务器响应结束后才能，浏览器页面才能继续做其他的操 作。异步：浏览器页面发送请求给服务器，在服务器处理请求的过程中，浏览器页面还可以做其他的操作。
+Axios介绍使用简单的发送Ajax请求的技术Axios 。Axios是对原生的AJAX进行封装，简化书写。Axios官网
+入门引入Axios文件：
+&lt;script src=&quot;https://unpkg.com/axios/dist/axios.min.js&quot;&gt;&lt;/script&gt;
+请求方法别名:
+
+
+
+方法
+描述
+
+
+
+axios.get(url [, config])
+发送get请求
+
+
+axios.delete(url [, config])
+发送delete请求
+
+
+axios.post(url [, data[, config]])
+发送post请求
+
+
+axios.put(url [, data[, config]])
+发送put请求
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Ajax</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2026/04/25/Mybatis/</url>
+    <content><![CDATA[简介一个持久层框架 负责数据库数据数据操作简化JDBC的操作：硬编码 、操作繁琐 通过配置连接信息和SQL语句的XML文件和封装功能代码直接获取结果
+快速入门MyBatis中文网
+
+创建模块 
+编写mybatis-config.xml (数据库表、用户、密码)
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  &lt;!DOCTYPE configuration          PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;          &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;  &lt;configuration&gt;  &lt;!-- environments 配置数据库连接环境信息，可配置多个environment，通过default属性切换不同的environment--&gt;    &lt;environments default=&quot;development&quot;&gt;          &lt;environment id=&quot;development&quot;&gt;              &lt;transactionManager type=&quot;JDBC&quot;/&gt;              &lt;dataSource type=&quot;POOLED&quot;&gt;                  &lt;property name=&quot;driver&quot; value=&quot;com.mysql.cj.jdbc.Driver&quot;/&gt;                  &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql:///数据库名?useSSL=false&quot;/&gt;                  &lt;property name=&quot;username&quot; value=&quot;用户名&quot;/&gt;                  &lt;property name=&quot;password&quot; value=&quot;密码&quot;/&gt;              &lt;/dataSource&gt;             &lt;/environment&gt;        &lt;/environments&gt;        &lt;mappers&gt;        		&lt;mapper resource=&quot;UserMapper.xml&quot;/&gt;  &lt;!-- resource目录下文件--&gt;    &lt;/mappers&gt;&lt;/configuration&gt;
+
+编写sql映射文件 mapper.xml
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  &lt;!DOCTYPE mapper          PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;          &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;  &lt;!-- namespace:名称空间--&gt;  &lt;mapper namespace=&quot;test&quot;&gt;  &lt;!--可指向pojo包--&gt;    &lt;select id=&quot;selectAll&quot; resultType=&quot;com.study.mybatis1.pojo.User&quot;&gt;          select * from tb_user  &lt;!-- tb_user 报错 在idea连接数据库--&gt;    &lt;/select&gt;  &lt;/mapper&gt;
+
+1.创建pojo类2.加载mybatis-config.xml连接配置3.获取SqlSession对象，执行Sql语句4.释放资源
+
+Mapper代理开发未使用代理开发 ：List&lt;User&gt; user = sqlSession.selectList(&quot;test.selectAll&quot;);
+“test.selectAll”会随着mapper的增加而混乱，且需要自己填写到代码里属于硬编码，不便管理
+使用代理开发 ：UserMapper userMapper = sqlSession.getMapper(UserMapper.class);  List&lt;User&gt; users = userMapper.selectAll();
+在resource目录下创建目录com&#x2F;study&#x2F;mybatis&#x2F;mapper和源文件mapper目录一直，再把mapper.xml文件放到该目录下。源文件mapper下写接口和对应方法。
+包扫描的方式简化SQL映射文件的加载&lt;mappers&gt;      &lt;!--mapper resource=&quot;com/study/mybatis1/mapper/UserMapper.xml&quot;/--&gt;      &lt;!-- Mapper代理方式--&gt;      &lt;package name=&quot;com.study.mybatis1.mapper&quot;/&gt;  &lt;/mappers&gt;
+Mybatis核心配置文件&lt;typeAliases&gt;      &lt;package name=&quot;com.study.mybatis1.pojo&quot;/&gt;  &lt;/typeAliases&gt;
+resultType省略前面包名
+&lt;mapper namespace=&quot;com.study.mybatis1.mapper.UserMapper&quot;&gt;      &lt;select id=&quot;selectAll&quot; resultType=&quot;User&quot;&gt;          select * from tb_user      &lt;/select&gt;  &lt;/mapper&gt;
+配置标签要遵守顺序
+  
+      
+    ]]></content>
+  </entry>
+  <entry>
     <title>MySQL</title>
     <url>/2026/04/13/MySQL/</url>
     <content><![CDATA[InnoDB Buffer Pool 详解1. 什么是 Buffer Pool？Buffer Pool 是 InnoDB 存储引擎 中一块内存区域，用于缓存数据页和索引页。它是 MySQL 中最重要的内存组件，直接影响数据库的读写性能。
@@ -276,7 +490,7 @@ SERIALIZABLE
 
 
 五、隔离级别演示（MySQL）1. READ UNCOMMITTED —— 脏读-- 事务 A（窗口1）                 -- 事务 B（窗口2）SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;START TRANSACTION;UPDATE account SET balance = balance-100 WHERE id = 1;                                 START TRANSACTION;                                 SELECT * FROM account;  -- 读到 0（未提交）ROLLBACK;                        -- 事务 B 读到的是脏数据
-事务B:![[Pasted image 20260427142438.png|568]]
+![[Pasted image 20260427142438.png]]
 2. READ COMMITTED —— 不可重复读-- 事务 A                          -- 事务 BSET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;START TRANSACTION;SELECT balance FROM account WHERE id = 1;  -- 100                                 START TRANSACTION;                                 UPDATE account SET balance = 200 WHERE id = 1;                                 COMMIT;SELECT balance FROM account WHERE id = 1;  -- 200（不可重复读）COMMIT;
 ![[Pasted image 20260427143857.png]]
 3. REPEATABLE READ —— 避免不可重复读，但仍可能幻读（当前读）-- 事务 A                               -- 事务 BSET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;START TRANSACTION;SELECT * FROM user WHERE age &gt; 20;   -- 5 行（快照读）                                  START TRANSACTION;                                  INSERT INTO user VALUES (100, &#x27;新用户&#x27;, 25);                                  COMMIT;SELECT * FROM user WHERE age &gt; 20;   -- 仍然是 5 行（快照读，MVCC 保证）SELECT * FROM user WHERE age &gt; 20 FOR UPDATE;  -- 6 行（当前读，出现幻读）COMMIT;
@@ -382,220 +596,6 @@ SHOW ENGINE INNODB STATUS
       <tags>
         <tag>MySQL</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Agent</title>
-    <url>/2026/04/25/Ajax(Axios)/</url>
-    <content><![CDATA[Ajax介绍Asynchronous JavaScript And XML, 异步的JavaScript和XML
-功能
-与服务器进行数据交换：通过Ajax可以给服务器发送请求，并获取服务器响应的数据。
-异步交互：可以在不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术，如：搜索联想、用户名是否可用的校验等等。大大提高页面的加载速度，用户体验提升。
-
-同步异步区别同步：浏览器页面在发送请求给服务器，在服务器处理请求的过程中，浏览器页面不能做其他的操作。只能等到服务器响应结束后才能，浏览器页面才能继续做其他的操 作。异步：浏览器页面发送请求给服务器，在服务器处理请求的过程中，浏览器页面还可以做其他的操作。
-Axios介绍使用简单的发送Ajax请求的技术Axios 。Axios是对原生的AJAX进行封装，简化书写。Axios官网
-入门引入Axios文件：
-&lt;script src=&quot;https://unpkg.com/axios/dist/axios.min.js&quot;&gt;&lt;/script&gt;
-请求方法别名:
-
-
-
-方法
-描述
-
-
-
-axios.get(url [, config])
-发送get请求
-
-
-axios.delete(url [, config])
-发送delete请求
-
-
-axios.post(url [, data[, config]])
-发送post请求
-
-
-axios.put(url [, data[, config]])
-发送put请求
-
-
-]]></content>
-      <categories>
-        <category>技术笔记</category>
-      </categories>
-      <tags>
-        <tag>Ajax</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java语法学习</title>
-    <url>/2026/04/23/Java%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[1.Record避免繁琐的DTO语法、JAVA16+支持、用于少业务逻辑、单纯做数据存储。数据比对时可以重写equal,选择要比对的值，默认全属性比对，再重写hashcode，避免报错
-Student实体import java.time.LocalDate;    // record 自动生成构造器、equals、hashCode、toString  public record Student (          String id, //学号          String name,// 姓名          int age,// 年龄          String grade,// 年级          LocalDate enrollDate // 入学时间  )&#123;          // 可以添加自定义方法          public boolean isAdult() &#123;              return age &gt;= 18;          &#125;          //紧凑构造器，用于验证          public Student &#123;              if(id==null || id.isBlank())&#123;                  throw new IllegalArgumentException(&quot;学号不能为空&quot;);              &#125;              if(name==null || name.isBlank())&#123;                  throw new IllegalArgumentException(&quot;姓名不能为空&quot;);              &#125;              if(age&lt;0)&#123;                  throw new IllegalArgumentException(&quot;年龄不能小于0&quot;);              &#125;              if(age&gt;150)&#123;                  throw new IllegalArgumentException(&quot;年龄不能大于150&quot;);              &#125;          &#125;      &#125;
-学生Serviceimport java.util.*;  import java.util.stream.Collectors;    public class StudentService &#123;      private final List&lt;Student&gt; students = new ArrayList&lt;&gt;();        //添加学生      public boolean addStudent(Student student) &#123;          boolean exists = students.stream().anyMatch(s -&gt; s.id().equals(student.id()));          if (exists) &#123;              System.out.println(&quot;该学生已存在，学号为：&quot; + student.id());              return false;          &#125;            students.add(student);          System.out.println(&quot;添加成功&quot; + student.name());          return true;      &#125;        //删除学生      public boolean deleteStudent(String id) &#123;          boolean removed = students.removeIf(s -&gt; s.id().equals(id));          if (removed) &#123;              System.out.println(&quot;删除成功，学号为：&quot; + id);          &#125; else &#123;              System.out.println(&quot;该学生不存在，学号为：&quot; + id);          &#125;          return removed;      &#125;        //更新学生信息      public boolean updateStudent(String id, String newName, Integer newAge) &#123;          for (int i = 0; i &lt; students.size(); i++) &#123;              Student s = students.get(i);              if (s.id().equals(id)) &#123;                  Student updated = new Student(                          s.id(),                          newName != null ? newName : s.name(),                          newAge != null ? newAge : s.age(),                          s.grade(),                          s.enrollDate()                  );                  students.set(i, updated);                  System.out.println(&quot;更新成功，学号为：&quot; + id);                  return true;              &#125;          &#125;          System.out.println(&quot;该学生不存在，学号为：&quot; + id);          return false;      &#125;        //查询学生按学号      public Optional&lt;Student&gt; findById(String id) &#123;          return students.stream()                  .filter(s -&gt; s.id().equals(id))                  .findFirst();      &#125;        //查询学生按姓名      public List&lt;Student&gt; findByName(String name) &#123;          return students.stream()                  .filter(s -&gt; s.name().equalsIgnoreCase(name))                  .toList();      &#125;        //查询学生按年级      public List&lt;Student&gt; findByGrade(String grade) &#123;          return students.stream()                  .filter(s -&gt; s.grade().equals(grade))                  .toList();      &#125;        //查询所有学生      public List&lt;Student&gt; findAll() &#123;          return new ArrayList&lt;&gt;(students);//返回副本，保护内部数据      &#125;        //查询所有学生按年龄排序      public List&lt;Student&gt; sortByAge() &#123;          return students.stream()                  .sorted(Comparator.comparing(Student::age))                  .toList();      &#125;      // 统计成年学生      public long countAdults() &#123;          return students.stream()                  .filter(Student::isAdult)                  .count();      &#125;        // 获取所有年级      public Set&lt;String&gt; getAllGrades() &#123;          return students.stream()                  .map(Student::grade)                  .collect(Collectors.toSet());      &#125;  &#125;
-主程序import java.time.LocalDate;  import java.util.List;    public class Main &#123;      public static void main(String[] args) &#123;          StudentService service = new StudentService();            System.out.println(&quot;=== 学生管理系统 ===\n&quot;);            // 1. 添加学生          System.out.println(&quot;--- 添加学生 ---&quot;);          Student s1 = new Student(&quot;001&quot;, &quot;张三&quot;, 18, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          System.out.println(&quot;添加成功: &quot; + s1);          Student s2 = new Student(&quot;002&quot;, &quot;李四&quot;, 20, &quot;大二&quot;, LocalDate.of(2023, 9, 1));          Student s3 = new Student(&quot;003&quot;, &quot;王五&quot;, 17, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          Student s4 = new Student(&quot;004&quot;, &quot;赵六&quot;, 22, &quot;大三&quot;, LocalDate.of(2022, 9, 1));            service.addStudent(s1);          service.addStudent(s2);          service.addStudent(s3);          service.addStudent(s4);            // 测试重复学号          service.addStudent(new Student(&quot;001&quot;, &quot;重复&quot;, 20, &quot;大四&quot;, LocalDate.now()));            System.out.println();            // 2. 查询所有学生          System.out.println(&quot;--- 所有学生 ---&quot;);          service.findAll().forEach(System.out::println);            System.out.println();            // 3. 按学号查询          System.out.println(&quot;--- 按学号查询 ---&quot;);          service.findById(&quot;002&quot;).ifPresentOrElse(                  s -&gt; System.out.println(&quot;找到: &quot; + s),                  () -&gt; System.out.println(&quot;未找到&quot;)          );            System.out.println();            // 4. 按姓名查询          System.out.println(&quot;--- 按姓名查询 ---&quot;);          List&lt;Student&gt; result = service.findByName(&quot;张三&quot;);          result.forEach(System.out::println);            System.out.println();            // 5. 按年级查询          System.out.println(&quot;--- 按年级查询 ---&quot;);          service.findByGrade(&quot;大一&quot;).forEach(System.out::println);            System.out.println();            // 6. 更新学生          System.out.println(&quot;--- 更新学生 ---&quot;);          service.updateStudent(&quot;003&quot;, &quot;王五改&quot;, 18);          System.out.println(&quot;更新后: &quot; + service.findById(&quot;003&quot;).get());            System.out.println();            // 7. 删除学生          System.out.println(&quot;--- 删除学生 ---&quot;);          service.deleteStudent(&quot;004&quot;);            System.out.println();            // 8. 按年龄排序          System.out.println(&quot;--- 按年龄排序 ---&quot;);          service.sortByAge().forEach(System.out::println);            System.out.println();            // 9. 统计数据          System.out.println(&quot;--- 统计信息 ---&quot;);          System.out.println(&quot;成年学生数: &quot; + service.countAdults());          System.out.println(&quot;所有年级: &quot; + service.getAllGrades());            System.out.println();            // 10. 最终学生列表          System.out.println(&quot;--- 最终学生列表 ---&quot;);          service.findAll().forEach(System.out::println);      &#125;  &#125;
-
-
-]]></content>
-      <categories>
-        <category>语法学习</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Maven高级</title>
-    <url>/2026/01/20/Maven/</url>
-    <content><![CDATA[Maven 高级特性总结本文档旨在系统化梳理 Maven 的高级功能，帮助应对中大型项目的构建与依赖管理挑战。
-1. 分模块设计与开发
-定义：将单一 Java 项目按功能或结构拆分为多个独立的子模块。
-优势：
-易维护：便于大型团队并行开发与管理。
-高复用：通用组件（如工具类）可被多个项目独立依赖。
-
-
-拆分策略：
-按功能模块：如公共组件、商品模块、订单模块。
-按代码分层：如实体层、业务层、控制层。
-混合拆分：功能模块与分层结合。
-
-
-实践要点：设计先行，先规划模块结构再进行编码。
-
-2. 继承与聚合2.1 继承 (&lt;parent&gt;)
-作用：子模块继承父模块的配置，用于简化依赖配置和统一版本管理。
-核心配置：
-父工程打包方式必须为 pom。
-子工程使用 &lt;parent&gt; 标签指定父工程坐标。
-
-
-
-&lt;!-- 父工程示例：tlias-parent/pom.xml --&gt;&lt;groupId&gt;com.itheima&lt;/groupId&gt;&lt;artifactId&gt;tlias-parent&lt;/artifactId&gt;&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;&lt;packaging&gt;pom&lt;/packaging&gt;&lt;!-- 子工程示例：tlias-pojo/pom.xml --&gt;&lt;parent&gt;    &lt;groupId&gt;com.itheima&lt;/groupId&gt;    &lt;artifactId&gt;tlias-parent&lt;/artifactId&gt;    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;    &lt;relativePath&gt;../tlias-parent/pom.xml&lt;/relativePath&gt;&lt;/parent&gt;
-2.2 版本锁定 (&lt;dependencyManagement&gt;)
-作用：在父工程中统一声明依赖及版本，仅声明不自动引入。子模块需显式引入坐标但无需写版本号。
-区别（面试重点）：
-&lt;dependencies&gt;：直接引入，子模块自动继承。
-&lt;dependencyManagement&gt;：版本锁定，子模块需手动引入。
-
-
-
-&lt;!-- 父工程统一管理版本 --&gt;&lt;properties&gt;    &lt;jwt.version&gt;0.9.1&lt;/jwt.version&gt;&lt;/properties&gt;&lt;dependencyManagement&gt;    &lt;dependencies&gt;        &lt;dependency&gt;            &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;            &lt;artifactId&gt;jjwt&lt;/artifactId&gt;            &lt;version&gt;$&#123;jwt.version&#125;&lt;/version&gt;        &lt;/dependency&gt;    &lt;/dependencies&gt;&lt;/dependencyManagement&gt;
-2.3 聚合 (&lt;modules&gt;)
-作用：将多个模块组织成一个整体，实现一键构建（如统一编译、打包、安装）。
-配置：在聚合工程（通常与父工程合并）的 pom.xml 中添加。
-
-&lt;!-- 在 tlias-parent 中配置聚合 --&gt;&lt;modules&gt;    &lt;module&gt;../tlias-pojo&lt;/module&gt;    &lt;module&gt;../tlias-utils&lt;/module&gt;    &lt;module&gt;../tlias-web-management&lt;/module&gt;&lt;/modules&gt;
-
-
-
-对比项
-聚合
-继承
-
-
-
-核心作用
-快速构建项目
-简化配置、统一依赖
-
-
-配置位置
-聚合工程中配置子模块列表
-子模块中配置父工程坐标
-
-
-关系感知
-父模块知道聚合了谁
-父模块不知道谁继承了自己
-
-
-3. 私服 (Nexus)
-定义：架设在局域网内的私有远程仓库，用于解决团队内部依赖共享与外部依赖缓存。
-依赖查找顺序：本地仓库 → 私服仓库 → 中央仓库。
-
-3.1 资源配置流程
-
-
-步骤
-配置内容
-关键位置
-
-
-
-第一步
-配置私服访问权限（账号&#x2F;密码）
-Maven conf/settings.xml 中的 &lt;servers&gt;
-
-
-第二步
-配置依赖下载地址（镜像&#x2F;仓库组）
-Maven conf/settings.xml 中的 &lt;mirrors&gt; 和 &lt;profiles&gt;
-
-
-第三步
-配置项目上传地址
-项目父工程 pom.xml 中的 &lt;distributionManagement&gt;
-
-
-第四步
-执行上传指令
-运行 Maven 生命周期 deploy
-
-
-3.2 关键配置示例
-Maven settings.xml 配置：
-
-&lt;servers&gt;    &lt;server&gt;        &lt;id&gt;maven-releases&lt;/id&gt;        &lt;username&gt;admin&lt;/username&gt;        &lt;password&gt;admin&lt;/password&gt;    &lt;/server&gt;&lt;/servers&gt;&lt;mirrors&gt;    &lt;mirror&gt;        &lt;id&gt;maven-public&lt;/id&gt;        &lt;mirrorOf&gt;*&lt;/mirrorOf&gt;        &lt;url&gt;http://localhost:8081/repository/maven-public/&lt;/url&gt;    &lt;/mirror&gt;&lt;/mirrors&gt;
-
-项目 pom.xml 上传配置：
-
-&lt;distributionManagement&gt;    &lt;repository&gt;        &lt;id&gt;maven-releases&lt;/id&gt;        &lt;url&gt;http://localhost:8081/repository/maven-releases/&lt;/url&gt;    &lt;/repository&gt;    &lt;snapshotRepository&gt;        &lt;id&gt;maven-snapshots&lt;/id&gt;        &lt;url&gt;http://localhost:8081/repository/maven-snapshots/&lt;/url&gt;    &lt;/snapshotRepository&gt;&lt;/distributionManagement&gt;
-
-仓库类型说明：
-RELEASE：存放稳定发布版本。
-SNAPSHOT：存放开发中的快照版本。
-
-
-
-]]></content>
-      <categories>
-        <category>技术笔记</category>
-      </categories>
-      <tags>
-        <tag>Maven</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2026/04/25/Mybatis/</url>
-    <content><![CDATA[简介一个持久层框架 负责数据库数据数据操作简化JDBC的操作：硬编码 、操作繁琐 通过配置连接信息和SQL语句的XML文件和封装功能代码直接获取结果
-快速入门MyBatis中文网
-
-创建模块 
-编写mybatis-config.xml (数据库表、用户、密码)
-
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  &lt;!DOCTYPE configuration          PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;          &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;  &lt;configuration&gt;  &lt;!-- environments 配置数据库连接环境信息，可配置多个environment，通过default属性切换不同的environment--&gt;    &lt;environments default=&quot;development&quot;&gt;          &lt;environment id=&quot;development&quot;&gt;              &lt;transactionManager type=&quot;JDBC&quot;/&gt;              &lt;dataSource type=&quot;POOLED&quot;&gt;                  &lt;property name=&quot;driver&quot; value=&quot;com.mysql.cj.jdbc.Driver&quot;/&gt;                  &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql:///数据库名?useSSL=false&quot;/&gt;                  &lt;property name=&quot;username&quot; value=&quot;用户名&quot;/&gt;                  &lt;property name=&quot;password&quot; value=&quot;密码&quot;/&gt;              &lt;/dataSource&gt;             &lt;/environment&gt;        &lt;/environments&gt;        &lt;mappers&gt;        		&lt;mapper resource=&quot;UserMapper.xml&quot;/&gt;  &lt;!-- resource目录下文件--&gt;    &lt;/mappers&gt;&lt;/configuration&gt;
-
-编写sql映射文件 mapper.xml
-
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  &lt;!DOCTYPE mapper          PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;          &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;  &lt;!-- namespace:名称空间--&gt;  &lt;mapper namespace=&quot;test&quot;&gt;  &lt;!--可指向pojo包--&gt;    &lt;select id=&quot;selectAll&quot; resultType=&quot;com.study.mybatis1.pojo.User&quot;&gt;          select * from tb_user  &lt;!-- tb_user 报错 在idea连接数据库--&gt;    &lt;/select&gt;  &lt;/mapper&gt;
-
-1.创建pojo类2.加载mybatis-config.xml连接配置3.获取SqlSession对象，执行Sql语句4.释放资源
-
-Mapper代理开发未使用代理开发 ：List&lt;User&gt; user = sqlSession.selectList(&quot;test.selectAll&quot;);
-“test.selectAll”会随着mapper的增加而混乱，且需要自己填写到代码里属于硬编码，不便管理
-使用代理开发 ：UserMapper userMapper = sqlSession.getMapper(UserMapper.class);  List&lt;User&gt; users = userMapper.selectAll();
-在resource目录下创建目录com&#x2F;study&#x2F;mybatis&#x2F;mapper和源文件mapper目录一直，再把mapper.xml文件放到该目录下。源文件mapper下写接口和对应方法。
-包扫描的方式简化SQL映射文件的加载&lt;mappers&gt;      &lt;!--mapper resource=&quot;com/study/mybatis1/mapper/UserMapper.xml&quot;/--&gt;      &lt;!-- Mapper代理方式--&gt;      &lt;package name=&quot;com.study.mybatis1.mapper&quot;/&gt;  &lt;/mappers&gt;
-Mybatis核心配置文件&lt;typeAliases&gt;      &lt;package name=&quot;com.study.mybatis1.pojo&quot;/&gt;  &lt;/typeAliases&gt;
-resultType省略前面包名
-&lt;mapper namespace=&quot;com.study.mybatis1.mapper.UserMapper&quot;&gt;      &lt;select id=&quot;selectAll&quot; resultType=&quot;User&quot;&gt;          select * from tb_user      &lt;/select&gt;  &lt;/mapper&gt;
-配置标签要遵守顺序
-  
-      
-    ]]></content>
   </entry>
   <entry>
     <title>Agent</title>
