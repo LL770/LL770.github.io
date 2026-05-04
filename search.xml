@@ -1,0 +1,2250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Ajax</title>
+    <url>/2026/04/25/Ajax(Axios)/</url>
+    <content><![CDATA[Ajax介绍Asynchronous JavaScript And XML, 异步的JavaScript和XML
+功能
+与服务器进行数据交换：通过Ajax可以给服务器发送请求，并获取服务器响应的数据。
+异步交互：可以在不重新加载整个页面的情况下，与服务器交换数据并更新部分网页的技术，如：搜索联想、用户名是否可用的校验等等。大大提高页面的加载速度，用户体验提升。
+
+同步异步区别同步：浏览器页面在发送请求给服务器，在服务器处理请求的过程中，浏览器页面不能做其他的操作。只能等到服务器响应结束后才能，浏览器页面才能继续做其他的操 作。异步：浏览器页面发送请求给服务器，在服务器处理请求的过程中，浏览器页面还可以做其他的操作。
+Axios介绍使用简单的发送Ajax请求的技术Axios 。Axios是对原生的AJAX进行封装，简化书写。Axios官网
+入门引入Axios文件：
+&lt;script src=&quot;https://unpkg.com/axios/dist/axios.min.js&quot;&gt;&lt;/script&gt;
+请求方法别名:
+
+
+
+方法
+描述
+
+
+
+axios.get(url [, config])
+发送get请求
+
+
+axios.delete(url [, config])
+发送delete请求
+
+
+axios.post(url [, data[, config]])
+发送post请求
+
+
+axios.put(url [, data[, config]])
+发送put请求
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Ajax</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux</title>
+    <url>/2026/05/03/Linux/</url>
+    <content><![CDATA[Linux固定ip(参考黑马)
+点击 编辑-&gt;虚拟网络编辑器
+选择VMnet8，子网IP改为192.168.88.0（如果下面有《更改设置》选项，先点击更改设置才能修改），子网掩码改为255.255.255.0。再点击NET设置
+将网关设置为192.168.88.2。修改后点击确定-&gt;确定
+打开终端，切换为root用户，输入以下命令来编辑系统文件&#96;&#96;&#96;
+
+vim /etc/sysconfig/network-scripts/ifcfg-ens33
+
+将第4行的dhcp(动态内存分配）改为static。
+在文件末尾添加以下内容：
+
+IPADDR=&quot;192.168.88.130&quot;  NETMASK=&quot;255.255.255.0&quot;GATEWAY=&quot;192.168.88.2&quot;DNS1=&quot;192.168.88.2&quot;
+
+重启网卡
+
+systemctl restart network
+
+ifconfig查看ip,显示为192.168.88.130，配置成功。
+📊 常用网段配置速查表
+
+
+
+
+网段
+子网掩码
+网关（按规则）
+推荐 IP 范围
+
+
+
+192.168.1.0
+255.255.255.0
+192.168.1.2
+192.168.1.100-200
+
+
+192.168.88.0
+255.255.255.0
+192.168.88.2
+192.168.88.128-254
+
+
+172.16.0.0
+255.255.0.0
+172.16.0.2
+172.16.0.100-254
+
+
+172.20.10.0
+255.255.255.0
+172.20.10.2
+172.20.10.100-200
+
+
+10.0.0.0
+255.0.0.0
+10.0.0.2
+10.0.0.100-254
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Redis</title>
+    <url>/2026/05/03/Redis/</url>
+    <content><![CDATA[简介Redsi是一种基于内存的key-value的结构数据库
+
+基于内存存储，读写性能高
+适合存储热点数据（热点商品，新闻，资讯）
+项目Redis + MySQL 共存
+Redis提供读写性能官网英文官网中文·
+
+Redis数据类型5种常用数据类型
+string
+hash
+list
+set
+zset
+
+Redis常用命令见教程
+Spring Data Redis]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mybatis</title>
+    <url>/2026/04/25/Mybatis/</url>
+    <content><![CDATA[简介一个持久层框架 负责数据库数据数据操作简化JDBC的操作：硬编码 、操作繁琐 通过配置连接信息和SQL语句的XML文件和封装功能代码直接获取结果
+快速入门MyBatis中文网
+
+创建模块 
+编写mybatis-config.xml (数据库表、用户、密码)
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  &lt;!DOCTYPE configuration          PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;          &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;  &lt;configuration&gt;  &lt;!-- environments 配置数据库连接环境信息，可配置多个environment，通过default属性切换不同的environment--&gt;    &lt;environments default=&quot;development&quot;&gt;          &lt;environment id=&quot;development&quot;&gt;              &lt;transactionManager type=&quot;JDBC&quot;/&gt;              &lt;dataSource type=&quot;POOLED&quot;&gt;                  &lt;property name=&quot;driver&quot; value=&quot;com.mysql.cj.jdbc.Driver&quot;/&gt;                  &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql:///数据库名?useSSL=false&quot;/&gt;                  &lt;property name=&quot;username&quot; value=&quot;用户名&quot;/&gt;                  &lt;property name=&quot;password&quot; value=&quot;密码&quot;/&gt;              &lt;/dataSource&gt;             &lt;/environment&gt;        &lt;/environments&gt;        &lt;mappers&gt;        		&lt;mapper resource=&quot;UserMapper.xml&quot;/&gt;  &lt;!-- resource目录下文件--&gt;    &lt;/mappers&gt;&lt;/configuration&gt;
+
+编写sql映射文件 mapper.xml
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;  &lt;!DOCTYPE mapper          PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;          &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;  &lt;!-- namespace:名称空间--&gt;  &lt;mapper namespace=&quot;test&quot;&gt;  &lt;!--可指向pojo包--&gt;    &lt;select id=&quot;selectAll&quot; resultType=&quot;com.study.mybatis1.pojo.User&quot;&gt;          select * from tb_user  &lt;!-- tb_user 报错 在idea连接数据库--&gt;    &lt;/select&gt;  &lt;/mapper&gt;
+
+1.创建pojo类2.加载mybatis-config.xml连接配置3.获取SqlSession对象，执行Sql语句4.释放资源
+
+Mapper代理开发未使用代理开发 ：List&lt;User&gt; user = sqlSession.selectList(&quot;test.selectAll&quot;);
+“test.selectAll”会随着mapper的增加而混乱，且需要自己填写到代码里属于硬编码，不便管理
+使用代理开发 ：UserMapper userMapper = sqlSession.getMapper(UserMapper.class);  List&lt;User&gt; users = userMapper.selectAll();
+在resource目录下创建目录com&#x2F;study&#x2F;mybatis&#x2F;mapper和源文件mapper目录一直，再把mapper.xml文件放到该目录下。源文件mapper下写接口和对应方法。
+包扫描的方式简化SQL映射文件的加载&lt;mappers&gt;      &lt;!--mapper resource=&quot;com/study/mybatis1/mapper/UserMapper.xml&quot;/--&gt;      &lt;!-- Mapper代理方式--&gt;      &lt;package name=&quot;com.study.mybatis1.mapper&quot;/&gt;  &lt;/mappers&gt;
+Mybatis核心配置文件&lt;typeAliases&gt;      &lt;package name=&quot;com.study.mybatis1.pojo&quot;/&gt;  &lt;/typeAliases&gt;
+resultType省略前面包名
+&lt;mapper namespace=&quot;com.study.mybatis1.mapper.UserMapper&quot;&gt;      &lt;select id=&quot;selectAll&quot; resultType=&quot;User&quot;&gt;          select * from tb_user      &lt;/select&gt;  &lt;/mapper&gt;
+配置标签要遵守顺序
+  
+      
+    ]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Maven高级</title>
+    <url>/2026/04/14/Maven/</url>
+    <content><![CDATA[Maven 高级特性总结本文档旨在系统化梳理 Maven 的高级功能，帮助应对中大型项目的构建与依赖管理挑战。
+1. 分模块设计与开发
+定义：将单一 Java 项目按功能或结构拆分为多个独立的子模块。
+优势：
+易维护：便于大型团队并行开发与管理。
+高复用：通用组件（如工具类）可被多个项目独立依赖。
+
+
+拆分策略：
+按功能模块：如公共组件、商品模块、订单模块。
+按代码分层：如实体层、业务层、控制层。
+混合拆分：功能模块与分层结合。
+
+
+实践要点：设计先行，先规划模块结构再进行编码。
+
+2. 继承与聚合2.1 继承 (&lt;parent&gt;)
+作用：子模块继承父模块的配置，用于简化依赖配置和统一版本管理。
+核心配置：
+父工程打包方式必须为 pom。
+子工程使用 &lt;parent&gt; 标签指定父工程坐标。
+
+
+
+&lt;!-- 父工程示例：tlias-parent/pom.xml --&gt;&lt;groupId&gt;com.itheima&lt;/groupId&gt;&lt;artifactId&gt;tlias-parent&lt;/artifactId&gt;&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;&lt;packaging&gt;pom&lt;/packaging&gt;&lt;!-- 子工程示例：tlias-pojo/pom.xml --&gt;&lt;parent&gt;    &lt;groupId&gt;com.itheima&lt;/groupId&gt;    &lt;artifactId&gt;tlias-parent&lt;/artifactId&gt;    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;    &lt;relativePath&gt;../tlias-parent/pom.xml&lt;/relativePath&gt;&lt;/parent&gt;
+2.2 版本锁定 (&lt;dependencyManagement&gt;)
+作用：在父工程中统一声明依赖及版本，仅声明不自动引入。子模块需显式引入坐标但无需写版本号。
+区别（面试重点）：
+&lt;dependencies&gt;：直接引入，子模块自动继承。
+&lt;dependencyManagement&gt;：版本锁定，子模块需手动引入。
+
+
+
+&lt;!-- 父工程统一管理版本 --&gt;&lt;properties&gt;    &lt;jwt.version&gt;0.9.1&lt;/jwt.version&gt;&lt;/properties&gt;&lt;dependencyManagement&gt;    &lt;dependencies&gt;        &lt;dependency&gt;            &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;            &lt;artifactId&gt;jjwt&lt;/artifactId&gt;            &lt;version&gt;$&#123;jwt.version&#125;&lt;/version&gt;        &lt;/dependency&gt;    &lt;/dependencies&gt;&lt;/dependencyManagement&gt;
+2.3 聚合 (&lt;modules&gt;)
+作用：将多个模块组织成一个整体，实现一键构建（如统一编译、打包、安装）。
+配置：在聚合工程（通常与父工程合并）的 pom.xml 中添加。
+
+&lt;!-- 在 tlias-parent 中配置聚合 --&gt;&lt;modules&gt;    &lt;module&gt;../tlias-pojo&lt;/module&gt;    &lt;module&gt;../tlias-utils&lt;/module&gt;    &lt;module&gt;../tlias-web-management&lt;/module&gt;&lt;/modules&gt;
+
+
+
+对比项
+聚合
+继承
+
+
+
+核心作用
+快速构建项目
+简化配置、统一依赖
+
+
+配置位置
+聚合工程中配置子模块列表
+子模块中配置父工程坐标
+
+
+关系感知
+父模块知道聚合了谁
+父模块不知道谁继承了自己
+
+
+3. 私服 (Nexus)
+定义：架设在局域网内的私有远程仓库，用于解决团队内部依赖共享与外部依赖缓存。
+依赖查找顺序：本地仓库 → 私服仓库 → 中央仓库。
+
+3.1 资源配置流程
+
+
+步骤
+配置内容
+关键位置
+
+
+
+第一步
+配置私服访问权限（账号&#x2F;密码）
+Maven conf/settings.xml 中的 &lt;servers&gt;
+
+
+第二步
+配置依赖下载地址（镜像&#x2F;仓库组）
+Maven conf/settings.xml 中的 &lt;mirrors&gt; 和 &lt;profiles&gt;
+
+
+第三步
+配置项目上传地址
+项目父工程 pom.xml 中的 &lt;distributionManagement&gt;
+
+
+第四步
+执行上传指令
+运行 Maven 生命周期 deploy
+
+
+3.2 关键配置示例
+Maven settings.xml 配置：
+
+&lt;servers&gt;    &lt;server&gt;        &lt;id&gt;maven-releases&lt;/id&gt;        &lt;username&gt;admin&lt;/username&gt;        &lt;password&gt;admin&lt;/password&gt;    &lt;/server&gt;&lt;/servers&gt;&lt;mirrors&gt;    &lt;mirror&gt;        &lt;id&gt;maven-public&lt;/id&gt;        &lt;mirrorOf&gt;*&lt;/mirrorOf&gt;        &lt;url&gt;http://localhost:8081/repository/maven-public/&lt;/url&gt;    &lt;/mirror&gt;&lt;/mirrors&gt;
+
+项目 pom.xml 上传配置：
+
+&lt;distributionManagement&gt;    &lt;repository&gt;        &lt;id&gt;maven-releases&lt;/id&gt;        &lt;url&gt;http://localhost:8081/repository/maven-releases/&lt;/url&gt;    &lt;/repository&gt;    &lt;snapshotRepository&gt;        &lt;id&gt;maven-snapshots&lt;/id&gt;        &lt;url&gt;http://localhost:8081/repository/maven-snapshots/&lt;/url&gt;    &lt;/snapshotRepository&gt;&lt;/distributionManagement&gt;
+
+仓库类型说明：
+RELEASE：存放稳定发布版本。
+SNAPSHOT：存放开发中的快照版本。
+
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Maven</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL</title>
+    <url>/2026/04/14/MySQL/</url>
+    <content><![CDATA[InnoDB Buffer Pool 详解1. 什么是 Buffer Pool？Buffer Pool 是 InnoDB 存储引擎 中一块内存区域，用于缓存数据页和索引页。它是 MySQL 中最重要的内存组件，直接影响数据库的读写性能。
+
+简单理解：Buffer Pool 是 MySQL 的“内存数据缓存层”。
+
+
+2. Buffer Pool 的作用核心作用
+加速读操作：查询数据时，先从 Buffer Pool 中查找，若存在（命中）则直接返回，避免磁盘 I&#x2F;O。
+加速写操作：修改数据时，先修改 Buffer Pool 中的页，然后由后台线程异步刷回磁盘（Checkpoint 机制）。
+
+带来的好处
+
+
+功能
+说明
+
+
+
+减少磁盘 I&#x2F;O
+内存操作比磁盘快 1000+ 倍
+
+
+提高并发能力
+多线程共享 Buffer Pool
+
+
+实现数据持久性
+配合 Redo Log 保证事务不丢失
+
+
+
+3. Buffer Pool 工作原理3.1 内部结构Buffer Pool    ├── 数据页（Data Pages）    ├── 索引页（Index Pages）    ├── 自适应哈希索引（AHI）    ├── 锁信息（Lock Info）    └── 变更缓冲区（Change Buffer）
+3.2 页面管理算法：LRU
+采用 改进的 LRU（最近最少使用）算法
+分为 Young 区（热数据） 和 Old 区（冷数据）
+新加载的页先进入 Old 区头，再次被访问才进入 Young 区，防止全表扫描污染热数据
+
+3.3 预读机制
+线性预读：相邻多页一次载入
+随机预读：异步提前加载可能访问的页
+
+
+4. 如何配置 Buffer Pool4.1 查看当前大小SHOW VARIABLES LIKE &#x27;innodb_buffer_pool_size&#x27;;
+4.2 设置大小（my.cnf 或 SET GLOBAL）[mysqld]# 推荐设置为物理内存的 50%~80%innodb_buffer_pool_size = 4G
+动态调整（MySQL 5.7+）：
+SET GLOBAL innodb_buffer_pool_size = 8 * 1024 * 1024 * 1024;
+4.3 多实例分割 Buffer Poolinnodb_buffer_pool_instances = 4
+
+每个实例独立管理，减少锁竞争
+建议每个实例 ≥ 1GB
+
+4.4 其他重要参数
+
+
+参数
+说明
+
+
+
+innodb_buffer_pool_chunk_size
+块大小（默认128MB）
+
+
+innodb_old_blocks_pct
+LRU Old 区占比（默认37%）
+
+
+innodb_old_blocks_time
+页在Old区必须停留的时间（ms）
+
+
+
+5. 监控 Buffer Pool 状态5.1 常用命令SHOW ENGINE INNODB STATUS\G-- 查看 Buffer pool 部分SELECT * FROM information_schema.INNODB_BUFFER_POOL_STATS\G
+5.2 关键指标解读
+
+
+指标
+含义
+健康值
+
+
+
+Buffer pool hit rate
+命中率
+&gt;99%
+
+
+Free buffers
+空闲页数量
+&gt;10% 总页数
+
+
+Database pages
+已使用的页数
+-
+
+
+Pages read/written
+读写页计数
+关注突增
+
+
+5.3 计算命中率-- MySQL 8.0 内置SHOW STATUS LIKE &#x27;Innodb_buffer_pool_read%&#x27;;
+
+Innodb_buffer_pool_read_requests：逻辑读总次数
+Innodb_buffer_pool_reads：物理读次数命中率 &#x3D; (1 - Innodb_buffer_pool_reads &#x2F; Innodb_buffer_pool_read_requests) × 100%
+
+
+6. 最佳实践建议6.1 大小设置原则
+专用数据库服务器：物理内存 × 70% ~ 80%
+混合服务器：物理内存 × 50%
+最小不低于 1GB（生产环境）
+
+6.2 避免常见问题
+❌ 过大导致操作系统 swap
+❌ 过小导致频繁磁盘 I&#x2F;O
+❌ 频繁动态调整（会清空 Buffer Pool）
+
+6.3 预热 Buffer PoolMySQL 8.0+ 支持持久化：
+innodb_buffer_pool_dump_at_shutdown = ONinnodb_buffer_pool_load_at_startup = ON
+手动预热：
+SET GLOBAL innodb_buffer_pool_dump_now = ON;SET GLOBAL innodb_buffer_pool_load_now = ON;
+
+
+7. 总结
+
+
+方面
+核心要点
+
+
+
+本质
+InnoDB 的内存数据&#x2F;索引缓存
+
+
+作用
+极大减少磁盘 I&#x2F;O，提升读写性能
+
+
+配置
+大小、实例数、LRU 参数
+
+
+监控
+命中率、读请求、空闲页
+
+
+注意
+避免过大&#x2F;过小，合理预热
+
+
+
+Buffer Pool 是 MySQL 性能优化的第一落脚点，正确配置可显著提升数据库吞吐能力。
+
+MySQL 事务详解一、什么是事务？事务 是数据库执行操作的最小逻辑单元，由一个或多个 SQL 语句组成，要么全部执行成功，要么全部失败回滚。
+
+二、事务四大特性（ACID）
+
+
+特性
+说明
+实现机制
+
+
+
+原子性（Atomicity）
+事务中的所有操作要么全部提交，要么全部回滚
+undo log（回滚日志）
+
+
+一致性（Consistency）
+事务执行前后，数据完整性约束不被破坏（如金额总和不变）
+通过 A、I、D 共同保证
+
+
+隔离性（Isolation）
+多个事务并发执行时，相互隔离，互不干扰
+MVCC + 锁机制
+
+
+持久性（Durability）
+事务一旦提交，数据永久保存（即使断电）
+redo log（重做日志）
+
+
+
+面试官常问：ACID 中最重要的是哪个？通常回答 一致性，因为其他三个特性都是为了最终保证一致性。
+
+
+三、并发事务带来的问题（重要区分）
+
+
+问题
+定义
+核心区别
+示例
+
+
+
+脏读
+读到其他事务未提交的数据
+读到临时、可能回滚的数据
+事务 A 修改余额 100→200 未提交，事务 B 读到 200；A 回滚后 B 读到的 200 无效
+
+
+不可重复读
+同一事务内两次读取同一行数据，结果不同
+针对同一行，内容被修改
+事务 A 第一次读余额 100，事务 B 修改为 200 并提交，A 第二次读变成 200
+
+
+幻读
+同一事务内两次范围查询，返回的行数不同
+出现原先不存在的新行（通常由 INSERT 导致）
+事务 A 查询年龄&gt;20 的用户（5 条），事务 B 插入一条年龄 21 的用户，A 再次查询变成 6 条
+
+
+幻读的典型场景（必懂）-- 事务 A                      -- 事务 BSTART TRANSACTION;SELECT * FROM user WHERE id = 10;  -- 空（不存在）                               START TRANSACTION;                               INSERT INTO user (id, name) VALUES (10, &#x27;张三&#x27;);                               COMMIT;INSERT INTO user (id, name) VALUES (10, &#x27;李四&#x27;);  -- ❌ 主键冲突！明明刚才读不存在，却插入失败 → 幻读COMMIT;
+
+
+一句话区分：  
+
+不可重复读：原来有的行，内容变了（写-写 或 写-读冲突）  
+幻读：原来没有的行，突然出现（写-插入冲突）
+
+
+
+四、隔离级别（SQL 标准定义）
+
+
+隔离级别
+脏读
+不可重复读
+幻读
+实现方式
+
+
+
+READ UNCOMMITTED
+✅
+✅
+✅
+几乎不加锁
+
+
+READ COMMITTED
+❌
+✅
+✅
+快照读 + 行锁（释放读锁）
+
+
+REPEATABLE READ
+❌
+❌
+❌*
+快照读 + 行锁 + 间隙锁
+
+
+SERIALIZABLE
+❌
+❌
+❌
+所有读加共享锁，完全串行
+
+
+
+ ❌* 表示 MySQL InnoDB 在 RR 级别下通过 间隙锁（Gap Lock） 基本消除了幻读，但标准 SQL 的 RR 仍可能存在幻读。
+
+查看与设置隔离级别-- 查看当前隔离级别SELECT @@transaction_isolation;-- 或SHOW VARIABLES LIKE &#x27;transaction_isolation&#x27;;-- 设置会话/全局隔离级别SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;SET GLOBAL TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+
+五、隔离级别演示（MySQL）1. READ UNCOMMITTED —— 脏读-- 事务 A（窗口1）                 -- 事务 B（窗口2）SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;START TRANSACTION;UPDATE account SET balance = balance-100 WHERE id = 1;                                 START TRANSACTION;                                 SELECT * FROM account;  -- 读到 0（未提交）ROLLBACK;                        -- 事务 B 读到的是脏数据
+
+![[Pasted image 20260427142438.png|591]]
+2. READ COMMITTED —— 不可重复读-- 事务 A                          -- 事务 BSET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;START TRANSACTION;SELECT balance FROM account WHERE id = 1;  -- 100                                 START TRANSACTION;                                 UPDATE account SET balance = 200 WHERE id = 1;                                 COMMIT;SELECT balance FROM account WHERE id = 1;  -- 200（不可重复读）COMMIT;```![[Pasted image 20260427143857.png|977]]#### 3. REPEATABLE READ —— 避免不可重复读，但仍可能幻读（当前读）```sql-- 事务 A                               -- 事务 BSET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;START TRANSACTION;SELECT * FROM user WHERE age &gt; 20;   -- 5 行（快照读）                                  START TRANSACTION;                                  INSERT INTO user VALUES (100, &#x27;新用户&#x27;, 25);                                  COMMIT;SELECT * FROM user WHERE age &gt; 20;   -- 仍然是 5 行（快照读，MVCC 保证）SELECT * FROM user WHERE age &gt; 20 FOR UPDATE;  -- 6 行（当前读，出现幻读）COMMIT;
+
+
+解释：普通 SELECT 是快照读，基于 Read View，不会出现幻读；SELECT ... FOR UPDATE 是当前读，会看到最新提交的数据，此时间隙锁未能阻止的插入会导致幻读。![[Pasted image 20260427143857.png|853]]
+
+4. SERIALIZABLE —— 串行化所有查询自动加锁，并发极低，几乎不用。
+SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;START TRANSACTION;SELECT * FROM account WHERE id = 1;  -- 隐式加共享锁，阻塞其他事务的写操作COMMIT;
+
+
+六、并发问题的解决方案方案1：选择合适的隔离级别（最常见）
+大多数业务使用 READ COMMITTED（Oracle、PostgreSQL 默认）或 REPEATABLE READ（MySQL 默认）
+金融、对账等强一致场景可升级为 SERIALIZABLE
+
+方案2：悲观锁（SELECT ... FOR UPDATE）START TRANSACTION;-- 锁定行，防止其他事务修改或插入（配合间隙锁防幻读）SELECT * FROM account WHERE id = 1 FOR UPDATE;UPDATE account SET balance = balance - 100 WHERE id = 1;COMMIT;
+
+方案3：乐观锁（版本号）-- 表结构增加 version 字段ALTER TABLE account ADD COLUMN version INT DEFAULT 0;-- 更新时校验版本START TRANSACTION;SELECT balance, version FROM account WHERE id = 1;  -- 100, 0UPDATE account SET balance = 200, version = version + 1 WHERE id = 1 AND version = 0;  -- 影响行数为 0 则说明已被修改，重试COMMIT;
+
+方案4：MVCC（MySQL InnoDB 默认机制）
+每行记录隐藏字段：DB_TRX_ID（最后修改的事务ID）、DB_ROLL_PTR（回滚指针）
+Read View（读视图）决定事务能看到哪些版本的数据
+实现快照读，读不阻塞写，提升并发
+
+
+七、MVCC 原理简析（面试加分）
+
+
+概念
+说明
+
+
+
+DB_TRX_ID
+最近修改该行的事务 ID
+
+
+DB_ROLL_PTR
+指向 undo log 中旧版本记录的指针
+
+
+Read View
+事务开始时生成的活动事务 ID 列表（m_ids）
+
+
+可见性规则
+仅当 DB_TRX_ID &lt; 当前 Read View 中最小活跃事务 ID 时可见；否则通过回滚指针查找历史版本
+
+
+
+RR 与 RC 的 MVCC 区别：  
+
+RR：Read View 在第一次读取时生成，整个事务复用同一个视图。  
+RC：每次读取都生成新的 Read View，因此会出现不可重复读。
+
+
+
+八、完整事务示例：银行转账（含异常处理）DROP TABLE IF EXISTS account;CREATE TABLE account (    id INT PRIMARY KEY,    name VARCHAR(20),    balance DECIMAL(10,2));INSERT INTO account VALUES (1, &#x27;张三&#x27;, 1000), (2, &#x27;李四&#x27;, 500);-- 存储过程：转账DELIMITER $$CREATE PROCEDURE transfer(    IN from_id INT,    IN to_id INT,    IN amount DECIMAL(10,2))BEGIN    DECLARE EXIT HANDLER FOR SQLEXCEPTION    BEGIN        ROLLBACK;        SELECT &#x27;转账失败，已回滚&#x27; AS result;    END;        START TRANSACTION;        -- 加锁查询余额    SELECT balance INTO @balance FROM account WHERE id = from_id FOR UPDATE;    IF @balance &lt; amount THEN        SIGNAL SQLSTATE &#x27;45000&#x27; SET MESSAGE_TEXT = &#x27;余额不足&#x27;;    END IF;        UPDATE account SET balance = balance - amount WHERE id = from_id;    UPDATE account SET balance = balance + amount WHERE id = to_id;        COMMIT;    SELECT &#x27;转账成功&#x27; AS result;END$$DELIMITER ;-- 执行转账CALL transfer(1, 2, 200);
+
+
+九、面试高频追问与总结Q1：MySQL 为什么默认使用 RR 而不是 RC？历史原因 + 主从复制：早期 binlog 为 statement 格式时，RC 级别可能导致主从不一致（如带 LIMIT 的更新）。RR 通过间隙锁保证了 binlog 记录顺序与实际情况一致。现在 row 格式下 RC 也安全，但 MySQL 仍沿用 RR 为默认。
+Q2：间隙锁（Gap Lock）有什么副作用？
+增大死锁概率（两个事务同时锁定相同范围，然后分别插入）
+降低并发性能（锁定不存在的间隙）
+
+Q3：如何解决高并发下的幻读？
+使用唯一索引 + 乐观锁
+将隔离级别降为 RC + 应用层分布式锁
+业务设计避免范围插入（如使用自增主键，不在查询范围内插入）
+
+Q4：事务最佳实践（总结表）
+
+
+建议
+理由
+
+
+
+短事务优先
+减少锁持有时间，提高并发
+
+
+避免 SELECT ... FOR UPDATE 无索引扫描
+会锁全表
+
+
+合理使用隔离级别
+不要盲目使用 SERIALIZABLE
+
+
+监控死锁
+SHOW ENGINE INNODB STATUS
+
+
+使用 row 格式 binlog
+避免主从复制问题
+
+
+视图]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java语法学习</title>
+    <url>/2026/04/23/Java%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[1.Record避免繁琐的DTO语法、JAVA16+支持、用于少业务逻辑、单纯做数据存储。数据比对时可以重写equal,选择要比对的值，默认全属性比对，再重写hashcode，避免报错
+Student实体import java.time.LocalDate;    // record 自动生成构造器、equals、hashCode、toString  public record Student (          String id, //学号          String name,// 姓名          int age,// 年龄          String grade,// 年级          LocalDate enrollDate // 入学时间  )&#123;          // 可以添加自定义方法          public boolean isAdult() &#123;              return age &gt;= 18;          &#125;          //紧凑构造器，用于验证          public Student &#123;              if(id==null || id.isBlank())&#123;                  throw new IllegalArgumentException(&quot;学号不能为空&quot;);              &#125;              if(name==null || name.isBlank())&#123;                  throw new IllegalArgumentException(&quot;姓名不能为空&quot;);              &#125;              if(age&lt;0)&#123;                  throw new IllegalArgumentException(&quot;年龄不能小于0&quot;);              &#125;              if(age&gt;150)&#123;                  throw new IllegalArgumentException(&quot;年龄不能大于150&quot;);              &#125;          &#125;      &#125;
+学生Serviceimport java.util.*;  import java.util.stream.Collectors;    public class StudentService &#123;      private final List&lt;Student&gt; students = new ArrayList&lt;&gt;();        //添加学生      public boolean addStudent(Student student) &#123;          boolean exists = students.stream().anyMatch(s -&gt; s.id().equals(student.id()));          if (exists) &#123;              System.out.println(&quot;该学生已存在，学号为：&quot; + student.id());              return false;          &#125;            students.add(student);          System.out.println(&quot;添加成功&quot; + student.name());          return true;      &#125;        //删除学生      public boolean deleteStudent(String id) &#123;          boolean removed = students.removeIf(s -&gt; s.id().equals(id));          if (removed) &#123;              System.out.println(&quot;删除成功，学号为：&quot; + id);          &#125; else &#123;              System.out.println(&quot;该学生不存在，学号为：&quot; + id);          &#125;          return removed;      &#125;        //更新学生信息      public boolean updateStudent(String id, String newName, Integer newAge) &#123;          for (int i = 0; i &lt; students.size(); i++) &#123;              Student s = students.get(i);              if (s.id().equals(id)) &#123;                  Student updated = new Student(                          s.id(),                          newName != null ? newName : s.name(),                          newAge != null ? newAge : s.age(),                          s.grade(),                          s.enrollDate()                  );                  students.set(i, updated);                  System.out.println(&quot;更新成功，学号为：&quot; + id);                  return true;              &#125;          &#125;          System.out.println(&quot;该学生不存在，学号为：&quot; + id);          return false;      &#125;        //查询学生按学号      public Optional&lt;Student&gt; findById(String id) &#123;          return students.stream()                  .filter(s -&gt; s.id().equals(id))                  .findFirst();      &#125;        //查询学生按姓名      public List&lt;Student&gt; findByName(String name) &#123;          return students.stream()                  .filter(s -&gt; s.name().equalsIgnoreCase(name))                  .toList();      &#125;        //查询学生按年级      public List&lt;Student&gt; findByGrade(String grade) &#123;          return students.stream()                  .filter(s -&gt; s.grade().equals(grade))                  .toList();      &#125;        //查询所有学生      public List&lt;Student&gt; findAll() &#123;          return new ArrayList&lt;&gt;(students);//返回副本，保护内部数据      &#125;        //查询所有学生按年龄排序      public List&lt;Student&gt; sortByAge() &#123;          return students.stream()                  .sorted(Comparator.comparing(Student::age))                  .toList();      &#125;      // 统计成年学生      public long countAdults() &#123;          return students.stream()                  .filter(Student::isAdult)                  .count();      &#125;        // 获取所有年级      public Set&lt;String&gt; getAllGrades() &#123;          return students.stream()                  .map(Student::grade)                  .collect(Collectors.toSet());      &#125;  &#125;
+主程序import java.time.LocalDate;  import java.util.List;    public class Main &#123;      public static void main(String[] args) &#123;          StudentService service = new StudentService();            System.out.println(&quot;=== 学生管理系统 ===\n&quot;);            // 1. 添加学生          System.out.println(&quot;--- 添加学生 ---&quot;);          Student s1 = new Student(&quot;001&quot;, &quot;张三&quot;, 18, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          System.out.println(&quot;添加成功: &quot; + s1);          Student s2 = new Student(&quot;002&quot;, &quot;李四&quot;, 20, &quot;大二&quot;, LocalDate.of(2023, 9, 1));          Student s3 = new Student(&quot;003&quot;, &quot;王五&quot;, 17, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          Student s4 = new Student(&quot;004&quot;, &quot;赵六&quot;, 22, &quot;大三&quot;, LocalDate.of(2022, 9, 1));            service.addStudent(s1);          service.addStudent(s2);          service.addStudent(s3);          service.addStudent(s4);            // 测试重复学号          service.addStudent(new Student(&quot;001&quot;, &quot;重复&quot;, 20, &quot;大四&quot;, LocalDate.now()));            System.out.println();            // 2. 查询所有学生          System.out.println(&quot;--- 所有学生 ---&quot;);          service.findAll().forEach(System.out::println);            System.out.println();            // 3. 按学号查询          System.out.println(&quot;--- 按学号查询 ---&quot;);          service.findById(&quot;002&quot;).ifPresentOrElse(                  s -&gt; System.out.println(&quot;找到: &quot; + s),                  () -&gt; System.out.println(&quot;未找到&quot;)          );            System.out.println();            // 4. 按姓名查询          System.out.println(&quot;--- 按姓名查询 ---&quot;);          List&lt;Student&gt; result = service.findByName(&quot;张三&quot;);          result.forEach(System.out::println);            System.out.println();            // 5. 按年级查询          System.out.println(&quot;--- 按年级查询 ---&quot;);          service.findByGrade(&quot;大一&quot;).forEach(System.out::println);            System.out.println();            // 6. 更新学生          System.out.println(&quot;--- 更新学生 ---&quot;);          service.updateStudent(&quot;003&quot;, &quot;王五改&quot;, 18);          System.out.println(&quot;更新后: &quot; + service.findById(&quot;003&quot;).get());            System.out.println();            // 7. 删除学生          System.out.println(&quot;--- 删除学生 ---&quot;);          service.deleteStudent(&quot;004&quot;);            System.out.println();            // 8. 按年龄排序          System.out.println(&quot;--- 按年龄排序 ---&quot;);          service.sortByAge().forEach(System.out::println);            System.out.println();            // 9. 统计数据          System.out.println(&quot;--- 统计信息 ---&quot;);          System.out.println(&quot;成年学生数: &quot; + service.countAdults());          System.out.println(&quot;所有年级: &quot; + service.getAllGrades());            System.out.println();            // 10. 最终学生列表          System.out.println(&quot;--- 最终学生列表 ---&quot;);          service.findAll().forEach(System.out::println);      &#125;  &#125;
+
+
+]]></content>
+      <categories>
+        <category>语法学习</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Agent</title>
+    <url>/2026/04/18/agent/</url>
+    <content><![CDATA[1.什么是agent,与大模型有什么不同？
+工具调用：不同于大模型只能生成文本，agent能真正执行功能，而不是像大模型只能回答问题。注意：agent是决策调用什么工具，而不是去执行工具的代码。
+记忆机制：大模型一问一答，对之前的对话不记得，而agent会有短期记忆和长期记忆两层。短期记忆是一个对话执行多个问答时agent能记住之前问答的结果，存在上下文中。长期记忆是跨多个对话的，用向量数据库来存储
+多步推理和自我纠错：agent利用大模型实现复杂任务的多步推理，在推理得到的结果会进行验证纠错，也就是思考，再继续执行下一个步骤。而大模型直接得到回答，答案会偏离正确答案。
+
+2.agent的基本架构
+大模型：负责统筹全局，工具什么时候调用，怎么得到用户输入的结果，何时调用记忆功能,选择合适的模型，去做决策或执行任务能有效节省token
+工具系统：给一份agent工具的说明书，说明书越精确agent工具调用越准确。MCP协议，将工具标准化，可以适应不同大模型，三层架构。最外层Host，与用户交互的AI应用。中间层Clinet,负责管理和MCP Server之间的连接。最里层Server,提供标准化Server，任何支持MCP的agent都能调用这些工具
+记忆系统：短期记忆的最大问题：上下文窗口有限，要进行摘要压缩或者滑动窗口。长期记忆的最大问题：存什么，不存什么，存了怎么管理。再存入之前做一轮重要性评估，还有记忆衰退机制
+规划模块：CoT和ToT 实际运行是Plan-and-Execute和ReAct
+
+3.Workflow,Agent,Tools概念和区别- 
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Agent</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>登录验证</title>
+    <url>/2026/04/28/%E8%8B%8D%E7%A9%B9%E5%A4%96%E5%8D%96%E5%BF%83%E5%BE%97%E4%B8%8E%E6%94%B9%E8%BF%9B/</url>
+    <content><![CDATA[YApi 部署文档(第二次，第一次删除，数据会丢失，现在持久化了)docker-compose.yml保存到 D:\docker\yapi\docker-compose.yml
+services:  mongo:    image: mongo:4.4    container_name: mongo    restart: unless-stopped    volumes:      - mongo-data:/data/db  yapi:    image: registry.cn-hangzhou.aliyuncs.com/anoy/yapi    container_name: yapi-server    restart: unless-stopped    ports:      - &quot;3000:3000&quot;    environment:      - DB_SERVER=mongo      - DB_NAME=yapi    depends_on:      - mongo    entrypoint: node    command: /api/vendors/server/app.jsvolumes:  mongo-data:
+
+
+部署步骤# 1. 进入目录cd D:\docker\yapi# 2. 启动容器docker-compose up -d# 3. 初始化数据库（首次必须执行）docker exec -it yapi-server sh -c &quot;cd /api/vendors &amp;&amp; npm run install-server&quot;# 4. 重启服务docker-compose restart# 5. 查看状态docker ps | findstr yapi
+
+
+访问
+
+
+项目
+内容
+
+
+
+地址
+http://localhost:3000
+
+
+账号
+admin@admin.com
+
+
+密码
+ymfe.org
+
+
+
+日常管理# 启动docker-compose up -d# 停止docker-compose down# 查看日志docker-compose logs -f# 重启docker-compose restart
+
+
+数据持久化说明
+
+
+操作
+数据结果
+
+
+
+docker-compose down
+✅ 数据保留
+
+
+docker-compose down -v
+❌ 数据删除（慎用）
+
+
+docker rm mongo
+✅ 数据保留（卷还在）
+
+
+
+清理重来（保留数据）docker-compose downdocker-compose up -d
+
+彻底清理（删数据）docker-compose down -v
+
+
+总结：Docker 命令 vs Docker Compose 部署区别你第一次数据丢失的原因# ❌ 你第一次做的（数据丢失）docker rm mongodocker rm yapi-server
+
+问题：直接删除容器，没有挂载数据卷，容器内的数据随容器一起被删除了。
+
+两种部署方式对比
+
+
+维度
+Docker 命令
+Docker Compose
+
+
+
+命令复杂度
+多条命令，容易出错
+一条命令搞定
+
+
+数据持久化
+需要手动加 -v 参数
+自动挂载数据卷
+
+
+删除容器
+docker rm → ❌ 数据丢失
+docker-compose down → ✅ 数据保留
+
+
+重新部署
+需要重新输入所有参数
+docker-compose up -d 即可
+
+
+配置复用
+无法复用
+docker-compose.yml 可版本控制
+
+
+适用场景
+临时测试
+生产环境 &#x2F; 长期使用
+
+
+
+正确 vs 错误做法❌ 错误做法（你第一次）# 没有挂载数据卷docker run -d --name mongo mongo:4.4# 直接删除容器docker rm mongo  # ← 数据全没了！
+
+✅ 正确做法（Docker 命令 + 数据卷）# 挂载数据卷docker run -d --name mongo -v mongo-data:/data/db mongo:4.4# 删除容器（数据还在）docker rm mongodocker run -d --name mongo -v mongo-data:/data/db mongo:4.4  # 数据恢复
+
+✅ 推荐做法（Docker Compose）volumes:  mongo-data:   # ← 声明数据卷
+
+docker-compose down   # 删除容器，数据保留docker-compose up -d  # 重新启动，数据还在
+
+
+命令对比表
+
+
+操作
+Docker 命令（无数据卷）
+Docker 命令（有数据卷）
+Docker Compose
+
+
+
+启动
+docker run ...
+docker run -v mongo-data:/data/db ...
+docker-compose up -d
+
+
+停止
+docker stop ...
+docker stop ...
+docker-compose stop
+
+
+删除容器
+docker rm ... ❌ 丢数据
+docker rm ... ✅ 数据在
+docker-compose down ✅ 数据在
+
+
+删除容器+数据
+-
+docker rm -v ... ❌ 丢数据
+docker-compose down -v ❌ 丢数据
+
+
+重新部署
+重新输入命令
+重新输入命令
+docker-compose up -d
+
+
+
+数据卷生命周期创建数据卷    ↓docker-compose up -d  ← 容器使用数据卷    ↓docker-compose down   ← 删除容器，数据卷保留 ✅    ↓docker-compose up -d  ← 新容器挂载旧数据卷，数据恢复 ✅    ↓docker-compose down -v ← 删除容器+数据卷，数据丢失 ❌
+
+
+最佳实践
+
+
+场景
+推荐方式
+
+
+
+临时测试实验
+Docker 命令（无数据卷）
+
+
+个人长期使用
+Docker Compose + 数据卷
+
+
+团队&#x2F;生产环境
+Docker Compose + 数据卷 + 定期备份
+
+
+
+你现在正确的配置# D:\docker\yapi\docker-compose.ymlservices:  mongo:    image: mongo:4.4    volumes:      - mongo-data:/data/db   # ← 关键：数据持久化volumes:  mongo-data:   # ← 命名数据卷
+
+以后删除容器用 docker-compose down，数据不会丢。
+YApi 部署文档背景与目的YApi 是一个开源的接口管理平台（类似 Postman + Swagger 的整合）。但由于官方已停止维护，且最新版 MongoDB 不兼容，部署时需要锁定 MongoDB 4.4 版本。
+功能：
+
+接口文档管理
+Mock 数据
+测试集合
+团队协作
+
+
+部署步骤1. 创建网络docker network create yapi-network
+
+2. 启动 MongoDB 4.4（名称必须为 mongo）docker run -d --name mongo --network yapi-network mongo:4.4
+
+3. 初始化数据库docker run -it --rm \  --network yapi-network \  --workdir /api/vendors \  --entrypoint npm \  registry.cn-hangzhou.aliyuncs.com/anoy/yapi \  run install-server
+docker run -it --rm --network yapi-network --workdir /api/vendors --entrypoint npm registry.cn-hangzhou.aliyuncs.com/anoy/yapi run install-server
+
+提示输入时：全部直接按回车，最后输入 y 回车
+
+4. 启动 YApi 服务docker run -d \  --name yapi-server \  --network yapi-network \  -p 3000:3000 \  -e DB_SERVER=mongo \  -e DB_NAME=yapi \  --entrypoint node \  registry.cn-hangzhou.aliyuncs.com/anoy/yapi \  /api/vendors/server/app.js
+
+docker run -d --name yapi-server --network yapi-network -p 3000:3000 -e DB_SERVER=mongo -e DB_NAME=yapi --entrypoint node registry.cn-hangzhou.aliyuncs.com/anoy/yapi /api/vendors/server/app.js
+
+5. 验证docker ps | findstr yapi
+
+
+访问
+
+
+项目
+内容
+
+
+
+地址
+http://localhost:3000
+
+
+账号
+admin@admin.com
+
+
+密码
+ymfe.org
+
+
+
+常用管理命令
+
+
+操作
+命令
+
+
+
+停止
+docker stop yapi-server
+
+
+启动
+docker start yapi-server
+
+
+重启
+docker restart yapi-server
+
+
+日志
+docker logs yapi-server
+
+
+停止并删除
+docker stop yapi-server &amp;&amp; docker rm yapi-server
+
+
+
+注意事项
+必须使用 MongoDB 4.4，最新版不兼容
+MongoDB 容器名称必须是 mongo（YApi 脚本硬编码）
+镜像使用阿里云镜像：registry.cn-hangzhou.aliyuncs.com/anoy/yapi（原官方镜像是 jayfong/yapi）
+登录后请立即修改密码
+
+报错你遇到的核心问题是：存在旧容器&#x2F;网络，并且没有正确清理。
+根据你的日志，问题链条如下：
+
+容器名冲突 → 名为 mongo 和 yapi-server 的容器已经存在（可能是之前残留的或正在运行的）。
+初始化连接失败 → 因为旧的 mongo 容器可能是用最新版镜像启动的（不兼容），或者根本没有正常运行。
+
+请按以下步骤彻底清理并重新部署（直接复制每行命令执行）：
+第一步：彻底清理旧容器和网络# 1. 强制停止并删除所有相关容器docker rm -f mongodocker rm -f yapi-server# 2. 确认没有残留容器（应该没有输出）docker ps -a | findstr &quot;mongo\|yapi&quot;
+
+第二步：重新部署（使用一行命令，不要换行）1. 启动 MongoDB 4.4（新容器）
+docker run -d --name mongo --network yapi-network mongo:4.4
+
+2. 初始化数据库（直接复制这一整行）
+docker run -it --rm --network yapi-network --workdir /api/vendors --entrypoint npm registry.cn-hangzhou.aliyuncs.com/anoy/yapi run install-server
+
+执行后看到提示全部按回车，最后输入 y 确认。看到 初始化管理员账号成功 即可。
+
+3. 启动 YApi 服务（直接复制这一整行）
+docker run -d --name yapi-server --network yapi-network -p 3000:3000 -e DB_SERVER=mongo -e DB_NAME=yapi --entrypoint node registry.cn-hangzhou.aliyuncs.com/anoy/yapi /api/vendors/server/app.js
+
+4. 验证是否成功
+docker ps | findstr yapi
+
+如果看到 yapi-server 状态为 Up，立即访问 http://localhost:3000，使用 admin@admin.com &#x2F; ymfe.org 登录。
+为什么会出错？
+旧容器残留：你之前已经创建过 mongo 和 yapi-server 容器（可能是用最新版 MongoDB 运行的），导致新容器无法同名创建。
+MongoDB 版本：初始化报错 ENOTFOUND mongo 是因为旧的 MongoDB 容器可能没有正确连接到 yapi-network 或者不是 4.4 版本。
+
+按照上面的“两步走”，可以完整重建一套干净可用的环境。
+
+架构图┌─────────────────────────────────────────────┐│              Docker Network                  ││              (yapi-network)                  ││  ┌─────────────┐      ┌─────────────────┐   ││  │   MongoDB   │      │     YApi        │   ││  │   :27017    │◄────►│   :3000         │   ││  │  (mongo:4.4)│      │  (node app.js)  │   ││  └─────────────┘      └─────────────────┘   │└─────────────────────────────────────────────┘                    │                    ▼            http://localhost:3000
+
+删除现有容器docker stop yapi-server mongo
+docker rm yapi-server mongo
+docker ps -a | findstr yapi
+docker ps -a | findstr mongo
+确认两个容器都已删除（无输出）。
+
+MD5// MD5加密算法password = DigestUtils.md5DigestAsHex(password.getBytes());
+
+Swagger生成接口文档，以及在线接口调试页面官网Knife4j是为Java MVC框架集成Swagger生成Api文档的增强解决方案。使用方式
+
+导入 knife4j 的maven坐标
+
+在配置类中加入 knife4j 相关配置
+
+设置静态资源映射，否则接口文档页面无法访问
+
+
+
+异常处理在控制台捕获异常，写入GlobalExceptionHandler中，对其异常分析为何种异常，然后返回自定义的错误，错误为自定义常量在一个常量类中，错误返回给前端
+ThreadLocalThreadLocal并不是一个Thread,而是Thread的局部变量ThreadLoca为每个线程提供单独一份存储空间，具有线程隔离的效果，只有在线程内才能获取对应的值，线程外则不能访问。前端一次请求到后端是一个单独的线程
+分页查询前端请求数据EmployeePageQueryDTO
+public class EmployeePageQueryDTO implements Serializable &#123;        //员工姓名      private String name;        //页码      private int page;        //每页显示记录数      private int pageSize;    &#125;
+统一封装为PageResult 
+public class PageResult implements Serializable &#123;        private long total; //总记录数        private List records; //当前页数据集合    &#125;
+分页查询 service层
+public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) &#123;      PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());      Page&lt;Employee&gt; page = employeeMapper.pageQuery(employeePageQueryDTO);      long total = page.getTotal();      List&lt;Employee&gt; records = page.getResult();      return new PageResult(total, records);  &#125;
+日期格式化
+
+方式1. 在属性上加入注解，对日期进行格式化
+
+@JsonFormat(pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;)private LocalDateTime createTime;
+
+
+方式2. 在 WebMvcConfiguration 中扩展Spring MVC的消息转换器，统一对日期类型进行格式化处理WebMvcConfiguration.java
+
+/**   * 扩展mvc框架的消息转换器   * @param converters   */  protected void extendMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters) &#123;      log.info(&quot;开始扩展消息转换器...&quot;);        //创建一个消息转化器对象      MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();      //设置对象转换器，可以将Java对象转为json字符串      converter.setObjectMapper(new JacksonObjectMapper());        //将我们自己的转换器放入spring MVC框架的容器中      converters.add(0,converter);  &#125;
+ JacksonObjectMapper.java  /**   * 对象映射器:基于jackson将Java对象转为json，或者将json转为Java对象   * 将JSON解析为Java对象的过程称为 [从JSON反序列化Java对象]   * 从Java对象生成JSON的过程称为 [序列化Java对象到JSON]   */ public class JacksonObjectMapper extends ObjectMapper &#123;        public static final String DEFAULT_DATE_FORMAT = &quot;yyyy-MM-dd&quot;;      //public static final String DEFAULT_DATE_TIME_FORMAT = &quot;yyyy-MM-dd HH:mm:ss&quot;;      public static final String DEFAULT_DATE_TIME_FORMAT = &quot;yyyy-MM-dd HH:mm&quot;;      public static final String DEFAULT_TIME_FORMAT = &quot;HH:mm:ss&quot;;        public JacksonObjectMapper() &#123;          super();          //收到未知属性时不报异常          this.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);            //反序列化时，属性不存在的兼容处理          this.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);            SimpleModule simpleModule = new SimpleModule()                  .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))                  .addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))                  .addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))                  .addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))                  .addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))                  .addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)));            //注册功能模块 例如，可以添加自定义序列化器和反序列化器          this.registerModule(simpleModule);      &#125;  &#125;
+Bean 名称冲突修复问题描述org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name &#x27;shopController&#x27; for bean class [com.sky.controller.user.ShopController] conflicts with existing, non-compatible bean definition of same name and class [com.sky.controller.admin.ShopController]
+
+根本原因两个不同包下的 Controller 类名相同（都是 ShopController），Spring 默认使用类名首字母小写作为 Bean 名称，导致冲突。
+解决方案1 Admin ShopController文件： controller/admin/ShopController.java
+@RestController(&quot;adminShopController&quot;)  // 指定唯一的 Bean 名称@RequestMapping(&quot;/admin/shop&quot;)@Api(tags=&quot;店铺相关接口&quot;)@Slf4jpublic class ShopController &#123;    // ...&#125;
+
+2 User ShopController文件： controller/user/ShopController.java
+@RestController(&quot;userShopController&quot;)  // 指定唯一的 Bean 名称@RequestMapping(&quot;/user/shop&quot;)  // 注意：用户端路径应该是 /user/shop@Api(tags=&quot;用户相关接口&quot;)@Slf4jpublic class ShopController &#123;    // ...&#125;
+
+
+API 设计说明1 单例资源 vs 多实例资源的 API 设计差异店铺营业状态（单例资源）GET  /admin/shop/status          # 获取营业状态PUT  /admin/shop/&#123;status&#125;        # 设置营业状态
+
+设计特点：
+
+店铺是单一资源，系统中只有一个店铺
+不需要额外的 ID 参数
+status 直接作为路径参数
+符合 RESTful 资源导向风格
+
+套餐状态（多实例资源）POST /admin/setmeal/status/&#123;status&#125;?id=&#123;id&#125;    # 起售/停售套餐
+
+设计特点：
+
+套餐是集合资源，系统中有多个套餐
+需要通过 id 参数指定具体操作哪个套餐
+采用操作式 API 设计
+更适合批量操作的扩展
+
+2 为什么设计不同？
+
+
+特性
+店铺状态
+套餐状态
+
+
+
+资源数量
+单一（只有一个店铺）
+多个（很多套餐）
+
+
+是否需要 ID
+❌ 不需要
+✅ 需要
+
+
+设计风格
+RESTful 资源导向
+操作导向
+
+
+路径示例
+/shop/{status}
+/setmeal/status/{status}?id=xxx
+
+
+核心原因： 单例资源可以直接在路径中表达状态变更，而多实例资源需要额外标识具体是哪个实例。
+3 更 RESTful 的替代方案如果希望统一风格，套餐状态接口也可以设计为：
+// 方案一：嵌套路径@PutMapping(&quot;/&#123;id&#125;/status&quot;)public Result updateStatus(@PathVariable Long id, @RequestParam Integer status)// 方案二：使用 PATCH@PatchMapping(&quot;/&#123;id&#125;&quot;)public Result update(@PathVariable Long id, @RequestBody Map&lt;String, Object&gt; updates)
+
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>RAGFlow 部署总结</title>
+    <url>/2026/05/02/RAGFlow%20%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[RAGFlow 部署总结📋 环境信息
+
+
+项目
+信息
+
+
+
+操作系统
+Windows (PowerShell)
+
+
+Docker
+Docker Desktop (WSL2 后端)
+
+
+GPU
+NVIDIA GeForce RTX 4060 (8GB)
+
+
+部署模式
+CPU 模式（更稳定，更省资源）
+
+
+RAGFlow 版本
+v0.25.0
+
+
+访问地址
+http://localhost:8090
+
+
+API 端口
+http://localhost:9380
+
+
+
+🚀 快速部署命令# 1. 克隆代码git clone https://github.com/infiniflow/ragflow.gitcd ragflowgit checkout v0.25.0# 2. 配置环境cd dockercp .env.single-bucket-example .env# 3. 修改 .env 配置（详见下方配置说明）# 4. 启动服务docker compose --profile elasticsearch --profile cpu up -d# 5. 查看状态docker compose ps# 6. 查看日志docker logs -f docker-ragflow-cpu-1
+
+
+⚙️ .env 核心配置# 设备模式（使用 CPU）DEVICE=cpu# 向量数据库DOC_ENGINE=elasticsearch# 组合 profilesCOMPOSE_PROFILES=elasticsearch,cpu# 端口配置（避免冲突）ES_PORT=9200                    # Elasticsearch 端口EXPOSE_MYSQL_PORT=3307          # MySQL 对外端口SVR_WEB_HTTP_PORT=8090          # Web 界面端口SVR_WEB_HTTPS_PORT=8443         # HTTPS 端口SVR_HTTP_PORT=9380              # API 端口# 镜像版本RAGFLOW_IMAGE=infiniflow/ragflow:v0.25.0# 内存限制（8GB）MEM_LIMIT=8073741824# Elasticsearch 内存限制ES_JAVA_OPTS=&quot;-Xms2g -Xmx2g&quot;# 时区TZ=Asia/Shanghai# 允许注册REGISTER_ENABLED=1
+
+
+📦 服务组件
+
+
+服务
+镜像
+端口映射
+
+
+
+RAGFlow
+infiniflow&#x2F;ragflow:v0.25.0
+8090→80, 9380→9380
+
+
+Elasticsearch
+elasticsearch:8.11.3
+9200→9200
+
+
+MySQL
+mysql:8.0.39
+3307→3306
+
+
+MinIO
+pgsty&#x2F;minio
+9000-9001→9000-9001
+
+
+Redis
+valkey&#x2F;valkey:8
+6379→6379
+
+
+
+🔧 常用管理命令# 进入 docker 目录cd D:\RAGFlow\ragflow\docker# 启动服务docker compose --profile elasticsearch --profile cpu up -d# 停止服务docker compose down# 重启服务docker compose restart ragflow-cpu# 查看容器状态docker compose ps# 查看实时日志docker logs -f docker-ragflow-cpu-1# 进入容器docker exec -it docker-ragflow-cpu-1 bash# 查看资源占用docker stats --no-stream
+
+
+🔌 Ollama 模型配置在 RAGFlow 界面中添加 Ollama 模型时：
+
+
+
+配置项
+值
+
+
+
+基础 URL
+http://host.docker.internal:11434
+
+
+API-Key
+留空（本地部署）
+
+
+模型名称
+deepseek-r1:8b（对话）或 nomic-embed-text:latest（嵌入）
+
+
+Ollama 环境配置（如需）# 设置环境变量后重启 OllamaOLLAMA_HOST=0.0.0.0OLLAMA_ORIGINS=*
+
+
+⚠️ 常见问题及解决
+
+
+问题
+解决方案
+
+
+
+502 Bad Gateway
+等待依赖下载完成（首次启动需 5-15 分钟）
+
+
+端口冲突
+修改 .env 中的端口号
+
+
+内存不足
+增加 Docker Desktop 内存限制到 12GB+
+
+
+MySQL 连接失败
+确保使用 CPU profile：--profile elasticsearch --profile cpu
+
+
+下载慢
+使用国内镜像：registry.cn-hangzhou.aliyuncs.com/infiniflow/ragflow:v0.25.0
+
+
+
+🧹 清理命令# 停止并删除容器、网络（保留数据）docker compose down# 停止并删除所有（包括数据卷）docker compose down -v# 清理未使用的镜像docker image prune -a# 清理构建缓存docker builder prune -a# 查看磁盘占用docker system df
+
+
+✅ 验证部署成功# 1. 检查容器状态（都应该是 Up 或 healthy）docker compose ps# 2. 测试 APIcurl http://localhost:9380/api/health# 3. 访问 Web 界面# 浏览器打开 http://localhost:8090
+
+
+📝 注意事项
+首次启动需要下载 PyTorch 和 CUDA 依赖（约 2GB），等待 10-15 分钟
+CPU 模式比 GPU 模式更稳定，内存占用更低
+slim 版本可避免 CUDA 依赖，启动更快
+数据卷包含知识库数据，定期备份
+Ollama 地址必须用 host.docker.internal，不能用 localhost
+
+
+🔗 相关资源
+RAGFlow GitHub
+RAGFlow 文档
+Ollama 官网
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Git</title>
+    <url>/2026/04/20/git/</url>
+    <content><![CDATA[Git是什么Git是目前世界上最先进的分布式版本控制系统,用于追踪文件修改、支持多分支并行开发、随时回溯历史版本，并方便多人协作合并代码，且大部分操作在本地完成。
+安装Git(Windows)
+官网安装
+或者安装一个包管理器，推荐Scoop，然后PowerShell中通过以下命令安装Git：
+
+scoop install git
+配置Git安装好Git后，还需要最后一步设置，在命令行输入：
+git config --global user.name &quot;Your Name&quot;git config --global user.email &quot;email@example.com&quot;
+
+Git的基本使用通过git init命令把这个目录变成Git可以管理的仓库git init
+创建成功后目录下会多出了一个.git文件夹
+Git工作区和暂存区
+工作区：你看到的文件夹，修改&#x2F;删除文件在这里发生
+暂存区：git add 后的临时存放地
+仓库：git commit 后的永久存储Git跟踪并管理的是修改，而非文件，只有你git add 文件后，git commit 才会提交暂存区的文件到仓库
+
+Git的文件管理git add [文件名] | .  解释：将指定文件或全部更改的文件添加到仓库
+
+git commit -m &quot;你修改的说明&quot;  解释：把文件提交到仓库并附上说明
+
+git status  解释：查看文件什么状态，未添加、修改、删除
+
+git diff  解释：查看文件与修改前的差异
+
+git log [--pretty=oneline]  解释：查看提交日志 参数是简洁输出
+
+git reset --hard HEAD^  解释：回到上一个版本， HEAD^^ 回到上上一个版本 HEAD~n 回到上n个版本
+
+git reset --hard 1094a   解释：撤回即回到最新版本，输入最新版本的commit id前缀前几位就可以
+
+git reflog  解释：commit id没有找到，查看每一次命令的日志，即可找到对应的commit id
+
+git checkout -- 文件名  解释：把文件在工作区的修改全部撤销，这里有两种情况：
+一种是文件自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+一种是r文件已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+git reset HEAD [file]  解释：同样可以把暂存区的修改撤销掉（unstage），重新放回工作区
+
+要删除文件 2种情况 
+1 git rm [file]  解释：已经提交 版本库中删除该文件
+2 git checkout -- [file]  解释：删错了，恢复到最新版本
+
+git remote add origin git@github.com:LL770/LL770.github.io.git 解释：添加远程库 请更换自己得github用户名并配置SSH Key公钥
+
+git push origin master 解释：把本地master分支的最新修改推送至GitHub
+
+git remote -v  解释：查看远程库信息
+
+git remote rm origin  解释：根据远程库名字origin，删除远程库
+
+git clone 解释：克隆远程仓库
+
+```s
+| 指令 | 解释 |
+|------|------|
+| `git branch` | 查看分支 |
+| `git branch &lt;name&gt;` | 创建分支 |
+| `git checkout &lt;name&gt;` 或 `git switch &lt;name&gt;` | 切换分支 |
+| `git checkout -b &lt;name&gt;` 或 `git switch -c &lt;name&gt;` | 创建+切换分支 |
+| `git merge &lt;name&gt;` | 合并某分支到当前分支 |
+| `git branch -d &lt;name&gt;` | 删除分支 |
+|`git log --graph`|分支合并图|
+
+### 合并某分支到当前分支冲突
+必须手动解决冲突后再提交
+Git用&lt;&lt;&lt;&lt;&lt;&lt;&lt;，=======，&gt;&gt;&gt;&gt;&gt;&gt;&gt;标记出不同分支的内容
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>阿里云 ECS 从零搭建：服务功能配置与 API 管理平台部署完整指南</title>
+    <url>/2026/05/04/%E9%98%BF%E9%87%8C%E4%BA%91%20ECS%20%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BA%EF%BC%9A%E6%9C%8D%E5%8A%A1%E5%8A%9F%E8%83%BD%E9%85%8D%E7%BD%AE%E4%B8%8E%20API%20%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[阿里云服务器初始化与环境搭建指南本指南记录了从购买阿里云轻量应用服务器到完成基础环境配置（安装 MySQL、Redis、Docker）的全过程，适合新手学习和参考。
+1. 服务器选购与配置
+产品类型：阿里云轻量应用服务器 或 ECS 经济型e实例
+核心配置：2核 2GB
+存储：40GB 系统盘
+带宽：200Mbps 峰值（轻量） 或 3Mbps 固定（ECS）
+操作系统：Ubuntu 22.04 LTS（推荐）
+
+
+建议：我选择的是 Ubuntu 系统，因为对新手友好，社区支持好，教程丰富。
+
+
+2. 连接到云服务器2.1 重置密码
+登录阿里云控制台 → 轻量应用服务器
+点击服务器名称 → 重置密码
+设置符合规则的密码（大小写字母 + 数字）
+等待服务器自动重启（约1-2分钟）
+
+2.2 放行 22 端口
+进入控制台 → 防火墙 → 添加规则
+协议：TCP，端口：22，来源：0.0.0.0/0
+tip:  如果SSH连接失败，看一下22端口是否开放
+
+2.3 使用 SSH 连接方法一：命令行（验证用）
+ssh root@你的公网IP
+
+方法二：FinalShell（推荐）
+
+下载并安装 FinalShell
+新建连接：主机填公网IP，端口22，用户名root，密码为重置后的密码
+
+
+3. 基础系统更新登录服务器后，首先更新软件源：
+apt update
+
+
+MySQL 远程访问配置指南📋 环境信息
+
+
+项目
+信息
+
+
+
+服务器 IP
+公网ip
+
+
+MySQL 版本
+8.0.x
+
+
+操作系统
+Ubuntu 22.04
+
+
+一、安装 MySQL# 安装 MySQL 服务器sudo apt install mysql-server -y# 查看版本确认安装成功mysql --version
+
+
+二、基础安全配置sudo mysql_secure_installation
+
+交互回答指南
+
+
+提示
+输入
+说明
+
+
+
+VALIDATE PASSWORD COMPONENT
+n
+❌ 不开启密码验证插件（允许简单密码）
+
+
+New password:
+123456
+设置你的密码
+
+
+Re-enter new password:
+123456
+确认密码
+
+
+Remove anonymous users?
+Y
+✅ 删除匿名用户
+
+
+Disallow root login remotely?
+n
+❌ 允许远程登录
+
+
+Remove test database and access to it?
+Y
+✅ 删除测试数据库
+
+
+Reload privilege tables now?
+Y
+✅ 重载权限表
+
+
+三、配置远程访问3.1 修改绑定地址编辑配置文件：
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+
+找到并修改：
+# 将这行bind-address = 127.0.0.1# 改成bind-address = 0.0.0.0
+
+3.2 重启 MySQL 服务sudo systemctl restart mysql
+
+3.3 验证绑定地址sudo netstat -tlnp | grep 3306
+
+预期输出：
+tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      1234/mysqld
+
+✅ 0.0.0.0:3306 表示监听所有网络接口（正确）
+❌ 127.0.0.1:3306 表示仅本地访问（需要重新修改配置）
+
+3.4 授权远程访问用户# 登录 MySQLsudo mysql -u root -p# 输入密码: 123456
+
+在 MySQL 命令行中执行：
+-- 查看当前用户权限SELECT host, user FROM mysql.user WHERE user=&#x27;root&#x27;;-- 创建允许任意 IP 访问的 root 用户CREATE USER IF NOT EXISTS &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;123456&#x27;;-- 授予所有权限GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27; WITH GRANT OPTION;-- 刷新权限FLUSH PRIVILEGES;-- 退出EXIT;
+
+3.5 一键执行（可选）sudo mysql -u root -p123456 &lt;&lt;EOFCREATE USER IF NOT EXISTS &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;123456&#x27;;GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27; WITH GRANT OPTION;FLUSH PRIVILEGES;EOF
+
+
+四、配置阿里云安全组操作步骤
+登录 阿里云 ECS 控制台
+找到目标实例（IP）
+点击实例 ID → 安全组 选项卡
+点击安全组 ID → 配置规则
+点击 手动添加 入方向规则
+
+添加规则
+
+
+配置项
+值
+说明
+
+
+
+端口范围
+3306
+MySQL 默认端口
+
+
+授权对象
+0.0.0.0/0
+允许所有 IP（或填写你电脑的公网 IP）
+
+
+协议
+TCP
+传输协议
+
+
+描述
+MySQL 远程访问
+规则说明
+
+
+
+安全建议：生产环境建议授权对象填写你电脑的公网 IP（如 ip&#x2F;32），而不是 0.0.0.0&#x2F;0&#96;
+
+
+五、服务器防火墙配置（可选）如果服务器启用了 ufw 防火墙：
+# 查看防火墙状态sudo ufw status# 如果开启，允许 3306 端口sudo ufw allow 3306/tcp# 重载防火墙sudo ufw reload
+
+
+六、连接测试6.1 本地测试（在服务器上）# 通过本地 socket 连接mysql -u root -p123456 -h 127.0.0.1 -e &quot;SELECT 1&quot;# 通过公网 IP 连接（测试网络）mysql -u root -p123456 -h 公网ip -e &quot;SELECT 1&quot;
+
+6.2 远程测试（在你本地电脑）mysql -u root -p123456 -h 公网ip -e &quot;SELECT 1&quot;
+
+成功输出：
++---+| 1 |+---+| 1 |+---+
+
+6.3 端口连通性测试# telnet 测试telnet 公网ip 3306# nc 测试nc -zv 公网ip 3306# PowerShell 测试（Windows）Test-NetConnection -ComputerName 公网ip -Port 3306
+
+
+七、常见错误及解决方案错误 1：ERROR 2003 (HY000): Can&#39;t connect
+
+
+原因
+解决方案
+
+
+
+安全组未开放 3306 端口
+阿里云控制台添加入方向规则
+
+
+MySQL 绑定地址错误
+确认 bind-address = 0.0.0.0
+
+
+服务器防火墙拦截
+sudo ufw allow 3306/tcp
+
+
+MySQL 服务未启动
+sudo systemctl start mysql
+
+
+错误 2：ERROR 1130 (HY000): Host &#39;xxx&#39; is not allowed
+
+
+原因
+解决方案
+
+
+
+root 用户未授权远程访问
+执行 CREATE USER &#39;root&#39;@&#39;%&#39;...
+
+
+权限未刷新
+执行 FLUSH PRIVILEGES;
+
+
+错误 3：ERROR 1045 (28000): Access denied
+
+
+原因
+解决方案
+
+
+
+密码错误
+确认密码是否正确
+
+
+认证插件不兼容
+使用 mysql_native_password
+
+
+
+八、常用管理命令# 服务管理sudo systemctl start mysql   # 启动sudo systemctl stop mysql    # 停止sudo systemctl restart mysql # 重启sudo systemctl status mysql  # 查看状态# 登录 MySQLmysql -u root -pmysql -u root -p123456        # 带密码登录# 查看 MySQL 版本mysql --version# 查看监听端口sudo netstat -tlnp | grep mysql# 查看 MySQL 日志sudo tail -f /var/log/mysql/error.log
+
+
+九、安全建议
+
+
+场景
+建议
+
+
+
+开发&#x2F;测试环境
+可以使用简单密码 + 0.0.0.0/0
+
+
+生产环境
+⚠️ 强烈建议：• 使用复杂密码• 授权对象限制为特定 IP• 开启 SSL 连接• 使用非默认端口
+
+
+客户端工具推荐：
+
+Navicat
+DataGrip
+DBeaver
+MySQL Workbench
+
+
+Redis 远程访问配置指南📋 环境信息
+
+
+项目
+信息
+
+
+
+服务器公网 IP
+&lt;你的服务器公网IP&gt;
+
+
+Redis 版本
+7.x
+
+
+操作系统
+Ubuntu 22.04 &#x2F; 24.04
+
+
+
+一、安装 Redis# 安装 Redissudo apt install redis-server -y# 查看版本确认安装成功redis-server --version
+
+
+二、配置远程访问2.1 编辑配置文件sudo nano /etc/redis/redis.conf
+
+2.2 修改配置项
+
+
+配置项
+原值
+修改为
+说明
+
+
+
+bind
+127.0.0.1 ::1
+0.0.0.0
+允许所有 IP 连接
+
+
+protected-mode
+yes
+no
+关闭保护模式（或设置密码后保持 yes）
+
+
+requirepass
+注释状态
+requirepass &lt;你的密码&gt;
+设置密码（取消注释）
+
+
+具体操作：
+# 找到 bind 行（大约第 69 行）# 将bind 127.0.0.1 ::1# 改为bind 0.0.0.0# 找到 protected-mode（大约第 87 行）# 将 yes 改为 no（如果不设置密码）protected-mode no# 找到 requirepass（大约第 104 行）# 取消注释并设置密码requirepass &lt;你的密码&gt;
+
+2.3 保存并退出Ctrl+O → 回车 → Ctrl+X
+
+三、找到正确的服务名并重启# 查看 Redis 服务名systemctl list-unit-files | grep -i redis
+
+常见输出：
+redis-server.service                       enabled         enabledredis-server@.service                      disabled        enabledredis.service                              alias           -
+
+真正的服务名是 redis-server.service（redis.service 只是别名）
+# 启用开机自启sudo systemctl enable redis-server# 重启 Redissudo systemctl restart redis-server# 查看状态sudo systemctl status redis-server
+
+
+四、验证配置4.1 确认监听地址sudo netstat -tlnp | grep 6379
+
+预期输出：
+tcp        0      0 0.0.0.0:6379            0.0.0.0:*               LISTEN      12345/redis-server
+
+✅ 0.0.0.0:6379 表示监听所有接口（正确）
+❌ 127.0.0.1:6379 表示仅本地（需重新修改 bind）
+
+4.2 本地测试（带密码）# 方式一：使用 -a 参数redis-cli -a &lt;你的密码&gt; ping# 方式二：先连接再认证redis-cli127.0.0.1:6379&gt; AUTH &lt;你的密码&gt;OK127.0.0.1:6379&gt; pingPONG127.0.0.1:6379&gt; exit
+
+预期输出：PONG
+4.3 测试远程连接（在服务器上测试公网 IP）redis-cli -a &lt;你的密码&gt; -h &lt;你的服务器公网IP&gt; ping
+
+预期输出：PONG
+
+五、配置阿里云安全组在阿里云 ECS 控制台，添加入方向规则：
+
+
+
+配置项
+值
+说明
+
+
+
+端口范围
+6379
+Redis 默认端口
+
+
+授权对象
+0.0.0.0/0
+允许所有 IP（或填写你电脑的公网 IP）
+
+
+协议
+TCP
+传输协议
+
+
+描述
+Redis 远程访问
+规则说明
+
+
+
+⚠️ 安全建议：生产环境建议授权对象填写你电脑的公网 IP（如 xxx.xxx.xxx.xxx/32），而不是 0.0.0.0/0
+
+
+六、服务器防火墙配置（可选）# 查看防火墙状态sudo ufw status# 如果开启，允许 6379 端口sudo ufw allow 6379/tcp# 重载防火墙sudo ufw reload
+
+
+七、本地测试连接7.1 命令行测试（需安装 Redis 客户端）redis-cli -a &lt;你的密码&gt; -h &lt;你的服务器公网IP&gt; ping
+
+成功输出：PONG
+7.2 PowerShell 测试端口连通性（Windows）Test-NetConnection -ComputerName &lt;你的服务器公网IP&gt; -Port 6379
+
+预期输出：TcpTestSucceeded : True
+
+八、使用 GUI 工具连接推荐工具：
+
+Another Redis Desktop Manager（免费，推荐）
+RedisInsight（官方，功能强大）
+QuickRedis（轻量级）
+
+连接信息：
+
+
+
+配置项
+值
+
+
+
+Host
+&lt;你的服务器公网IP&gt;
+
+
+Port
+6379
+
+
+Password
+&lt;你的密码&gt;
+
+
+
+九、常用管理命令# 服务管理sudo systemctl start redis-server    # 启动sudo systemctl stop redis-server     # 停止sudo systemctl restart redis-server  # 重启sudo systemctl status redis-server   # 查看状态# Redis 命令行操作redis-cli -a &lt;你的密码&gt;           # 连接redis-cli -a &lt;你的密码&gt; ping      # 测试连接# 查看 Redis 信息redis-cli -a &lt;你的密码&gt; INFO# 监控 Redis 实时命令redis-cli -a &lt;你的密码&gt; MONITOR# 查看所有 keys（生产环境慎用）redis-cli -a &lt;你的密码&gt; KEYS &quot;*&quot;# 清空所有数据（慎用）redis-cli -a &lt;你的密码&gt; FLUSHALL
+
+
+十、常见错误及解决方案
+
+
+错误
+原因
+解决方案
+
+
+
+Failed to enable unit: Refusing to operate on alias name
+使用了别名 redis.service
+使用真实服务名 redis-server.service
+
+
+DENIED Redis is running in protected mode
+保护模式开启且无密码
+设置 requirepass 或关闭 protected-mode
+
+
+Connection refused
+端口未开放
+检查安全组、防火墙、bind 配置
+
+
+NOAUTH Authentication required
+需要密码
+使用 -a 参数或先执行 AUTH
+
+
+ERR Client sent AUTH, but no password is set
+未设置密码但发送了 AUTH
+注释掉 AUTH 命令或设置密码
+
+
+
+十一、一键配置脚本# 修改 Redis 配置sudo sed -i &#x27;s/^bind 127.0.0.1.*/bind 0.0.0.0/&#x27; /etc/redis/redis.confsudo sed -i &#x27;s/^protected-mode yes/protected-mode no/&#x27; /etc/redis/redis.confsudo sed -i &#x27;s/^# requirepass foobared/requirepass &lt;你的密码&gt;/&#x27; /etc/redis/redis.conf# 重启 Redis（使用正确的服务名）sudo systemctl restart redis-server# 验证redis-cli -a &lt;你的密码&gt; ping
+
+
+十二、验证清单
+
+
+检查项
+命令
+预期结果
+
+
+
+Redis 运行中
+sudo systemctl status redis-server
+active (running)
+
+
+监听 0.0.0.0
+sudo netstat -tlnp | grep 6379
+0.0.0.0:6379
+
+
+本地连接
+redis-cli -a &lt;密码&gt; ping
+PONG
+
+
+远程端口
+Test-NetConnection &lt;IP&gt; 6379
+True
+
+
+远程连接
+redis-cli -a &lt;密码&gt; -h &lt;IP&gt; ping
+PONG
+
+
+
+十三、连接信息汇总
+
+
+配置项
+值
+
+
+
+主机
+&lt;你的服务器公网IP&gt;
+
+
+端口
+6379
+
+
+密码
+&lt;你的密码&gt;
+
+
+
+YApi 数据迁移完整指南📋 迁移概述将本地 Docker 部署的 YApi 数据（含 MongoDB 数据库）完整迁移到阿里云 ECS 服务器。
+
+一、本地数据导出1.1 查看本地配置cd D:\docker\yapicat docker-compose.yml
+
+1.2 导出 MongoDB 数据# 启动容器（如果未运行）docker compose up -d# 导出数据库docker exec mongo mongodump --db yapi --out /dump# 复制到本地docker cp mongo:/dump ./dump# 打包Compress-Archive -Path .\dump -DestinationPath .\yapi-data.zip
+
+1.3 导出本地镜像（可选，加速服务器部署）# 导出 MongoDB 镜像docker save mongo:4.4 -o mongo-4.4.tar# 导出 YApi 镜像docker save registry.cn-hangzhou.aliyuncs.com/anoy/yapi -o yapi-image.tar
+
+
+二、服务器环境准备2.1 连接服务器ssh root@&lt;服务器IP&gt;
+
+2.2 安装 Dockercurl -fsSL https://get.docker.com | bashsystemctl start dockersystemctl enable docker
+
+2.3 配置国内镜像加速（可选）cat &gt; /etc/docker/daemon.json &lt;&lt; &#x27;EOF&#x27;&#123;  &quot;registry-mirrors&quot;: [&quot;https://docker.mirrors.ustc.edu.cn&quot;]&#125;EOFsystemctl restart docker
+
+
+三、服务器端部署3.1 上传文件# 在本地 PowerShell 执行scp D:\docker\yapi\yapi-data.zip root@&lt;服务器IP&gt;:/root/scp D:\docker\yapi\mongo-4.4.tar root@&lt;服务器IP&gt;:/root/   # 可选
+
+3.2 创建部署目录mkdir -p /soft/yapicd /soft/yapi
+
+3.3 创建 docker-compose.ymlcat &gt; docker-compose.yml &lt;&lt; &#x27;EOF&#x27;services:  mongo:    image: mongo:4.4    container_name: yapi-mongo    restart: unless-stopped    volumes:      - ./mongo-data:/data/db    networks:      - yapi-network  yapi:    image: registry.cn-hangzhou.aliyuncs.com/anoy/yapi    container_name: yapi-server    restart: unless-stopped    ports:      - &quot;3000:3000&quot;    environment:      - DB_SERVER=mongo      - DB_NAME=yapi    depends_on:      - mongo    networks:      - yapi-network    entrypoint: node    command: /api/vendors/server/app.jsnetworks:  yapi-network:    driver: bridgeEOF
+
+3.4 导入镜像（如果本地导出了）docker load -i /root/mongo-4.4.tar
+
+3.5 启动服务docker compose up -ddocker ps
+
+
+四、数据恢复4.1 解压数据cd /rootunzip -o yapi-data.zip -d ./
+
+4.2 复制到容器并恢复docker cp /root/dump/. yapi-mongo:/dumpdocker exec -it yapi-mongo mongorestore --drop --dir /dump --nsInclude=yapi.*
+
+4.3 验证恢复docker exec -it yapi-mongo mongo yapi --eval &quot;db.getCollectionNames()&quot;docker exec -it yapi-mongo mongo yapi --eval &quot;db.user.find().pretty()&quot;
+
+
+五、密码同步5.1 查看本地密码信息# 在本地执行docker exec mongo mongo yapi --eval &quot;db.user.find(&#123;email:&#x27;admin@admin.com&#x27;&#125;).pretty()&quot;
+
+输出示例：
+&#123;  &quot;_id&quot; : 11,  &quot;email&quot; : &quot;admin@admin.com&quot;,  &quot;password&quot; : &quot;1d14054943cca63edde616e804fdb8eb8ef8b664&quot;,  &quot;passsalt&quot; : &quot;t5baxuclk6&quot;&#125;
+
+5.2 同步到服务器# 在服务器执行，替换为实际的值docker exec -it yapi-mongo mongo yapi --eval &quot;db.user.update(&#123;email:&#x27;admin@admin.com&#x27;&#125;, &#123; \$set: &#123; password: &#x27;1d14054943cca63edde616e804fdb8eb8ef8b664&#x27;, passsalt: &#x27;t5baxuclk6&#x27; &#125; &#125;)&quot;
+
+5.3 重启服务cd /soft/yapidocker compose restart yapi
+
+
+六、开放端口6.1 阿里云安全组配置登录阿里云控制台 → 安全组 → 添加入方向规则：
+
+
+
+端口
+授权对象
+说明
+
+
+
+3000
+0.0.0.0&#x2F;0
+YApi Web 访问
+
+
+6.2 服务器防火墙（如有）ufw allow 3000/tcp
+
+
+七、验证迁移7.1 测试登录curl -X POST http://localhost:3000/api/user/login \  -H &quot;Content-Type: application/json&quot; \  -d &#x27;&#123;&quot;email&quot;:&quot;admin@admin.com&quot;,&quot;password&quot;:&quot;你的密码&quot;&#125;&#x27;
+
+成功返回：
+&#123;&quot;errcode&quot;:0,&quot;errmsg&quot;:&quot;成功&quot;,&quot;data&quot;:&#123;...&#125;&#125;
+
+7.2 浏览器访问http://&lt;服务器IP&gt;:3000
+
+使用 admin@admin.com 和本地 YApi 密码登录。
+
+八、清理临时文件rm -f /root/yapi-data.ziprm -rf /root/dumprm -f /root/mongo-4.4.tarrm -f /root/yapi-image.tar
+
+
+九、常用管理命令
+
+
+操作
+命令
+
+
+
+查看容器状态
+docker ps
+
+
+查看日志
+docker logs yapi-server
+
+
+重启服务
+cd /soft/yapi &amp;&amp; docker compose restart
+
+
+停止服务
+cd /soft/yapi &amp;&amp; docker compose down
+
+
+启动服务
+cd /soft/yapi &amp;&amp; docker compose up -d
+
+
+进入 MongoDB
+docker exec -it yapi-mongo mongo yapi
+
+
+
+十、故障排查
+
+
+问题
+解决方案
+
+
+
+容器不断重启
+检查 docker-compose.yml 中的 entrypoint 和 command 是否正确
+
+
+密码错误
+同步本地的 password 和 passsalt 到服务器
+
+
+端口不通
+检查阿里云安全组是否开放 3000 端口
+
+
+看不到项目
+用原账号登录，数据已关联
+
+
+镜像拉取慢
+使用国内镜像源或导入本地镜像
+
+
+
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Spring Boot</title>
+    <url>/2026/04/25/Spring%20Boot/</url>
+    <content><![CDATA[IOC（控制反转、Spring、DI）IOC是思想, DI是实现方式 ,将自己可以new的对象交给容器管理 ,容器在我们需要对象的时候DI作用：
+
+对象之间的耦合度或者说依赖程度降低。
+资源变的容易管理；比如你用 Spring 容器提供的话很容易就可以实现一个单例。
+
+IoC 容器容器就是存放和管理 Bean 的地方
+Bean 的作用域
+
+
+作用域
+说明
+使用场景
+
+
+
+singleton（默认）
+整个容器只有一个实例
+无状态服务
+
+
+prototype
+每次获取都创建新实例
+有状态对象
+
+
+request（Web）
+每个请求一个实例
+Web应用
+
+
+session（Web）
+每个会话一个实例
+用户会话
+
+
+@Component@Scope(&quot;prototype&quot;)  // 每次都是新对象public class ShoppingCart &#123;    private List&lt;Item&gt; items = new ArrayList&lt;&gt;();&#125;@Component@Scope(&quot;singleton&quot;)  // 默认，整个应用只有一个,可不写public class Calculator &#123;    public int add(int a, int b) &#123; return a + b; &#125;&#125;
+三种依赖注入:
+1️⃣ 字段注入（最常用）
+
+@Component  //UserDao @Component(&quot;alipay&quot;)  // 自定义名称public class UserService &#123;    @Autowired    @Qualifier(&quot;alipay&quot;)  // 使用自定义名称    private UserDao userDao;  // 直接注入        @Autowired    private EmailService emailService;&#125;
+
+2️⃣ 构造器注入（推荐，官方推荐）
+
+@Component  public class UserService &#123;    private final UserDao userDao;    private final EmailService emailService;        // 不用写 @Autowired，Spring 自动识别    public UserService(UserDao userDao, EmailService emailService) &#123;        this.userDao = userDao;        this.emailService = emailService;    &#125;&#125;
+
+3️⃣ Setter 注入（用于可选依赖）
+
+@Componentpublic class UserService &#123;    private UserDao userDao;        @Autowired    public void setUserDao(UserDao userDao) &#123;        this.userDao = userDao;    &#125;&#125;
+核心注解详解1. @Component - 将类标记为 Bean@Component  // 最通用public class CommonService &#123;&#125;@Repository  // 数据访问层@Primary //当没有 @Qualifier 时，默认注入这个public class UserDao &#123;&#125;@Service     // 业务逻辑层public class UserService &#123;&#125;@Controller  // Web 控制层public class UserController &#123;&#125;// 它们本质上都是 @Component，只是语义不同
+
+
+2. @Autowired - 自动注入依赖@Componentpublic class OrderService &#123;        // 按类型注入    @Autowired    private PaymentService paymentService;        // 如果有多个同类型，可以用 @Qualifier 指定名称 注意：@Qualifier 的值默认是**类名首字母小写**    @Autowired    @Qualifier(&quot;alipay&quot;)     private PaymentService paymentService;        // 可选依赖（找不到就不注入）    @Autowired(required = false)    private Logger logger;&#125;
+3. @Configuration - 配置类@Configuration  // 标记为配置类public class AppConfig &#123;        // 手动注册 Bean    @Bean    public DataSource dataSource() &#123;        HikariDataSource ds = new HikariDataSource();        ds.setJdbcUrl(&quot;jdbc:mysql://localhost:3306/test&quot;);        ds.setUsername(&quot;root&quot;);        ds.setPassword(&quot;123456&quot;);        return ds;    &#125;        @Bean    public UserService userService() &#123;        // 可以调用其他 @Bean 方法        return new UserService(userDao());    &#125;        @Bean    public UserDao userDao() &#123;        return new UserDao(dataSource());    &#125;&#125;
+4. @Value - 注入配置值@Componentpublic class AppProperties &#123;        @Value(&quot;$&#123;app.name&#125;&quot;)    private String appName;  // 从配置文件读取        @Value(&quot;$&#123;server.port:8080&#125;&quot;)    private int port;  // 默认值 8080        @Value(&quot;10&quot;)    private int timeout;  // 直接赋值        @Value(&quot;#&#123;systemProperties[&#x27;user.home&#x27;]&#125;&quot;)    private String userHome;  // SpEL 表达式&#125;
+application.ymlapp:  name: MySpringAppserver:  port: 9000
+真实项目中的典型用法@Configurationpublic class PaymentConfig &#123;    @Bean    @Qualifier(&quot;alipay&quot;)    public PaymentService alipayPayment() &#123;        return new AlipayService();    &#125;    @Bean    @Qualifier(&quot;wechat&quot;)    public PaymentService wechatPayment() &#123;        return new WechatPayService();    &#125;&#125;
+@Servicepublic class PaymentProcessor &#123;    private final Map&lt;String, PaymentService&gt; paymentServiceMap;    // 构造器注入所有 PaymentService，并放到 Map 中    public PaymentProcessor(Map&lt;String, PaymentService&gt; paymentServiceMap) &#123;        this.paymentServiceMap = paymentServiceMap;    &#125;    public void process(String channel, BigDecimal amount) &#123;        PaymentService service = paymentServiceMap.get(channel);        if (service != null) &#123;            service.pay(amount);        &#125;    &#125;&#125;
+这样调用时：process(&quot;alipay&quot;, new BigDecimal(100)) 就能动态选择支付方式。
+Aop 面向切面编程AOP（面向切面编程）的核心作用AOP 允许你将横切关注点（跨越多个模块的公共逻辑）从业务代码中抽取出来，实现关注点分离。
+一、主要作用总结
+
+
+作用
+说明
+典型场景
+
+
+
+日志记录
+统一记录方法调用、参数、返回值
+审计、调试
+
+
+性能监控
+统计方法执行时间
+慢查询排查、性能瓶颈分析
+
+
+事务管理
+统一管理数据库事务
+增删改操作的开启&#x2F;提交&#x2F;回滚
+
+
+权限校验
+方法调用前检查用户权限
+接口鉴权、角色验证
+
+
+缓存管理
+方法返回值缓存
+减少数据库查询
+
+
+异常处理
+统一捕获和处理异常
+错误日志、降级处理
+
+
+参数校验
+统一验证输入参数
+接口入参合法性
+
+
+幂等性控制
+防止重复提交
+表单重复提交、接口重试
+
+
+
+二、具体代码示例1. 日志记录（最常用）@Aspect@Componentpublic class LogAspect &#123;        @Around(&quot;@annotation(com.example.annotation.Log)&quot;)    public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable &#123;        String methodName = joinPoint.getSignature().getName();        Object[] args = joinPoint.getArgs();                System.out.println(&quot;【调用前】方法：&quot; + methodName + &quot;，参数：&quot; + Arrays.toString(args));                long start = System.currentTimeMillis();        Object result = joinPoint.proceed();  // 执行原方法        long end = System.currentTimeMillis();                System.out.println(&quot;【调用后】返回值：&quot; + result + &quot;，耗时：&quot; + (end - start) + &quot;ms&quot;);                return result;    &#125;&#125;
+
+使用时只要在方法上加注解，就能自动记录日志：
+@Servicepublic class UserService &#123;        @Log    public User getUserById(Long id) &#123;        // 业务代码，不需要写任何日志逻辑        return userMapper.selectById(id);    &#125;&#125;
+
+
+2. 事务管理@Aspect@Componentpublic class TransactionAspect &#123;        @Around(&quot;@annotation(Transactional)&quot;)    public Object manageTransaction(ProceedingJoinPoint joinPoint) throws Throwable &#123;        try &#123;            beginTransaction();      // 开启事务            Object result = joinPoint.proceed();  // 执行业务方法            commitTransaction();     // 提交事务            return result;        &#125; catch (Exception e) &#123;            rollbackTransaction();   // 回滚事务            throw e;        &#125;    &#125;&#125;
+
+
+3. 性能监控@Aspect@Componentpublic class PerformanceAspect &#123;        @Around(&quot;@annotation(com.example.annotation.Monitor)&quot;)    public Object monitor(ProceedingJoinPoint joinPoint) throws Throwable &#123;        String methodName = joinPoint.getSignature().toShortString();        long start = System.currentTimeMillis();                try &#123;            return joinPoint.proceed();        &#125; finally &#123;            long duration = System.currentTimeMillis() - start;            if (duration &gt; 1000) &#123;  // 超过1秒告警                System.out.println(&quot;【慢查询】&quot; + methodName + &quot; 耗时：&quot; + duration + &quot;ms&quot;);            &#125;        &#125;    &#125;&#125;
+
+
+4. 权限校验@Aspect@Componentpublic class AuthAspect &#123;        @Before(&quot;@annotation(com.example.annotation.RequireRole)&quot;)    public void checkPermission(JoinPoint joinPoint) &#123;        // 从请求上下文获取当前用户角色        String userRole = getCurrentUserRole();        String requiredRole = getRequiredRole(joinPoint);                if (!userRole.equals(requiredRole)) &#123;            throw new SecurityException(&quot;权限不足，需要：&quot; + requiredRole);        &#125;    &#125;&#125;
+
+
+5. 缓存管理@Aspect@Componentpublic class CacheAspect &#123;        private Map&lt;String, Object&gt; cache = new ConcurrentHashMap&lt;&gt;();        @Around(&quot;@annotation(com.example.annotation.Cacheable)&quot;)    public Object cacheable(ProceedingJoinPoint joinPoint) throws Throwable &#123;        String key = joinPoint.getSignature().toShortString() + Arrays.toString(joinPoint.getArgs());                // 先查缓存        if (cache.containsKey(key)) &#123;            System.out.println(&quot;【缓存命中】&quot; + key);            return cache.get(key);        &#125;                // 缓存未命中，执行原方法        Object result = joinPoint.proceed();        cache.put(key, result);        System.out.println(&quot;【缓存写入】&quot; + key);                return result;    &#125;&#125;
+
+
+三、AOP 的执行时机（通知类型）
+
+
+类型
+注解
+执行时机
+
+
+
+前置通知
+@Before
+方法执行前
+
+
+后置通知
+@After
+方法执行后（无论是否异常）
+
+
+返回通知
+@AfterReturning
+方法正常返回后
+
+
+异常通知
+@AfterThrowing
+方法抛出异常后
+
+
+环绕通知
+@Around
+方法执行前后（最强大）
+
+
+
+四、没有 AOP 的痛点// 没有 AOP 的代码：横切逻辑到处重复public User getUserById(Long id) &#123;    logger.info(&quot;调用方法：getUserById，参数：&quot; + id);        // 日志    startTransaction();                                     // 事务    try &#123;        User user = userMapper.selectById(id);        commitTransaction();                                // 事务        logger.info(&quot;方法返回：&quot; + user);                    // 日志        return user;    &#125; catch (Exception e) &#123;        rollbackTransaction();                              // 事务        logger.error(&quot;方法异常：&quot; + e.getMessage());         // 日志        throw e;    &#125;&#125;public Order getOrderById(Long id) &#123;    logger.info(&quot;调用方法：getOrderById，参数：&quot; + id);       // 同样的代码重复    startTransaction();    // ... 又是一模一样的模板代码&#125;
+
+使用 AOP 后，业务代码恢复纯净：
+@Log@Transactionalpublic User getUserById(Long id) &#123;    return userMapper.selectById(id);  // 只有业务逻辑&#125;
+
+
+五、实际应用场景总结
+
+
+场景
+是否必须用 AOP
+替代方案
+
+
+
+全局日志
+✅ 强烈推荐
+手动在每个方法写日志 ❌
+
+
+事务管理
+✅ Spring 已内置
+手动开启&#x2F;提交 ❌
+
+
+权限校验
+✅ 推荐
+在每个 Controller 写校验 ❌
+
+
+接口限流
+✅ 推荐
+手动判断 ❌
+
+
+数据脱敏
+✅ 推荐
+在每个 getter 处理 ❌
+
+
+分布式锁
+✅ 推荐
+手动加锁&#x2F;释放 ❌
+
+
+
+一句话总结：AOP 让你不要在业务代码中重复写日志、事务、权限等样板代码，把这些公共逻辑抽到切面里统一管理，业务代码只关心核心逻辑。
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Nginx</title>
+    <url>/2026/04/27/Nginx/</url>
+    <content><![CDATA[反向代理和负载均衡 proxy_passupstream webservers&#123;	  server 127.0.0.1:8080 weight=90 ;	  #server 127.0.0.1:8088 weight=10 ;	&#125; server &#123;        listen       80;        server_name  localhost;        #charset koi8-r;        #access_log  logs/host.access.log  main;        location / &#123;            root   html/sky;            index  index.html index.htm;        &#125;        #error_page  404              /404.html;        # redirect server error pages to the static page /50x.html        #        error_page   500 502 503 504  /50x.html;        location = /50x.html &#123;            root   html;        &#125;        # 反向代理,处理管理端发送的请求        location /api/ &#123;			proxy_pass   http://localhost:8080/admin/;# 反向代理            #proxy_pass   http://webservers/admin/;# 负载均衡        &#125;				# 反向代理,处理用户端发送的请求        location /user/ &#123;            proxy_pass   http://webservers/user/;        &#125;				# WebSocket		location /ws/ &#123;            proxy_pass   http://webservers/ws/;			proxy_http_version 1.1;			proxy_read_timeout 3600s;			proxy_set_header Upgrade $http_upgrade;			proxy_set_header Connection &quot;$connection_upgrade&quot;;        &#125;]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+  </entry>
+</search>

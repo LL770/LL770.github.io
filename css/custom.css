@@ -1,0 +1,52 @@
+/* 自定义滚动条 - 简约现代 */
+::-webkit-scrollbar {
+  width: 8px;           /* 滚动条宽度 */
+  height: 8px;          /* 水平滚动条高度 */
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;   /* 浅色模式轨道颜色 */
+  border-radius: 10px;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  background: #888;       /* 滑块颜色 */
+  border-radius: 10px;
+}
+
+/* 滑块悬停效果 */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* 暗色模式适配 */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #666;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+/* 修复左侧文章列表与右侧侧边栏高度不一致 */
+.recent-posts,
+.layout {
+  align-items: stretch;
+}
+
+/* 让右侧卡片组适应整列高度 */
+.aside-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* 各卡片自动撑开剩余空间 */
+.card-widget {
+  flex: 1;
+}

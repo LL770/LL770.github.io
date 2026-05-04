@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linux | LL770</title><meta name="author" content="LL770"><meta name="copyright" content="LL770"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Linux固定ip(参考黑马) 点击 编辑-&gt;虚拟网络编辑器 选择VMnet8，子网IP改为192.168.88.0（如果下面有《更改设置》选项，先点击更改设置才能修改），子网掩码改为255.255.255.0。再点击NET设置 将网关设置为192.168.88.2。修改后点击确定-&gt;确定 打开终端，切换为root用户，输入以下命令来编辑系统文件&#96;&#96;&#96;  1vi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux">
+<meta property="og:url" content="https://ll770.github.io/2026/05/03/Linux/index.html">
+<meta property="og:site_name" content="LL770">
+<meta property="og:description" content="Linux固定ip(参考黑马) 点击 编辑-&gt;虚拟网络编辑器 选择VMnet8，子网IP改为192.168.88.0（如果下面有《更改设置》选项，先点击更改设置才能修改），子网掩码改为255.255.255.0。再点击NET设置 将网关设置为192.168.88.2。修改后点击确定-&gt;确定 打开终端，切换为root用户，输入以下命令来编辑系统文件&#96;&#96;&#96;  1vi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png">
+<meta property="article:published_time" content="2026-05-03T03:59:20.531Z">
+<meta property="article:modified_time" content="2026-05-04T12:49:26.072Z">
+<meta property="article:author" content="LL770">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux",
+  "url": "https://ll770.github.io/2026/05/03/Linux/",
+  "image": "https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png",
+  "datePublished": "2026-05-03T03:59:20.531Z",
+  "dateModified": "2026-05-04T12:49:26.072Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "LL770",
+      "url": "https://ll770.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://raw.gitcode.com/LL770/Pic/raw/main/favicon.ico"><link rel="canonical" href="https://ll770.github.io/2026/05/03/Linux/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/transparent.css"><link rel="stylesheet" href="/css/footer-gradient.css"><link rel="stylesheet" href="/css/头像呼吸灯.css"><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="LL770" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-backgroud.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="https://raw.gitcode.com/LL770/Pic/raw/main/2026.4.16-logo2.0.png" alt="Logo"><span class="site-name">LL770</span></a><a class="nav-page-title" href="/"><span class="site-name">Linux</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Linux</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-03T03:59:20.531Z" title="发表于 2026-05-03 11:59:20">2026-05-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-04T12:49:26.072Z" title="更新于 2026-05-04 20:49:26">2026-05-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0/">技术笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Linux固定ip-参考黑马"><a href="#Linux固定ip-参考黑马" class="headerlink" title="Linux固定ip(参考黑马)"></a>Linux固定ip(参考黑马)</h1><ol>
+<li>点击 编辑-&gt;虚拟网络编辑器</li>
+<li>选择VMnet8，子网IP改为192.168.88.0（如果下面有《更改设置》选项，先点击更改设置才能修改），子网掩码改为255.255.255.0。再点击NET设置</li>
+<li>将网关设置为192.168.88.2。修改后点击确定-&gt;确定</li>
+<li>打开终端，切换为root用户，输入以下命令来编辑系统文件&#96;&#96;&#96;</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-ens33</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>将第4行的dhcp(动态内存分配）改为static。</li>
+<li>在文件末尾添加以下内容：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IPADDR=&quot;192.168.88.130&quot;  </span><br><span class="line">NETMASK=&quot;255.255.255.0&quot;</span><br><span class="line">GATEWAY=&quot;192.168.88.2&quot;</span><br><span class="line">DNS1=&quot;192.168.88.2&quot;</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>重启网卡</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network</span><br></pre></td></tr></table></figure>
+<ol start="8">
+<li>ifconfig查看ip,显示为192.168.88.130，配置成功。</li>
+<li>📊 常用网段配置速查表</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>网段</th>
+<th>子网掩码</th>
+<th>网关（按规则）</th>
+<th>推荐 IP 范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>192.168.1.0</code></td>
+<td><code>255.255.255.0</code></td>
+<td><code>192.168.1.2</code></td>
+<td><code>192.168.1.100-200</code></td>
+</tr>
+<tr>
+<td><code>192.168.88.0</code></td>
+<td><code>255.255.255.0</code></td>
+<td><code>192.168.88.2</code></td>
+<td><code>192.168.88.128-254</code></td>
+</tr>
+<tr>
+<td><code>172.16.0.0</code></td>
+<td><code>255.255.0.0</code></td>
+<td><code>172.16.0.2</code></td>
+<td><code>172.16.0.100-254</code></td>
+</tr>
+<tr>
+<td><code>172.20.10.0</code></td>
+<td><code>255.255.255.0</code></td>
+<td><code>172.20.10.2</code></td>
+<td><code>172.20.10.100-200</code></td>
+</tr>
+<tr>
+<td><code>10.0.0.0</code></td>
+<td><code>255.0.0.0</code></td>
+<td><code>10.0.0.2</code></td>
+<td><code>10.0.0.100-254</code></td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://ll770.github.io">LL770</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://ll770.github.io/2026/05/03/Linux/">https://ll770.github.io/2026/05/03/Linux/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://ll770.github.io" target="_blank">LL770</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/05/04/%E9%98%BF%E9%87%8C%E4%BA%91%20ECS%20%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BA%EF%BC%9A%E6%9C%8D%E5%8A%A1%E5%8A%9F%E8%83%BD%E9%85%8D%E7%BD%AE%E4%B8%8E%20API%20%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97/" title="阿里云 ECS 从零搭建：服务功能配置与 API 管理平台部署完整指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">阿里云 ECS 从零搭建：服务功能配置与 API 管理平台部署完整指南</div></div><div class="info-2"><div class="info-item-1">阿里云服务器初始化与环境搭建指南本指南记录了从购买阿里云轻量应用服务器到完成基础环境配置（安装 MySQL、Redis、Docker）的全过程，适合新手学习和参考。 1. 服务器选购与配置 产品类型：阿里云轻量应用服务器 或 ECS 经济型e实例 核心配置：2核 2GB 存储：40GB 系统盘 带宽：200Mbps 峰值（轻量） 或 3Mbps 固定（ECS） 操作系统：Ubuntu 22.04 LTS（推荐）   建议：我选择的是 Ubuntu 系统，因为对新手友好，社区支持好，教程丰富。   2. 连接到云服务器2.1 重置密码 登录阿里云控制台 → 轻量应用服务器 点击服务器名称 → 重置密码 设置符合规则的密码（大小写字母 + 数字） 等待服务器自动重启（约1-2分钟）  2.2 放行 22 端口 进入控制台 → 防火墙 → 添加规则 协议：TCP，端口：22，来源：0.0.0.0/0 tip:  如果SSH连接失败，看一下22端口是否开放  2.3 使用 SSH 连接方法一：命令行（验证用） 1ssh root@你的公网IP  方法二：FinalShell（推荐）  下...</div></div></div></a><a class="pagination-related" href="/2026/05/03/Redis/" title="Redis"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Redis</div></div><div class="info-2"><div class="info-item-1">简介Redsi是一种基于内存的key-value的结构数据库  基于内存存储，读写性能高 适合存储热点数据（热点商品，新闻，资讯） 项目Redis + MySQL 共存 Redis提供读写性能官网英文官网中文·  Redis数据类型5种常用数据类型 string hash list set zset  Redis常用命令见教程 Spring Data Redis</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://raw.gitcode.com/LL770/Pic/raw/main/2026-04-16-head-picture.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LL770</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/1329889487"><i class="fab fa-bilibili"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/LL770" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:yxl_1123@yeah.net" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #D32F2F;"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS订阅"><i class="fas fa-rss" style="color: #ff7e00;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">📝本站所有博文均是博主的学习笔记与个人理解。<br>
+👌除特别注明外，如需转载，请在文章头部醒目处附带原文链接并告知我你将转载。<br>
+❌严禁未遵循规范的转载。<br>
+当然也欢迎使用<a href="https://space.bilibili.com/1329889487" target="_blank">哔哩哔哩私信</a>与我交流~
+</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E5%9B%BA%E5%AE%9Aip-%E5%8F%82%E8%80%83%E9%BB%91%E9%A9%AC"><span class="toc-number">1.</span> <span class="toc-text">Linux固定ip(参考黑马)</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/04/%E9%98%BF%E9%87%8C%E4%BA%91%20ECS%20%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BA%EF%BC%9A%E6%9C%8D%E5%8A%A1%E5%8A%9F%E8%83%BD%E9%85%8D%E7%BD%AE%E4%B8%8E%20API%20%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97/" title="阿里云 ECS 从零搭建：服务功能配置与 API 管理平台部署完整指南">阿里云 ECS 从零搭建：服务功能配置与 API 管理平台部署完整指南</a><time datetime="2026-05-03T18:43:47.931Z" title="发表于 2026-05-04 02:43:47">2026-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/03/Linux/" title="Linux">Linux</a><time datetime="2026-05-03T03:59:20.531Z" title="发表于 2026-05-03 11:59:20">2026-05-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/03/Redis/" title="Redis">Redis</a><time datetime="2026-05-03T03:33:53.873Z" title="发表于 2026-05-03 11:33:53">2026-05-03</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By LL770</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"></div><script src="/js/falling-stars.js"></script><script src="/js/click-fireworks.js"></script><script defer src="/js/shortcuts.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
