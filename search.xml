@@ -46,23 +46,6 @@ axios.put(url [, data[, config]])
       </tags>
   </entry>
   <entry>
-    <title>Java语法学习</title>
-    <url>/2026/04/23/Java%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[1.Record避免繁琐的DTO语法、JAVA16+支持、用于少业务逻辑、单纯做数据存储。数据比对时可以重写equal,选择要比对的值，默认全属性比对，再重写hashcode，避免报错
-Student实体import java.time.LocalDate;    // record 自动生成构造器、equals、hashCode、toString  public record Student (          String id, //学号          String name,// 姓名          int age,// 年龄          String grade,// 年级          LocalDate enrollDate // 入学时间  )&#123;          // 可以添加自定义方法          public boolean isAdult() &#123;              return age &gt;= 18;          &#125;          //紧凑构造器，用于验证          public Student &#123;              if(id==null || id.isBlank())&#123;                  throw new IllegalArgumentException(&quot;学号不能为空&quot;);              &#125;              if(name==null || name.isBlank())&#123;                  throw new IllegalArgumentException(&quot;姓名不能为空&quot;);              &#125;              if(age&lt;0)&#123;                  throw new IllegalArgumentException(&quot;年龄不能小于0&quot;);              &#125;              if(age&gt;150)&#123;                  throw new IllegalArgumentException(&quot;年龄不能大于150&quot;);              &#125;          &#125;      &#125;
-学生Serviceimport java.util.*;  import java.util.stream.Collectors;    public class StudentService &#123;      private final List&lt;Student&gt; students = new ArrayList&lt;&gt;();        //添加学生      public boolean addStudent(Student student) &#123;          boolean exists = students.stream().anyMatch(s -&gt; s.id().equals(student.id()));          if (exists) &#123;              System.out.println(&quot;该学生已存在，学号为：&quot; + student.id());              return false;          &#125;            students.add(student);          System.out.println(&quot;添加成功&quot; + student.name());          return true;      &#125;        //删除学生      public boolean deleteStudent(String id) &#123;          boolean removed = students.removeIf(s -&gt; s.id().equals(id));          if (removed) &#123;              System.out.println(&quot;删除成功，学号为：&quot; + id);          &#125; else &#123;              System.out.println(&quot;该学生不存在，学号为：&quot; + id);          &#125;          return removed;      &#125;        //更新学生信息      public boolean updateStudent(String id, String newName, Integer newAge) &#123;          for (int i = 0; i &lt; students.size(); i++) &#123;              Student s = students.get(i);              if (s.id().equals(id)) &#123;                  Student updated = new Student(                          s.id(),                          newName != null ? newName : s.name(),                          newAge != null ? newAge : s.age(),                          s.grade(),                          s.enrollDate()                  );                  students.set(i, updated);                  System.out.println(&quot;更新成功，学号为：&quot; + id);                  return true;              &#125;          &#125;          System.out.println(&quot;该学生不存在，学号为：&quot; + id);          return false;      &#125;        //查询学生按学号      public Optional&lt;Student&gt; findById(String id) &#123;          return students.stream()                  .filter(s -&gt; s.id().equals(id))                  .findFirst();      &#125;        //查询学生按姓名      public List&lt;Student&gt; findByName(String name) &#123;          return students.stream()                  .filter(s -&gt; s.name().equalsIgnoreCase(name))                  .toList();      &#125;        //查询学生按年级      public List&lt;Student&gt; findByGrade(String grade) &#123;          return students.stream()                  .filter(s -&gt; s.grade().equals(grade))                  .toList();      &#125;        //查询所有学生      public List&lt;Student&gt; findAll() &#123;          return new ArrayList&lt;&gt;(students);//返回副本，保护内部数据      &#125;        //查询所有学生按年龄排序      public List&lt;Student&gt; sortByAge() &#123;          return students.stream()                  .sorted(Comparator.comparing(Student::age))                  .toList();      &#125;      // 统计成年学生      public long countAdults() &#123;          return students.stream()                  .filter(Student::isAdult)                  .count();      &#125;        // 获取所有年级      public Set&lt;String&gt; getAllGrades() &#123;          return students.stream()                  .map(Student::grade)                  .collect(Collectors.toSet());      &#125;  &#125;
-主程序import java.time.LocalDate;  import java.util.List;    public class Main &#123;      public static void main(String[] args) &#123;          StudentService service = new StudentService();            System.out.println(&quot;=== 学生管理系统 ===\n&quot;);            // 1. 添加学生          System.out.println(&quot;--- 添加学生 ---&quot;);          Student s1 = new Student(&quot;001&quot;, &quot;张三&quot;, 18, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          System.out.println(&quot;添加成功: &quot; + s1);          Student s2 = new Student(&quot;002&quot;, &quot;李四&quot;, 20, &quot;大二&quot;, LocalDate.of(2023, 9, 1));          Student s3 = new Student(&quot;003&quot;, &quot;王五&quot;, 17, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          Student s4 = new Student(&quot;004&quot;, &quot;赵六&quot;, 22, &quot;大三&quot;, LocalDate.of(2022, 9, 1));            service.addStudent(s1);          service.addStudent(s2);          service.addStudent(s3);          service.addStudent(s4);            // 测试重复学号          service.addStudent(new Student(&quot;001&quot;, &quot;重复&quot;, 20, &quot;大四&quot;, LocalDate.now()));            System.out.println();            // 2. 查询所有学生          System.out.println(&quot;--- 所有学生 ---&quot;);          service.findAll().forEach(System.out::println);            System.out.println();            // 3. 按学号查询          System.out.println(&quot;--- 按学号查询 ---&quot;);          service.findById(&quot;002&quot;).ifPresentOrElse(                  s -&gt; System.out.println(&quot;找到: &quot; + s),                  () -&gt; System.out.println(&quot;未找到&quot;)          );            System.out.println();            // 4. 按姓名查询          System.out.println(&quot;--- 按姓名查询 ---&quot;);          List&lt;Student&gt; result = service.findByName(&quot;张三&quot;);          result.forEach(System.out::println);            System.out.println();            // 5. 按年级查询          System.out.println(&quot;--- 按年级查询 ---&quot;);          service.findByGrade(&quot;大一&quot;).forEach(System.out::println);            System.out.println();            // 6. 更新学生          System.out.println(&quot;--- 更新学生 ---&quot;);          service.updateStudent(&quot;003&quot;, &quot;王五改&quot;, 18);          System.out.println(&quot;更新后: &quot; + service.findById(&quot;003&quot;).get());            System.out.println();            // 7. 删除学生          System.out.println(&quot;--- 删除学生 ---&quot;);          service.deleteStudent(&quot;004&quot;);            System.out.println();            // 8. 按年龄排序          System.out.println(&quot;--- 按年龄排序 ---&quot;);          service.sortByAge().forEach(System.out::println);            System.out.println();            // 9. 统计数据          System.out.println(&quot;--- 统计信息 ---&quot;);          System.out.println(&quot;成年学生数: &quot; + service.countAdults());          System.out.println(&quot;所有年级: &quot; + service.getAllGrades());            System.out.println();            // 10. 最终学生列表          System.out.println(&quot;--- 最终学生列表 ---&quot;);          service.findAll().forEach(System.out::println);      &#125;  &#125;
-
-
-]]></content>
-      <categories>
-        <category>语法学习</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux</title>
     <url>/2026/05/03/Linux/</url>
     <content><![CDATA[Linux固定ip(参考黑马)
@@ -129,6 +112,23 @@ ifconfig查看ip,显示为192.168.88.130，配置成功。
       <categories>
         <category>技术笔记</category>
       </categories>
+  </entry>
+  <entry>
+    <title>Java语法学习</title>
+    <url>/2026/04/23/Java%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[1.Record避免繁琐的DTO语法、JAVA16+支持、用于少业务逻辑、单纯做数据存储。数据比对时可以重写equal,选择要比对的值，默认全属性比对，再重写hashcode，避免报错
+Student实体import java.time.LocalDate;    // record 自动生成构造器、equals、hashCode、toString  public record Student (          String id, //学号          String name,// 姓名          int age,// 年龄          String grade,// 年级          LocalDate enrollDate // 入学时间  )&#123;          // 可以添加自定义方法          public boolean isAdult() &#123;              return age &gt;= 18;          &#125;          //紧凑构造器，用于验证          public Student &#123;              if(id==null || id.isBlank())&#123;                  throw new IllegalArgumentException(&quot;学号不能为空&quot;);              &#125;              if(name==null || name.isBlank())&#123;                  throw new IllegalArgumentException(&quot;姓名不能为空&quot;);              &#125;              if(age&lt;0)&#123;                  throw new IllegalArgumentException(&quot;年龄不能小于0&quot;);              &#125;              if(age&gt;150)&#123;                  throw new IllegalArgumentException(&quot;年龄不能大于150&quot;);              &#125;          &#125;      &#125;
+学生Serviceimport java.util.*;  import java.util.stream.Collectors;    public class StudentService &#123;      private final List&lt;Student&gt; students = new ArrayList&lt;&gt;();        //添加学生      public boolean addStudent(Student student) &#123;          boolean exists = students.stream().anyMatch(s -&gt; s.id().equals(student.id()));          if (exists) &#123;              System.out.println(&quot;该学生已存在，学号为：&quot; + student.id());              return false;          &#125;            students.add(student);          System.out.println(&quot;添加成功&quot; + student.name());          return true;      &#125;        //删除学生      public boolean deleteStudent(String id) &#123;          boolean removed = students.removeIf(s -&gt; s.id().equals(id));          if (removed) &#123;              System.out.println(&quot;删除成功，学号为：&quot; + id);          &#125; else &#123;              System.out.println(&quot;该学生不存在，学号为：&quot; + id);          &#125;          return removed;      &#125;        //更新学生信息      public boolean updateStudent(String id, String newName, Integer newAge) &#123;          for (int i = 0; i &lt; students.size(); i++) &#123;              Student s = students.get(i);              if (s.id().equals(id)) &#123;                  Student updated = new Student(                          s.id(),                          newName != null ? newName : s.name(),                          newAge != null ? newAge : s.age(),                          s.grade(),                          s.enrollDate()                  );                  students.set(i, updated);                  System.out.println(&quot;更新成功，学号为：&quot; + id);                  return true;              &#125;          &#125;          System.out.println(&quot;该学生不存在，学号为：&quot; + id);          return false;      &#125;        //查询学生按学号      public Optional&lt;Student&gt; findById(String id) &#123;          return students.stream()                  .filter(s -&gt; s.id().equals(id))                  .findFirst();      &#125;        //查询学生按姓名      public List&lt;Student&gt; findByName(String name) &#123;          return students.stream()                  .filter(s -&gt; s.name().equalsIgnoreCase(name))                  .toList();      &#125;        //查询学生按年级      public List&lt;Student&gt; findByGrade(String grade) &#123;          return students.stream()                  .filter(s -&gt; s.grade().equals(grade))                  .toList();      &#125;        //查询所有学生      public List&lt;Student&gt; findAll() &#123;          return new ArrayList&lt;&gt;(students);//返回副本，保护内部数据      &#125;        //查询所有学生按年龄排序      public List&lt;Student&gt; sortByAge() &#123;          return students.stream()                  .sorted(Comparator.comparing(Student::age))                  .toList();      &#125;      // 统计成年学生      public long countAdults() &#123;          return students.stream()                  .filter(Student::isAdult)                  .count();      &#125;        // 获取所有年级      public Set&lt;String&gt; getAllGrades() &#123;          return students.stream()                  .map(Student::grade)                  .collect(Collectors.toSet());      &#125;  &#125;
+主程序import java.time.LocalDate;  import java.util.List;    public class Main &#123;      public static void main(String[] args) &#123;          StudentService service = new StudentService();            System.out.println(&quot;=== 学生管理系统 ===\n&quot;);            // 1. 添加学生          System.out.println(&quot;--- 添加学生 ---&quot;);          Student s1 = new Student(&quot;001&quot;, &quot;张三&quot;, 18, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          System.out.println(&quot;添加成功: &quot; + s1);          Student s2 = new Student(&quot;002&quot;, &quot;李四&quot;, 20, &quot;大二&quot;, LocalDate.of(2023, 9, 1));          Student s3 = new Student(&quot;003&quot;, &quot;王五&quot;, 17, &quot;大一&quot;, LocalDate.of(2024, 9, 1));          Student s4 = new Student(&quot;004&quot;, &quot;赵六&quot;, 22, &quot;大三&quot;, LocalDate.of(2022, 9, 1));            service.addStudent(s1);          service.addStudent(s2);          service.addStudent(s3);          service.addStudent(s4);            // 测试重复学号          service.addStudent(new Student(&quot;001&quot;, &quot;重复&quot;, 20, &quot;大四&quot;, LocalDate.now()));            System.out.println();            // 2. 查询所有学生          System.out.println(&quot;--- 所有学生 ---&quot;);          service.findAll().forEach(System.out::println);            System.out.println();            // 3. 按学号查询          System.out.println(&quot;--- 按学号查询 ---&quot;);          service.findById(&quot;002&quot;).ifPresentOrElse(                  s -&gt; System.out.println(&quot;找到: &quot; + s),                  () -&gt; System.out.println(&quot;未找到&quot;)          );            System.out.println();            // 4. 按姓名查询          System.out.println(&quot;--- 按姓名查询 ---&quot;);          List&lt;Student&gt; result = service.findByName(&quot;张三&quot;);          result.forEach(System.out::println);            System.out.println();            // 5. 按年级查询          System.out.println(&quot;--- 按年级查询 ---&quot;);          service.findByGrade(&quot;大一&quot;).forEach(System.out::println);            System.out.println();            // 6. 更新学生          System.out.println(&quot;--- 更新学生 ---&quot;);          service.updateStudent(&quot;003&quot;, &quot;王五改&quot;, 18);          System.out.println(&quot;更新后: &quot; + service.findById(&quot;003&quot;).get());            System.out.println();            // 7. 删除学生          System.out.println(&quot;--- 删除学生 ---&quot;);          service.deleteStudent(&quot;004&quot;);            System.out.println();            // 8. 按年龄排序          System.out.println(&quot;--- 按年龄排序 ---&quot;);          service.sortByAge().forEach(System.out::println);            System.out.println();            // 9. 统计数据          System.out.println(&quot;--- 统计信息 ---&quot;);          System.out.println(&quot;成年学生数: &quot; + service.countAdults());          System.out.println(&quot;所有年级: &quot; + service.getAllGrades());            System.out.println();            // 10. 最终学生列表          System.out.println(&quot;--- 最终学生列表 ---&quot;);          service.findAll().forEach(System.out::println);      &#125;  &#125;
+
+
+]]></content>
+      <categories>
+        <category>语法学习</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
   </entry>
   <entry>
     <title>Maven高级</title>
@@ -251,176 +251,6 @@ SNAPSHOT：存放开发中的快照版本。
       <tags>
         <tag>Maven</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Nginx</title>
-    <url>/2026/04/27/Nginx/</url>
-    <content><![CDATA[反向代理和负载均衡 proxy_passupstream webservers&#123;	  server 127.0.0.1:8080 weight=90 ;	  #server 127.0.0.1:8088 weight=10 ;	&#125; server &#123;        listen       80;        server_name  localhost;        #charset koi8-r;        #access_log  logs/host.access.log  main;        location / &#123;            root   html/sky;            index  index.html index.htm;        &#125;        #error_page  404              /404.html;        # redirect server error pages to the static page /50x.html        #        error_page   500 502 503 504  /50x.html;        location = /50x.html &#123;            root   html;        &#125;        # 反向代理,处理管理端发送的请求        location /api/ &#123;			proxy_pass   http://localhost:8080/admin/;# 反向代理            #proxy_pass   http://webservers/admin/;# 负载均衡        &#125;				# 反向代理,处理用户端发送的请求        location /user/ &#123;            proxy_pass   http://webservers/user/;        &#125;				# WebSocket		location /ws/ &#123;            proxy_pass   http://webservers/ws/;			proxy_http_version 1.1;			proxy_read_timeout 3600s;			proxy_set_header Upgrade $http_upgrade;			proxy_set_header Connection &quot;$connection_upgrade&quot;;        &#125;]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>RAGFlow 部署总结</title>
-    <url>/2026/05/02/RAGFlow%20%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[RAGFlow 部署总结📋 环境信息
-
-
-项目
-信息
-
-
-
-操作系统
-Windows (PowerShell)
-
-
-Docker
-Docker Desktop (WSL2 后端)
-
-
-GPU
-NVIDIA GeForce RTX 4060 (8GB)
-
-
-部署模式
-CPU 模式（更稳定，更省资源）
-
-
-RAGFlow 版本
-v0.25.0
-
-
-访问地址
-http://localhost:8090
-
-
-API 端口
-http://localhost:9380
-
-
-
-🚀 快速部署命令# 1. 克隆代码git clone https://github.com/infiniflow/ragflow.gitcd ragflowgit checkout v0.25.0# 2. 配置环境cd dockercp .env.single-bucket-example .env# 3. 修改 .env 配置（详见下方配置说明）# 4. 启动服务docker compose --profile elasticsearch --profile cpu up -d# 5. 查看状态docker compose ps# 6. 查看日志docker logs -f docker-ragflow-cpu-1
-
-
-⚙️ .env 核心配置# 设备模式（使用 CPU）DEVICE=cpu# 向量数据库DOC_ENGINE=elasticsearch# 组合 profilesCOMPOSE_PROFILES=elasticsearch,cpu# 端口配置（避免冲突）ES_PORT=9200                    # Elasticsearch 端口EXPOSE_MYSQL_PORT=3307          # MySQL 对外端口SVR_WEB_HTTP_PORT=8090          # Web 界面端口SVR_WEB_HTTPS_PORT=8443         # HTTPS 端口SVR_HTTP_PORT=9380              # API 端口# 镜像版本RAGFLOW_IMAGE=infiniflow/ragflow:v0.25.0# 内存限制（8GB）MEM_LIMIT=8073741824# Elasticsearch 内存限制ES_JAVA_OPTS=&quot;-Xms2g -Xmx2g&quot;# 时区TZ=Asia/Shanghai# 允许注册REGISTER_ENABLED=1
-
-
-📦 服务组件
-
-
-服务
-镜像
-端口映射
-
-
-
-RAGFlow
-infiniflow&#x2F;ragflow:v0.25.0
-8090→80, 9380→9380
-
-
-Elasticsearch
-elasticsearch:8.11.3
-9200→9200
-
-
-MySQL
-mysql:8.0.39
-3307→3306
-
-
-MinIO
-pgsty&#x2F;minio
-9000-9001→9000-9001
-
-
-Redis
-valkey&#x2F;valkey:8
-6379→6379
-
-
-
-🔧 常用管理命令# 进入 docker 目录cd D:\RAGFlow\ragflow\docker# 启动服务docker compose --profile elasticsearch --profile cpu up -d# 停止服务docker compose down# 重启服务docker compose restart ragflow-cpu# 查看容器状态docker compose ps# 查看实时日志docker logs -f docker-ragflow-cpu-1# 进入容器docker exec -it docker-ragflow-cpu-1 bash# 查看资源占用docker stats --no-stream
-
-
-🔌 Ollama 模型配置在 RAGFlow 界面中添加 Ollama 模型时：
-
-
-
-配置项
-值
-
-
-
-基础 URL
-http://host.docker.internal:11434
-
-
-API-Key
-留空（本地部署）
-
-
-模型名称
-deepseek-r1:8b（对话）或 nomic-embed-text:latest（嵌入）
-
-
-Ollama 环境配置（如需）# 设置环境变量后重启 OllamaOLLAMA_HOST=0.0.0.0OLLAMA_ORIGINS=*
-
-
-⚠️ 常见问题及解决
-
-
-问题
-解决方案
-
-
-
-502 Bad Gateway
-等待依赖下载完成（首次启动需 5-15 分钟）
-
-
-端口冲突
-修改 .env 中的端口号
-
-
-内存不足
-增加 Docker Desktop 内存限制到 12GB+
-
-
-MySQL 连接失败
-确保使用 CPU profile：--profile elasticsearch --profile cpu
-
-
-下载慢
-使用国内镜像：registry.cn-hangzhou.aliyuncs.com/infiniflow/ragflow:v0.25.0
-
-
-
-🧹 清理命令# 停止并删除容器、网络（保留数据）docker compose down# 停止并删除所有（包括数据卷）docker compose down -v# 清理未使用的镜像docker image prune -a# 清理构建缓存docker builder prune -a# 查看磁盘占用docker system df
-
-
-✅ 验证部署成功# 1. 检查容器状态（都应该是 Up 或 healthy）docker compose ps# 2. 测试 APIcurl http://localhost:9380/api/health# 3. 访问 Web 界面# 浏览器打开 http://localhost:8090
-
-
-📝 注意事项
-首次启动需要下载 PyTorch 和 CUDA 依赖（约 2GB），等待 10-15 分钟
-CPU 模式比 GPU 模式更稳定，内存占用更低
-slim 版本可避免 CUDA 依赖，启动更快
-数据卷包含知识库数据，定期备份
-Ollama 地址必须用 host.docker.internal，不能用 localhost
-
-
-🔗 相关资源
-RAGFlow GitHub
-RAGFlow 文档
-Ollama 官网
-
-
-]]></content>
-      <categories>
-        <category>技术笔记</category>
-      </categories>
   </entry>
   <entry>
     <title>MySQL</title>
@@ -841,106 +671,291 @@ resultType省略前面包名
       </tags>
   </entry>
   <entry>
-    <title>Agent</title>
-    <url>/2026/04/18/agent/</url>
-    <content><![CDATA[1.什么是agent,与大模型有什么不同？
-工具调用：不同于大模型只能生成文本，agent能真正执行功能，而不是像大模型只能回答问题。注意：agent是决策调用什么工具，而不是去执行工具的代码。
-记忆机制：大模型一问一答，对之前的对话不记得，而agent会有短期记忆和长期记忆两层。短期记忆是一个对话执行多个问答时agent能记住之前问答的结果，存在上下文中。长期记忆是跨多个对话的，用向量数据库来存储
-多步推理和自我纠错：agent利用大模型实现复杂任务的多步推理，在推理得到的结果会进行验证纠错，也就是思考，再继续执行下一个步骤。而大模型直接得到回答，答案会偏离正确答案。
+    <title>Nginx</title>
+    <url>/2026/04/27/Nginx/</url>
+    <content><![CDATA[反向代理和负载均衡 proxy_passupstream webservers&#123;	  server 127.0.0.1:8080 weight=90 ;	  #server 127.0.0.1:8088 weight=10 ;	&#125; server &#123;        listen       80;        server_name  localhost;        #charset koi8-r;        #access_log  logs/host.access.log  main;        location / &#123;            root   html/sky;            index  index.html index.htm;        &#125;        #error_page  404              /404.html;        # redirect server error pages to the static page /50x.html        #        error_page   500 502 503 504  /50x.html;        location = /50x.html &#123;            root   html;        &#125;        # 反向代理,处理管理端发送的请求        location /api/ &#123;			proxy_pass   http://localhost:8080/admin/;# 反向代理            #proxy_pass   http://webservers/admin/;# 负载均衡        &#125;				# 反向代理,处理用户端发送的请求        location /user/ &#123;            proxy_pass   http://webservers/user/;        &#125;				# WebSocket		location /ws/ &#123;            proxy_pass   http://webservers/ws/;			proxy_http_version 1.1;			proxy_read_timeout 3600s;			proxy_set_header Upgrade $http_upgrade;			proxy_set_header Connection &quot;$connection_upgrade&quot;;        &#125;]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>RAGFlow 部署总结</title>
+    <url>/2026/05/02/RAGFlow%20%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[RAGFlow 部署总结📋 环境信息
 
-2.agent的基本架构
-大模型：负责统筹全局，工具什么时候调用，怎么得到用户输入的结果，何时调用记忆功能,选择合适的模型，去做决策或执行任务能有效节省token
-工具系统：给一份agent工具的说明书，说明书越精确agent工具调用越准确。MCP协议，将工具标准化，可以适应不同大模型，三层架构。最外层Host，与用户交互的AI应用。中间层Clinet,负责管理和MCP Server之间的连接。最里层Server,提供标准化Server，任何支持MCP的agent都能调用这些工具
-记忆系统：短期记忆的最大问题：上下文窗口有限，要进行摘要压缩或者滑动窗口。长期记忆的最大问题：存什么，不存什么，存了怎么管理。再存入之前做一轮重要性评估，还有记忆衰退机制
-规划模块：CoT和ToT 实际运行是Plan-and-Execute和ReAct
 
-3.Workflow,Agent,Tools概念和区别- 
+项目
+信息
+
+
+
+操作系统
+Windows (PowerShell)
+
+
+Docker
+Docker Desktop (WSL2 后端)
+
+
+GPU
+NVIDIA GeForce RTX 4060 (8GB)
+
+
+部署模式
+CPU 模式（更稳定，更省资源）
+
+
+RAGFlow 版本
+v0.25.0
+
+
+访问地址
+http://localhost:8090
+
+
+API 端口
+http://localhost:9380
+
+
+
+🚀 快速部署命令# 1. 克隆代码git clone https://github.com/infiniflow/ragflow.gitcd ragflowgit checkout v0.25.0# 2. 配置环境cd dockercp .env.single-bucket-example .env# 3. 修改 .env 配置（详见下方配置说明）# 4. 启动服务docker compose --profile elasticsearch --profile cpu up -d# 5. 查看状态docker compose ps# 6. 查看日志docker logs -f docker-ragflow-cpu-1
+
+
+⚙️ .env 核心配置# 设备模式（使用 CPU）DEVICE=cpu# 向量数据库DOC_ENGINE=elasticsearch# 组合 profilesCOMPOSE_PROFILES=elasticsearch,cpu# 端口配置（避免冲突）ES_PORT=9200                    # Elasticsearch 端口EXPOSE_MYSQL_PORT=3307          # MySQL 对外端口SVR_WEB_HTTP_PORT=8090          # Web 界面端口SVR_WEB_HTTPS_PORT=8443         # HTTPS 端口SVR_HTTP_PORT=9380              # API 端口# 镜像版本RAGFLOW_IMAGE=infiniflow/ragflow:v0.25.0# 内存限制（8GB）MEM_LIMIT=8073741824# Elasticsearch 内存限制ES_JAVA_OPTS=&quot;-Xms2g -Xmx2g&quot;# 时区TZ=Asia/Shanghai# 允许注册REGISTER_ENABLED=1
+
+
+📦 服务组件
+
+
+服务
+镜像
+端口映射
+
+
+
+RAGFlow
+infiniflow&#x2F;ragflow:v0.25.0
+8090→80, 9380→9380
+
+
+Elasticsearch
+elasticsearch:8.11.3
+9200→9200
+
+
+MySQL
+mysql:8.0.39
+3307→3306
+
+
+MinIO
+pgsty&#x2F;minio
+9000-9001→9000-9001
+
+
+Redis
+valkey&#x2F;valkey:8
+6379→6379
+
+
+
+🔧 常用管理命令# 进入 docker 目录cd D:\RAGFlow\ragflow\docker# 启动服务docker compose --profile elasticsearch --profile cpu up -d# 停止服务docker compose down# 重启服务docker compose restart ragflow-cpu# 查看容器状态docker compose ps# 查看实时日志docker logs -f docker-ragflow-cpu-1# 进入容器docker exec -it docker-ragflow-cpu-1 bash# 查看资源占用docker stats --no-stream
+
+
+🔌 Ollama 模型配置在 RAGFlow 界面中添加 Ollama 模型时：
+
+
+
+配置项
+值
+
+
+
+基础 URL
+http://host.docker.internal:11434
+
+
+API-Key
+留空（本地部署）
+
+
+模型名称
+deepseek-r1:8b（对话）或 nomic-embed-text:latest（嵌入）
+
+
+Ollama 环境配置（如需）# 设置环境变量后重启 OllamaOLLAMA_HOST=0.0.0.0OLLAMA_ORIGINS=*
+
+
+⚠️ 常见问题及解决
+
+
+问题
+解决方案
+
+
+
+502 Bad Gateway
+等待依赖下载完成（首次启动需 5-15 分钟）
+
+
+端口冲突
+修改 .env 中的端口号
+
+
+内存不足
+增加 Docker Desktop 内存限制到 12GB+
+
+
+MySQL 连接失败
+确保使用 CPU profile：--profile elasticsearch --profile cpu
+
+
+下载慢
+使用国内镜像：registry.cn-hangzhou.aliyuncs.com/infiniflow/ragflow:v0.25.0
+
+
+
+🧹 清理命令# 停止并删除容器、网络（保留数据）docker compose down# 停止并删除所有（包括数据卷）docker compose down -v# 清理未使用的镜像docker image prune -a# 清理构建缓存docker builder prune -a# 查看磁盘占用docker system df
+
+
+✅ 验证部署成功# 1. 检查容器状态（都应该是 Up 或 healthy）docker compose ps# 2. 测试 APIcurl http://localhost:9380/api/health# 3. 访问 Web 界面# 浏览器打开 http://localhost:8090
+
+
+📝 注意事项
+首次启动需要下载 PyTorch 和 CUDA 依赖（约 2GB），等待 10-15 分钟
+CPU 模式比 GPU 模式更稳定，内存占用更低
+slim 版本可避免 CUDA 依赖，启动更快
+数据卷包含知识库数据，定期备份
+Ollama 地址必须用 host.docker.internal，不能用 localhost
+
+
+🔗 相关资源
+RAGFlow GitHub
+RAGFlow 文档
+Ollama 官网
+
+
 ]]></content>
       <categories>
         <category>技术笔记</category>
       </categories>
+  </entry>
+  <entry>
+    <title>Redis</title>
+    <url>/2026/05/03/Redis/</url>
+    <content><![CDATA[简介Redsi是一种基于内存的key-value的结构数据库
+
+基于内存存储，读写性能高
+适合存储热点数据（热点商品，新闻，资讯）
+项目Redis + MySQL 共存
+Redis提供读写性能官网英文官网中文·
+
+Redis数据类型5种常用数据类型
+string
+hash
+list
+set
+zset
+
+Redis常用命令见教程
+Spring Data Redis]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
       <tags>
-        <tag>Agent</tag>
+        <tag>Redis</tag>
       </tags>
   </entry>
   <entry>
-    <title>Git</title>
-    <url>/2026/04/20/git/</url>
-    <content><![CDATA[Git是什么Git是目前世界上最先进的分布式版本控制系统,用于追踪文件修改、支持多分支并行开发、随时回溯历史版本，并方便多人协作合并代码，且大部分操作在本地完成。
-安装Git(Windows)
-官网安装
-或者安装一个包管理器，推荐Scoop，然后PowerShell中通过以下命令安装Git：
+    <title></title>
+    <url>/2026/05/07/RabbitMQ/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>RedisBloom 模块部署指南</title>
+    <url>/2026/05/05/RedisBloom%20%E6%A8%A1%E5%9D%97%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[RedisBloom 模块部署指南（Redis 6.x）基于 Redis 6.2.6 和 RedisBloom 2.2.14 的编译安装记录。
+📋 前置条件
 
-scoop install git
-配置Git安装好Git后，还需要最后一步设置，在命令行输入：
-git config --global user.name &quot;Your Name&quot;git config --global user.email &quot;email@example.com&quot;
 
-Git的基本使用通过git init命令把这个目录变成Git可以管理的仓库git init
-创建成功后目录下会多出了一个.git文件夹
-Git工作区和暂存区
-工作区：你看到的文件夹，修改&#x2F;删除文件在这里发生
-暂存区：git add 后的临时存放地
-仓库：git commit 后的永久存储Git跟踪并管理的是修改，而非文件，只有你git add 文件后，git commit 才会提交暂存区的文件到仓库
+检查项
+命令
+要求
 
-Git的文件管理git add [文件名] | .  解释：将指定文件或全部更改的文件添加到仓库
 
-git commit -m &quot;你修改的说明&quot;  解释：把文件提交到仓库并附上说明
 
-git status  解释：查看文件什么状态，未添加、修改、删除
+Redis 版本
+redis-server -v
+≥ 6.x（推荐 6.x）
 
-git diff  解释：查看文件与修改前的差异
 
-git log [--pretty=oneline]  解释：查看提交日志 参数是简洁输出
+编译工具
+gcc --version、make --version
+已安装
 
-git reset --hard HEAD^  解释：回到上一个版本， HEAD^^ 回到上上一个版本 HEAD~n 回到上n个版本
 
-git reset --hard 1094a   解释：撤回即回到最新版本，输入最新版本的commit id前缀前几位就可以
+🚀 部署步骤1. 确认 Redis 版本redis-server -v
 
-git reflog  解释：commit id没有找到，查看每一次命令的日志，即可找到对应的commit id
 
-git checkout -- 文件名  解释：把文件在工作区的修改全部撤销，这里有两种情况：
-一种是文件自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
-一种是r文件已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+2. 下载 RedisBloom 源码cd /tmpwget https://github.com/RedisBloom/RedisBloom/archive/refs/tags/v2.2.14.tar.gztar -zxvf v2.2.14.tar.gzcd RedisBloom-2.2.14
 
-git reset HEAD [file]  解释：同样可以把暂存区的修改撤销掉（unstage），重新放回工作区
+3. 编译模块make
 
-要删除文件 2种情况 
-1 git rm [file]  解释：已经提交 版本库中删除该文件
-2 git checkout -- [file]  解释：删错了，恢复到最新版本
+编译成功后，会在当前目录生成 redisbloom.so 文件。
+ls -la redisbloom.so# -rwxr-xr-x 1 root root ~2.5MB
 
-git remote add origin git@github.com:LL770/LL770.github.io.git 解释：添加远程库 请更换自己得github用户名并配置SSH Key公钥
+4. 部署模块文件# 创建模块目录mkdir -p /usr/lib/redis/modules# 复制模块cp redisbloom.so /usr/lib/redis/modules/# 设置权限chmod 755 /usr/lib/redis/modules/redisbloom.so
 
-git push origin master 解释：把本地master分支的最新修改推送至GitHub
+5. 配置 Redis 加载模块echo &quot;loadmodule /usr/lib/redis/modules/redisbloom.so&quot; &gt;&gt; /etc/redis/redis.conf
 
-git remote -v  解释：查看远程库信息
+验证配置已添加：
+tail -3 /etc/redis/redis.conf
 
-git remote rm origin  解释：根据远程库名字origin，删除远程库
+6. 重启 Redissystemctl restart redis-server
 
-git clone 解释：克隆远程仓库
+7. 验证模块加载redis-cli -a &#x27;your_password&#x27; MODULE LIST
 
-```s
-| 指令 | 解释 |
-|------|------|
-| `git branch` | 查看分支 |
-| `git branch &lt;name&gt;` | 创建分支 |
-| `git checkout &lt;name&gt;` 或 `git switch &lt;name&gt;` | 切换分支 |
-| `git checkout -b &lt;name&gt;` 或 `git switch -c &lt;name&gt;` | 创建+切换分支 |
-| `git merge &lt;name&gt;` | 合并某分支到当前分支 |
-| `git branch -d &lt;name&gt;` | 删除分支 |
-|`git log --graph`|分支合并图|
+预期输出：
+1) 1) &quot;name&quot;   2) &quot;bf&quot;   3) &quot;ver&quot;   4) (integer) 20214
 
-### 合并某分支到当前分支冲突
-必须手动解决冲突后再提交
-Git用&lt;&lt;&lt;&lt;&lt;&lt;&lt;，=======，&gt;&gt;&gt;&gt;&gt;&gt;&gt;标记出不同分支的内容
 
+🧪 功能测试redis-cli -a &#x27;your_password&#x27;
+
+# 创建布隆过滤器（容量100万，误判率1%）BF.RESERVE myfilter 0.01 1000000# 添加元素BF.ADD myfilter helloBF.ADD myfilter world# 检查元素BF.EXISTS myfilter hello   # 返回 1（存在）BF.EXISTS myfilter world   # 返回 1（存在）BF.EXISTS myfilter python  # 返回 0（不存在）# 批量操作BF.MADD myfilter a b cBF.MEXISTS myfilter a b d
+
+
+🔧 常见问题
+
+
+问题
+解决方法
+
+
+
+multiple definition 编译错误
+使用 Redis 6.x + RedisBloom 2.2.14 组合，或添加 -fcommon 编译标志
+
+
+ERR unknown command &#39;BF.ADD&#39;
+模块未加载，检查 loadmodule 路径是否正确，重启 Redis 后重试
+
+
+Redis 启动失败
+检查 /var/log/redis/redis-server.log 或 journalctl -u redis-server -f
+
+
+
+🧹 清理# 删除源码目录rm -rf /tmp/RedisBloom-2.2.14 /tmp/v2.2.14.tar.gz
+
+
+📖 参考
+RedisBloom GitHub: Release v2.2.14 · RedisBloom&#x2F;RedisBloom
+推荐版本组合：Redis 6.x + RedisBloom 2.2.14
 
 ]]></content>
       <categories>
         <category>技术笔记</category>
       </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
   </entry>
   <entry>
     <title>Spring Boot</title>
@@ -1160,29 +1175,105 @@ Aop 面向切面编程AOP（面向切面编程）的核心作用AOP 允许你将
       </categories>
   </entry>
   <entry>
-    <title>Redis</title>
-    <url>/2026/05/03/Redis/</url>
-    <content><![CDATA[简介Redsi是一种基于内存的key-value的结构数据库
+    <title>Git</title>
+    <url>/2026/04/20/git/</url>
+    <content><![CDATA[Git是什么Git是目前世界上最先进的分布式版本控制系统,用于追踪文件修改、支持多分支并行开发、随时回溯历史版本，并方便多人协作合并代码，且大部分操作在本地完成。
+安装Git(Windows)
+官网安装
+或者安装一个包管理器，推荐Scoop，然后PowerShell中通过以下命令安装Git：
 
-基于内存存储，读写性能高
-适合存储热点数据（热点商品，新闻，资讯）
-项目Redis + MySQL 共存
-Redis提供读写性能官网英文官网中文·
+scoop install git
+配置Git安装好Git后，还需要最后一步设置，在命令行输入：
+git config --global user.name &quot;Your Name&quot;git config --global user.email &quot;email@example.com&quot;
 
-Redis数据类型5种常用数据类型
-string
-hash
-list
-set
-zset
+Git的基本使用通过git init命令把这个目录变成Git可以管理的仓库git init
+创建成功后目录下会多出了一个.git文件夹
+Git工作区和暂存区
+工作区：你看到的文件夹，修改&#x2F;删除文件在这里发生
+暂存区：git add 后的临时存放地
+仓库：git commit 后的永久存储Git跟踪并管理的是修改，而非文件，只有你git add 文件后，git commit 才会提交暂存区的文件到仓库
 
-Redis常用命令见教程
-Spring Data Redis]]></content>
+Git的文件管理git add [文件名] | .  解释：将指定文件或全部更改的文件添加到仓库
+
+git commit -m &quot;你修改的说明&quot;  解释：把文件提交到仓库并附上说明
+
+git status  解释：查看文件什么状态，未添加、修改、删除
+
+git diff  解释：查看文件与修改前的差异
+
+git log [--pretty=oneline]  解释：查看提交日志 参数是简洁输出
+
+git reset --hard HEAD^  解释：回到上一个版本， HEAD^^ 回到上上一个版本 HEAD~n 回到上n个版本
+
+git reset --hard 1094a   解释：撤回即回到最新版本，输入最新版本的commit id前缀前几位就可以
+
+git reflog  解释：commit id没有找到，查看每一次命令的日志，即可找到对应的commit id
+
+git checkout -- 文件名  解释：把文件在工作区的修改全部撤销，这里有两种情况：
+一种是文件自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+一种是r文件已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+git reset HEAD [file]  解释：同样可以把暂存区的修改撤销掉（unstage），重新放回工作区
+
+要删除文件 2种情况 
+1 git rm [file]  解释：已经提交 版本库中删除该文件
+2 git checkout -- [file]  解释：删错了，恢复到最新版本
+
+git remote add origin git@github.com:LL770/LL770.github.io.git 解释：添加远程库 请更换自己得github用户名并配置SSH Key公钥
+
+git push origin master 解释：把本地master分支的最新修改推送至GitHub
+
+git remote -v  解释：查看远程库信息
+
+git remote rm origin  解释：根据远程库名字origin，删除远程库
+
+git clone 解释：克隆远程仓库
+
+```s
+| 指令 | 解释 |
+|------|------|
+| `git branch` | 查看分支 |
+| `git branch &lt;name&gt;` | 创建分支 |
+| `git checkout &lt;name&gt;` 或 `git switch &lt;name&gt;` | 切换分支 |
+| `git checkout -b &lt;name&gt;` 或 `git switch -c &lt;name&gt;` | 创建+切换分支 |
+| `git merge &lt;name&gt;` | 合并某分支到当前分支 |
+| `git branch -d &lt;name&gt;` | 删除分支 |
+|`git log --graph`|分支合并图|
+
+### 合并某分支到当前分支冲突
+必须手动解决冲突后再提交
+Git用&lt;&lt;&lt;&lt;&lt;&lt;&lt;，=======，&gt;&gt;&gt;&gt;&gt;&gt;&gt;标记出不同分支的内容
+
+
+]]></content>
       <categories>
-        <category>数据库</category>
+        <category>技术笔记</category>
       </categories>
       <tags>
-        <tag>Redis</tag>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Agent</title>
+    <url>/2026/04/18/agent/</url>
+    <content><![CDATA[1.什么是agent,与大模型有什么不同？
+工具调用：不同于大模型只能生成文本，agent能真正执行功能，而不是像大模型只能回答问题。注意：agent是决策调用什么工具，而不是去执行工具的代码。
+记忆机制：大模型一问一答，对之前的对话不记得，而agent会有短期记忆和长期记忆两层。短期记忆是一个对话执行多个问答时agent能记住之前问答的结果，存在上下文中。长期记忆是跨多个对话的，用向量数据库来存储
+多步推理和自我纠错：agent利用大模型实现复杂任务的多步推理，在推理得到的结果会进行验证纠错，也就是思考，再继续执行下一个步骤。而大模型直接得到回答，答案会偏离正确答案。
+
+2.agent的基本架构
+大模型：负责统筹全局，工具什么时候调用，怎么得到用户输入的结果，何时调用记忆功能,选择合适的模型，去做决策或执行任务能有效节省token
+工具系统：给一份agent工具的说明书，说明书越精确agent工具调用越准确。MCP协议，将工具标准化，可以适应不同大模型，三层架构。最外层Host，与用户交互的AI应用。中间层Clinet,负责管理和MCP Server之间的连接。最里层Server,提供标准化Server，任何支持MCP的agent都能调用这些工具
+记忆系统：短期记忆的最大问题：上下文窗口有限，要进行摘要压缩或者滑动窗口。长期记忆的最大问题：存什么，不存什么，存了怎么管理。再存入之前做一轮重要性评估，还有记忆衰退机制
+规划模块：CoT和ToT 实际运行是Plan-and-Execute和ReAct
+
+3.Workflow,Agent,Tools概念和区别- 
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+      <tags>
+        <tag>Agent</tag>
       </tags>
   </entry>
   <entry>
@@ -1843,6 +1934,175 @@ docker exec -it yapi-mongo mongo yapi
 
 
 
+]]></content>
+      <categories>
+        <category>技术笔记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>内网穿透教程</title>
+    <url>/2026/05/13/%E4%BD%BF%E7%94%A8%20FRP%20+%20Nginx%20%E5%B0%86%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE%E6%9A%B4%E9%9C%B2%E5%88%B0%E5%85%AC%E7%BD%91%EF%BC%88%E6%94%AF%E6%8C%81%20HTTPS%EF%BC%89/</url>
+    <content><![CDATA[使用 FRP + Nginx 将本地项目暴露到公网（支持 HTTPS）
+适用场景：本地开发机无公网 IP，利用一台有公网 IP 的云服务器，通过 FRP 内网穿透 + Nginx 反向代理，实现通过域名 + HTTPS 访问本地 Web 服务。
+
+环境要求
+云服务器：Ubuntu 20.04&#x2F;22.04&#x2F;24.04，有公网 IP（示例中记为 你的服务器IP）
+本地开发机：Windows &#x2F; macOS &#x2F; Linux，运行着 Web 项目（示例端口 3000）
+域名：已解析到云服务器 IP（示例中记为 你的域名）
+
+
+第一步：开放云服务器端口登录云服务商控制台，在安全组中添加入方向规则（协议 TCP）：
+
+
+
+端口
+用途
+是否必须开放公网
+
+
+
+22
+SSH 远程连接
+是（建议限制来源 IP）
+
+
+80
+HTTP 网站访问
+是
+
+
+443
+HTTPS 网站访问
+是
+
+
+7000
+FRP 服务端与客户端通信
+是
+
+
+8080
+FRP 接收 HTTP 流量
+否（仅服务器内部使用）
+
+
+7500
+FRP 仪表板
+否（建议用 SSH 隧道访问）
+
+
+
+说明：8080 和 7500 不要对公网开放，以减少暴露面。
+
+
+第二步：在云服务器上配置 FRP 服务端 (frps)2.1 下载并解压 FRP（使用 Linux amd64 版本）mkdir -p /root/frp &amp;&amp; cd /root/frpwget https://github.com/fatedier/frp/releases/download/v0.61.2/frp_0.61.2_linux_amd64.tar.gztar -zxvf frp_0.61.2_linux_amd64.tar.gzmv frp_0.61.2_linux_amd64/* . &amp;&amp; rm -rf frp_0.61.2_linux_amd64*
+
+2.2 创建服务端配置文件 frps.toml
+注意：请自行生成一个强 token（例如使用 openssl rand -hex 16），并设置仪表板密码。不要直接复制示例中的值。
+
+cat &gt; frps.toml &lt;&lt;EOFbindPort = 7000vhostHTTPPort = 8080auth.token = &quot;你的强token&quot;          # 自行生成，例如 32位十六进制字符串webServer.port = 7500webServer.addr = &quot;127.0.0.1&quot;        # 仅本地访问，不暴露公网webServer.user = &quot;admin&quot;webServer.password = &quot;你的仪表板密码&quot; # 设置一个强密码EOF
+
+2.3 使用 systemd 管理 frpscat &gt; /etc/systemd/system/frps.service &lt;&lt;EOF[Unit]Description=FRP ServerAfter=network.target[Service]Type=simpleUser=rootWorkingDirectory=/root/frpExecStart=/root/frp/frps -c /root/frp/frps.tomlRestart=on-failureRestartSec=10s[Install]WantedBy=multi-user.targetEOFsystemctl daemon-reloadsystemctl enable frps --now
+
+2.4 检查服务状态systemctl status frps
+
+应显示 active (running)。若有错误，查看日志：
+journalctl -u frps -n 20
+
+
+第三步：在本地开发机上配置 FRP 客户端 (frpc)3.1 下载 FRP 客户端根据你的操作系统下载对应版本：FRP Releases
+
+Windows: frp_0.68.1_windows_amd64.zip
+macOS: frp_0.68.1_darwin_amd64.tar.gz
+Linux: frp_0.68.1_linux_amd64.tar.gz
+
+解压后进入目录。
+3.2 创建客户端配置文件 frpc.toml
+注意：将 你的服务器IP、你的强token、你的域名 替换为实际值。localPort 改为本地项目监听的端口。
+
+serverAddr = &quot;你的服务器IP&quot;serverPort = 7000auth.token = &quot;你的强token&quot;       # 必须与服务端 token 完全一致[[proxies]]name = &quot;web&quot;type = &quot;http&quot;localIP = &quot;127.0.0.1&quot;localPort = 3000                 # 本地项目端口customDomains = [&quot;你的域名&quot;]      # 例如 [&quot;example.com&quot;]
+
+3.3 启动客户端Windows (PowerShell)：
+.\frpc.exe -c frpc.toml
+
+macOS &#x2F; Linux：
+./frpc -c frpc.toml
+
+成功日志应包含：
+login to server success[web] start proxy success
+
+
+第四步：配置 Nginx 反向代理并启用 HTTPS4.1 安装 Nginx（如未安装）apt update &amp;&amp; apt install nginx -y
+
+4.2 创建站点配置（替换 你的域名）cat &gt; /etc/nginx/sites-available/你的域名 &lt;&lt;&#x27;EOF&#x27;server &#123;    listen 80;    server_name 你的域名;    return 301 https://$host$request_uri;&#125;server &#123;    listen 443 ssl;    server_name 你的域名;    ssl_certificate     /etc/letsencrypt/live/你的域名/fullchain.pem;    ssl_certificate_key /etc/letsencrypt/live/你的域名/privkey.pem;    location / &#123;        proxy_pass http://127.0.0.1:8080;        proxy_set_header Host $host;        proxy_set_header X-Real-IP $remote_addr;        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;        proxy_set_header X-Forwarded-Proto $scheme;    &#125;&#125;EOF
+
+4.3 启用站点并测试ln -s /etc/nginx/sites-available/你的域名 /etc/nginx/sites-enabled/rm -f /etc/nginx/sites-enabled/default   # 可选，避免冲突nginx -tsystemctl reload nginx
+
+4.4 获取 SSL 证书（Let’s Encrypt）apt install certbot python3-certbot-nginx -ycertbot --nginx -d 你的域名 -d www.你的域名
+
+按提示输入邮箱、同意条款。证书将自动配置到 Nginx。
+
+第五步：验证配置成功5.1 云服务器内部测试curl -H &quot;Host: 你的域名&quot; http://127.0.0.1:8080
+
+预期结果：返回你本地项目的 HTML 内容（不是 FRP 的 Not Found 页面）。
+5.2 本地 Windows 防火墙处理（若上一步返回 404）若返回 FRP 404，通常是因为 Windows 防火墙阻止了 FRP 客户端访问本地端口。以管理员身份运行 PowerShell，添加规则：
+New-NetFirewallRule -DisplayName &quot;FRP to Local&quot; -Direction Inbound -LocalPort 3000 -Protocol TCP -Action AllowNew-NetFirewallRule -DisplayName &quot;FRP to Local Out&quot; -Direction Outbound -LocalPort 3000 -Protocol TCP -Action Allow
+
+重启 frpc 后重新测试第 5.1 步。
+5.3 公网访问测试在任意浏览器中打开：
+
+http://你的域名 → 应自动跳转到 https://你的域名
+https://你的域名 → 应显示你的本地项目，地址栏有小锁图标 ✅
+
+
+第六步：持久化运行（可选）6.1 本地 Windows：将 FRP 客户端注册为服务使用 nssm（下载地址）：
+nssm install frpc &quot;C:\你的frpc路径\frpc.exe&quot; -c &quot;C:\你的frpc路径\frpc.toml&quot;nssm start frpc
+
+6.2 本地 Vite&#x2F;Node 服务持久运行
+开发模式：可使用 pm2（npm install -g pm2）管理。
+生产模式：npm run build 后，用 serve 或 nginx 托管静态文件。
+
+6.3 云服务器（已通过 systemd 自启）frps 和 nginx 都已配置开机自启，无需额外操作。
+
+常见问题排查
+
+
+现象
+可能原因
+解决方法
+
+
+
+curl 返回 FRP 404
+FRP 客户端未连接或未注册代理
+检查 frpc 日志，确保 token 一致，且服务端 vhostHTTPPort 正确
+
+
+公网访问 502 Bad Gateway
+Nginx 无法连接到 127.0.0.1:8080
+检查 frps 是否运行：systemctl status frps
+
+
+证书错误或无法 HTTPS
+certbot 未成功或 Nginx 配置错误
+重新运行 certbot --nginx
+
+
+域名无法访问
+DNS 解析未生效或安全组未放行 80&#x2F;443
+检查域名 A 记录，检查云安全组规则
+
+
+本地项目收不到请求
+Vite 开发服务器未允许外部域名
+在 vite.config.js 中添加 allowedHosts: [&#39;你的域名&#39;] 和 host: &#39;0.0.0.0&#39;
+
+
+
+总结你现在已经拥有一个完整的 内网穿透 + 公网 HTTPS 访问 架构：
+用户 → https://你的域名 → 云服务器 Nginx (80/443) → FRP 服务端 (8080) → FRP 客户端 → 本地项目 (3000)
+
+恭喜！你的本地项目已成功暴露在公网，且支持 HTTPS。🎉
 ]]></content>
       <categories>
         <category>技术笔记</category>
